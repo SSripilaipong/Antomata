@@ -26,3 +26,5 @@ def test_should_tell_message():
 
     recv_message = queue.get(timeout=2)
     assert recv_message.value == "Hello"
+
+    system.stop()
