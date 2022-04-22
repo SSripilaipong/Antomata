@@ -1,13 +1,13 @@
-from multiprocessing import Queue
-
 from redcomet.actor.abstract import ActorAbstract
 from redcomet.message.abstract import MessageAbstract
+from redcomet.queue.abstract import QueueAbstract
+from redcomet.queue.default import DefaultQueue
 from redcomet.system import ActorSystem
 
 
 def test_should_tell_message():
     class MyActor(ActorAbstract):
-        def __init__(self, recv_queue: Queue):
+        def __init__(self, recv_queue: QueueAbstract):
             self._recv_queue = recv_queue
 
         def receive(self, message: MessageAbstract):
@@ -17,7 +17,7 @@ def test_should_tell_message():
         def __init__(self, value: str):
             self.value = value
 
-    queue = Queue()
+    queue = DefaultQueue()
     system = ActorSystem()
     ref = system.spawn(MyActor(queue))
     ref.tell(MyMessage("Hello"))
