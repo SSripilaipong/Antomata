@@ -1,5 +1,5 @@
 from redcomet.actor.abstract import ActorAbstract
-from redcomet.actor.ref import ActorRef
+from redcomet.context import Context
 from redcomet.message.abstract import MessageAbstract
 from redcomet.queue.abstract import QueueAbstract
 from redcomet.queue.default import DefaultQueue
@@ -9,11 +9,6 @@ from redcomet.system import ActorSystem
 class MyStringMessage(MessageAbstract):
     def __init__(self, value: str):
         self.value = value
-
-
-class Context:
-    def spawn(self, actor: ActorAbstract) -> ActorRef:
-        pass
 
 
 class MyActor(ActorAbstract):
