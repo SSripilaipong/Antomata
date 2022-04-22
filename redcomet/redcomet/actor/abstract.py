@@ -8,3 +8,6 @@ class ActorAbstract(ABC):
     @abstractmethod
     def receive(self, message: MessageAbstract):
         pass
+
+    def handle_message(self, message: MessageAbstract):
+        self.receive(message)
