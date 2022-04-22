@@ -1,5 +1,5 @@
-from redcomet.actor.abstract import ActorAbstract
-from redcomet.message.abstract import MessageAbstract
+from redcomet.base.actor.abstract import ActorAbstract
+from redcomet.base.message.abstract import MessageAbstract
 from redcomet.queue.abstract import QueueAbstract
 from redcomet.queue.default import DefaultQueue
 from redcomet.system import ActorSystem

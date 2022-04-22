@@ -1,8 +1,13 @@
-from redcomet.actor.abstract import ActorAbstract
+from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.actor.ref import ActorRef
+from redcomet.base.context import Context
+from redcomet.cluster import Cluster
 
 
 class ActorSystem:
+    def __init__(self):
+        Context().set_cluster(Cluster())
+
     def spawn(self, actor: ActorAbstract) -> ActorRef:
         return ActorRef.of(actor)
 
