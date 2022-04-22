@@ -5,3 +5,7 @@ from redcomet.actor.ref import ActorRef
 class Context:
     def spawn(self, actor: ActorAbstract) -> ActorRef:
         return ActorRef.of(actor)
+
+    @property
+    def sender(self) -> ActorRef:
+        raise NotImplementedError()
