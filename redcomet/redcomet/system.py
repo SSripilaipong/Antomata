@@ -6,5 +6,8 @@ class ActorSystem:
     def spawn(self, actor: ActorAbstract) -> ActorRef:
         return ActorRef.of(actor)
 
-    def stop(self):
+    def __enter__(self) -> 'ActorSystem':
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
         pass

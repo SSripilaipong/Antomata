@@ -40,13 +40,11 @@ class AnotherActor(ActorAbstract):
 
 def test_should_tell_message_to_another_actor():
     queue = DefaultQueue()
-    system = ActorSystem()
-    my_actor = system.spawn(MyActor(queue))
+    with ActorSystem() as system:
+        my_actor = system.spawn(MyActor(queue))
 
-    my_actor.tell(MyStringMessage("start"))
-    my_actor.tell(MyStringMessage("hi to another"))
-    recv_message = queue.get(timeout=2)
+        my_actor.tell(MyStringMessage("start"))
+        my_actor.tell(MyStringMessage("hi to another"))
+        recv_message = queue.get(timeout=2)
 
     assert recv_message.value == "HI"
-
-    system.stop()

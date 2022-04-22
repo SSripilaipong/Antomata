@@ -20,11 +20,10 @@ class MyActor(ActorAbstract):
 
 def test_should_tell_message():
     queue = DefaultQueue()
-    system = ActorSystem()
-    ref = system.spawn(MyActor(queue))
-    ref.tell(MyStringMessage("Hello"))
+    with ActorSystem() as system:
+        ref = system.spawn(MyActor(queue))
+        ref.tell(MyStringMessage("Hello"))
 
-    recv_message = queue.get(timeout=2)
+        recv_message = queue.get(timeout=2)
+
     assert recv_message.value == "Hello"
-
-    system.stop()
