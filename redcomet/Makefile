@@ -1,2 +1,2 @@
 test:
-	pytest tests/system
+	pytest tests/
