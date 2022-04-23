@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 from redcomet.base.actor.abstract import ActorAbstract
-from redcomet.base.actor.ref import ActorRefAbstract
+from redcomet.base.actor import ActorRefAbstract
 
 
 class ClusterAbstract(ABC):

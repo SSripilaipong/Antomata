@@ -1,7 +1,7 @@
 from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.actor.wrapper import ActorWrapper
 from redcomet.base.context import Context
-from redcomet.base.actor.ref import ActorRefAbstract
+from redcomet.base.actor import ActorRefAbstract
 from redcomet.base.message.abstract import MessageAbstract
 
 

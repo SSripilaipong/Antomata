@@ -27,7 +27,7 @@ class Caller(ActorAbstract):
         self._provider = provider
         self._recv_queue = recv_queue
 
-    def receive(self, message: MessageAbstract):
+    def receive(self, message: MessageAbstract, sender: ActorRef, me: ActorRef):
         if isinstance(message, StartCommand):
             self._provider.tell(RequestMessage(self._data))
         elif isinstance(message, ResponseMessage):
@@ -40,7 +40,7 @@ class Provider(ActorAbstract):
     def __init__(self, data: str):
         self._data = data
 
-    def receive(self, message: MessageAbstract):
+    def receive(self, message: MessageAbstract, sender: ActorRef, me: ActorRef):
         if isinstance(message, RequestMessage):
             Context().sender.tell(ResponseMessage(message.value + self._data))
         else:

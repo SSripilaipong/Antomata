@@ -21,7 +21,7 @@ class First(ActorAbstract):
         self._recv_queue = recv_queue
         self._second = None
 
-    def receive(self, message: MessageAbstract):
+    def receive(self, message: MessageAbstract, sender: ActorRef, me: ActorRef):
         if isinstance(message, IntroduceMessage):
             self._second = message.ref
         elif isinstance(message, MyStringMessage):
@@ -38,7 +38,7 @@ class Second(ActorAbstract):
         self._first = first
         self._recv_queue = recv_queue
 
-    def receive(self, message: MessageAbstract):
+    def receive(self, message: MessageAbstract, sender: ActorRef, me: ActorRef):
         if isinstance(message, MyStringMessage):
             if message.value == "hi to first":
                 self._first.tell(MyStringMessage("HI FROM SECOND"))

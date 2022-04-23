@@ -2,7 +2,7 @@ from contextlib import contextmanager
 from typing import Optional
 
 from redcomet.base.actor.abstract import ActorAbstract
-from redcomet.base.actor.ref import ActorRefAbstract
+from redcomet.base.actor import ActorRefAbstract
 from redcomet.base.cluster.abstract import ClusterAbstract
 
 

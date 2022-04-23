@@ -1,3 +1,4 @@
+from redcomet.actor.ref import ActorRef
 from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.base.context import Context
 from redcomet.base.message.abstract import MessageAbstract
@@ -16,7 +17,7 @@ class MyActor(ActorAbstract):
         self._recv_queue = recv_queue
         self._another = None
 
-    def receive(self, message: MyStringMessage):
+    def receive(self, message: MyStringMessage, sender: ActorRef, me: ActorRef):
         if message.value == "start":
             self._another = Context().spawn(AnotherActor(self._recv_queue))
         elif message.value == "hi to another":
@@ -29,7 +30,7 @@ class AnotherActor(ActorAbstract):
     def __init__(self, recv_queue: QueueAbstract):
         self._recv_queue = recv_queue
 
-    def receive(self, message: MessageAbstract):
+    def receive(self, message: MessageAbstract, sender: ActorRef, me: ActorRef):
         self._recv_queue.put(message)
 
 

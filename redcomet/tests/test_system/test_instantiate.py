@@ -1,3 +1,4 @@
+from redcomet.actor.ref import ActorRef
 from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.base.message.abstract import MessageAbstract
 from redcomet.queue.abstract import QueueAbstract
@@ -14,7 +15,7 @@ class MyActor(ActorAbstract):
     def __init__(self, recv_queue: QueueAbstract):
         self._recv_queue = recv_queue
 
-    def receive(self, message: MessageAbstract):
+    def receive(self, message: MessageAbstract, sender: ActorRef, me: ActorRef):
         self._recv_queue.put(message)
 
 
