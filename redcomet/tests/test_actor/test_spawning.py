@@ -1,6 +1,6 @@
-from redcomet.actor.ref import ActorRef
+from redcomet.base.actor import ActorRefAbstract
 from redcomet.base.actor.abstract import ActorAbstract
-from redcomet.base.context import Context
+from redcomet.base.cluster.abstract import ClusterAbstract
 from redcomet.base.message.abstract import MessageAbstract
 from redcomet.queue.abstract import QueueAbstract
 from redcomet.queue.default import DefaultQueue
@@ -17,9 +17,10 @@ class MyActor(ActorAbstract):
         self._recv_queue = recv_queue
         self._another = None
 
-    def receive(self, message: MyStringMessage, sender: ActorRef, me: ActorRef):
+    def receive(self, message: MyStringMessage, sender: ActorRefAbstract, me: ActorRefAbstract,
+                cluster: ClusterAbstract):
         if message.value == "start":
-            self._another = Context().spawn(AnotherActor(self._recv_queue))
+            self._another = cluster.spawn(AnotherActor(self._recv_queue))
         elif message.value == "hi to another":
             self._another.tell(MyStringMessage("HI"))
         else:
@@ -30,7 +31,8 @@ class AnotherActor(ActorAbstract):
     def __init__(self, recv_queue: QueueAbstract):
         self._recv_queue = recv_queue
 
-    def receive(self, message: MessageAbstract, sender: ActorRef, me: ActorRef):
+    def receive(self, message: MessageAbstract, sender: ActorRefAbstract, me: ActorRefAbstract,
+                cluster: ClusterAbstract):
         self._recv_queue.put(message)
 
 

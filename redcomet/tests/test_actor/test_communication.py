@@ -1,5 +1,7 @@
-from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.actor.ref import ActorRef
+from redcomet.base.actor import ActorRefAbstract
+from redcomet.base.actor.abstract import ActorAbstract
+from redcomet.base.cluster.abstract import ClusterAbstract
 from redcomet.base.message.abstract import MessageAbstract
 from redcomet.queue.abstract import QueueAbstract
 from redcomet.queue.default import DefaultQueue
@@ -17,11 +19,13 @@ class IntroduceMessage(MessageAbstract):
 
 
 class First(ActorAbstract):
+
     def __init__(self, recv_queue: QueueAbstract):
         self._recv_queue = recv_queue
         self._second = None
 
-    def receive(self, message: MessageAbstract, sender: ActorRef, me: ActorRef):
+    def receive(self, message: MessageAbstract, sender: ActorRefAbstract, me: ActorRefAbstract,
+                cluster: ClusterAbstract):
         if isinstance(message, IntroduceMessage):
             self._second = message.ref
         elif isinstance(message, MyStringMessage):
@@ -38,7 +42,8 @@ class Second(ActorAbstract):
         self._first = first
         self._recv_queue = recv_queue
 
-    def receive(self, message: MessageAbstract, sender: ActorRef, me: ActorRef):
+    def receive(self, message: MessageAbstract, sender: ActorRefAbstract, me: ActorRefAbstract,
+                cluster: ClusterAbstract):
         if isinstance(message, MyStringMessage):
             if message.value == "hi to first":
                 self._first.tell(MyStringMessage("HI FROM SECOND"))

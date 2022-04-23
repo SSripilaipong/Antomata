@@ -1,7 +1,8 @@
-from redcomet.base.actor.abstract import ActorAbstract
-from redcomet.base.context import Context
-from redcomet.base.message.abstract import MessageAbstract
 from redcomet.actor.ref import ActorRef
+from redcomet.base.actor import ActorRefAbstract
+from redcomet.base.actor.abstract import ActorAbstract
+from redcomet.base.cluster.abstract import ClusterAbstract
+from redcomet.base.message.abstract import MessageAbstract
 from redcomet.queue.abstract import QueueAbstract
 from redcomet.queue.default import DefaultQueue
 from redcomet.system import ActorSystem
@@ -27,7 +28,9 @@ class Caller(ActorAbstract):
         self._provider = provider
         self._recv_queue = recv_queue
 
-    def receive(self, message: MessageAbstract, sender: ActorRef, me: ActorRef):
+    def receive(self, message: MessageAbstract, sender: ActorRefAbstract, me: ActorRef,
+                cluster: ClusterAbstract):
+        self._provider = self._provider.for_actor(me)  # TODO: find better way to set local_id
         if isinstance(message, StartCommand):
             self._provider.tell(RequestMessage(self._data))
         elif isinstance(message, ResponseMessage):
@@ -40,9 +43,10 @@ class Provider(ActorAbstract):
     def __init__(self, data: str):
         self._data = data
 
-    def receive(self, message: MessageAbstract, sender: ActorRef, me: ActorRef):
+    def receive(self, message: MessageAbstract, sender: ActorRefAbstract, me: ActorRefAbstract,
+                cluster: ClusterAbstract):
         if isinstance(message, RequestMessage):
-            Context().sender.tell(ResponseMessage(message.value + self._data))
+            sender.tell(ResponseMessage(message.value + self._data))
         else:
             raise NotImplementedError()
 

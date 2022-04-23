@@ -1,20 +1,22 @@
-from redcomet.base.actor.abstract import ActorAbstract
-from redcomet.actor.wrapper import ActorWrapper
-from redcomet.base.context import Context
 from redcomet.base.actor import ActorRefAbstract
 from redcomet.base.message.abstract import MessageAbstract
+from redcomet.base.node import NodeAbstract
 
 
 class ActorRef(ActorRefAbstract):
-    def __init__(self, actor: ActorWrapper):
-        self._actor = actor
+    def __init__(self, local_node: NodeAbstract, local_id: str, receiver_id: str):
+        self._local_node = local_node
+        self._local_id = local_id
+        self._receiver_id = receiver_id
+
+    def for_actor(self, ref: 'ActorRef') -> 'ActorRef':
+        return ActorRef(ref._local_node, ref._local_id, self._receiver_id)
 
     def tell(self, message: MessageAbstract):
-        self._actor.handle_message(Context().me, message)
+        self._local_node.send(message, self._local_id, self._receiver_id)
 
     @classmethod
-    def of(cls, actor: ActorAbstract) -> 'ActorRef':
-        wrapper = ActorWrapper(actor)
-        ref = ActorRef(wrapper)
-        wrapper.set_my_ref(ref)
-        return ref
+    def create(cls, local_node: NodeAbstract, local_id: str, receiver_id: str) -> 'ActorRef':
+        if len(receiver_id.split(".")) > 2:  # TODO: remove this
+            raise Exception()
+        return ActorRef(local_node, local_id, receiver_id)

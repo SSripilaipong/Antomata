@@ -1,22 +1,16 @@
 from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING
 
+from redcomet.base.actor.ref import ActorRefAbstract
 from redcomet.base.message.abstract import MessageAbstract
+
+if TYPE_CHECKING:
+    from redcomet.base.cluster.abstract import ClusterAbstract
 
 
 class ActorAbstract(ABC):
 
     @abstractmethod
-    def receive(self, message: MessageAbstract, sender: 'ActorRefAbstract', me: 'ActorRefAbstract'):
-        pass
-
-
-class ActorRefAbstract(ABC):
-
-    @abstractmethod
-    def tell(self, message: MessageAbstract):
-        pass
-
-    @classmethod
-    @abstractmethod
-    def of(cls, actor: ActorAbstract) -> 'ActorRefAbstract':
+    def receive(self, message: MessageAbstract, sender: ActorRefAbstract, me: ActorRefAbstract,
+                cluster: 'ClusterAbstract'):
         pass

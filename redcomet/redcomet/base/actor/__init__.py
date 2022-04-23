@@ -1,1 +1,2 @@
-from .abstract import ActorAbstract, ActorRefAbstract
+from .abstract import ActorAbstract
+from .ref import ActorRefAbstract
