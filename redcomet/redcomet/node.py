@@ -5,6 +5,9 @@ from redcomet.base.inbox import InboxAbstract
 from redcomet.base.message.abstract import MessageAbstract
 from redcomet.base.node import NodeAbstract
 from redcomet.base.outbox import OutboxAbstract
+from redcomet.executor import Executor
+from redcomet.inbox import Inbox
+from redcomet.outbox import Outbox
 
 
 class Node(NodeAbstract):
@@ -14,6 +17,14 @@ class Node(NodeAbstract):
         self._inbox = inbox
         self._outbox = outbox
         self._executor = executor
+
+    @classmethod
+    def create(cls, node_id: str, executor: Executor, outbox: Outbox, inbox: Inbox) -> 'Node':
+        node = cls(node_id, executor, outbox, inbox)
+        outbox.set_node(node)
+        inbox.set_node(node)
+        executor.set_node(node)
+        return node
 
     def send(self, message: MessageAbstract, local_id: str, receiver_id: str):
         self._outbox.send(message, local_id, receiver_id)

@@ -20,16 +20,11 @@ class DummyActor(ActorAbstract):  # TODO: make use of this
 class ActorSystem:
     def __init__(self, node_id: str = None):
         self._node_id = node_id or "main"
-        outbox = Outbox(self._node_id)
-        inbox = Inbox(self._node_id)
         executor = Executor(self._node_id)
 
+        self._node = Node.create(self._node_id, executor, Outbox(self._node_id), Inbox(self._node_id))
         self._cluster = Cluster()
-        self._node = Node(self._node_id, executor, outbox, inbox)
 
-        outbox.set_node(self._node)
-        inbox.set_node(self._node)
-        executor.set_node(self._node)
         executor.set_cluster(self._cluster)
         self._cluster.set_node(self._node)
 
