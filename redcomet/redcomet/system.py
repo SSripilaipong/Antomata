@@ -22,7 +22,12 @@ class ActorSystem:
         self._node_id = node_id or "main"
         executor = Executor(self._node_id)
 
-        self._node = Node.create(self._node_id, executor, Outbox(self._node_id), Inbox(self._node_id))
+        inbox = Inbox(self._node_id)
+
+        outbox = Outbox(self._node_id)
+        outbox.register_inbox(inbox, "main")
+
+        self._node = Node.create(self._node_id, executor, outbox, inbox)
         self._cluster = Cluster()
 
         executor.set_cluster(self._cluster)
