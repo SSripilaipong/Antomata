@@ -11,7 +11,8 @@ from redcomet.queue.abstract import QueueAbstract
 
 
 class GatewayNode(NodeAbstract):
-    def __init__(self, node_id: str, executor: ActorExecutorAbstract, outbox: OutboxAbstract, incoming_queue: QueueAbstract):
+    def __init__(self, node_id: str, executor: ActorExecutorAbstract, outbox: OutboxAbstract,
+                 incoming_queue: QueueAbstract):
         self._node_id = node_id
         self._executor = executor
         self._outbox = outbox
