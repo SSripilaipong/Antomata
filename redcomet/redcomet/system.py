@@ -3,14 +3,14 @@ from typing import List, Tuple
 from redcomet.base.actor import ActorRefAbstract
 from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.base.cluster.abstract import ClusterAbstract
-from redcomet.base.message.abstract import MessageAbstract
+from redcomet.base.messaging.message import MessageAbstract
 from redcomet.base.node import NodeAbstract
 from redcomet.cluster import Cluster
 from redcomet.executor import Executor
-from redcomet.inbox import Inbox
+from redcomet.messaging.inbox import Inbox
 from redcomet.node.gateway import GatewayNode
 from redcomet.node.synchronous import Node
-from redcomet.outbox import Outbox
+from redcomet.messaging.outbox import Outbox
 from redcomet.queue.abstract import QueueAbstract
 from redcomet.queue.default import DefaultQueue
 

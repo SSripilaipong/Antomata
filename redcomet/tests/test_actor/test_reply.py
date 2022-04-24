@@ -2,7 +2,7 @@ from redcomet.actor.ref import ActorRef
 from redcomet.base.actor import ActorRefAbstract
 from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.base.cluster.abstract import ClusterAbstract
-from redcomet.base.message.abstract import MessageAbstract
+from redcomet.base.messaging.message import MessageAbstract
 from redcomet.queue.abstract import QueueAbstract
 from redcomet.queue.default import DefaultQueue
 from redcomet.system import ActorSystem

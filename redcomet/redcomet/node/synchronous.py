@@ -2,10 +2,10 @@ from redcomet.actor.ref import ActorRef
 from redcomet.base.actor import ActorAbstract, ActorRefAbstract
 from redcomet.base.executor import ExecutorAbstract
 from redcomet.base.node import NodeAbstract
-from redcomet.base.outbox import OutboxAbstract
+from redcomet.base.messaging.outbox import OutboxAbstract
 from redcomet.executor import Executor
-from redcomet.inbox import Inbox
-from redcomet.outbox import Outbox
+from redcomet.messaging.inbox import Inbox
+from redcomet.messaging.outbox import Outbox
 
 
 class Node(NodeAbstract):

@@ -1,6 +1,6 @@
 from redcomet.base.executor import ExecutorAbstract
-from redcomet.base.inbox import InboxAbstract
-from redcomet.base.message.abstract import MessageAbstract
+from redcomet.base.messaging.inbox import InboxAbstract
+from redcomet.base.messaging.message import MessageAbstract
 
 
 class Inbox(InboxAbstract):

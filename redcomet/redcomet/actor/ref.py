@@ -1,6 +1,6 @@
 from redcomet.base.actor import ActorRefAbstract
-from redcomet.base.message.abstract import MessageAbstract
-from redcomet.base.outbox import OutboxAbstract
+from redcomet.base.messaging.message import MessageAbstract
+from redcomet.base.messaging.outbox import OutboxAbstract
 
 
 class ActorRef(ActorRefAbstract):

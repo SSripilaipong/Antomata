@@ -1,8 +1,8 @@
 from typing import Dict
 
-from redcomet.base.inbox import InboxAbstract
-from redcomet.base.message.abstract import MessageAbstract
-from redcomet.base.outbox import OutboxAbstract
+from redcomet.base.messaging.inbox import InboxAbstract
+from redcomet.base.messaging.message import MessageAbstract
+from redcomet.base.messaging.outbox import OutboxAbstract
 
 
 class Outbox(OutboxAbstract):
