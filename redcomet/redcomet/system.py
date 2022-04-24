@@ -38,13 +38,20 @@ class ActorSystem:
         return self._cluster.spawn(actor, self._gateway, "main")
 
     def __enter__(self) -> 'ActorSystem':
+        self.start()
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        pass
+        self.stop()
 
     def fetch_message(self, timeout: float = None) -> MessageAbstract:
         return self._incoming_messages.get(timeout=timeout)
+
+    def start(self):
+        pass
+
+    def stop(self):
+        pass
 
 
 def _create_gateway_node(node_id: str, incoming_messages: DefaultQueue) -> (GatewayNode, Inbox, Outbox):
