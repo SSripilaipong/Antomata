@@ -7,14 +7,19 @@ from redcomet.base.node import NodeAbstract
 class Cluster(ClusterAbstract):
     def __init__(self, node: NodeAbstract = None):
         self._node = node
-        self._running_actor_local_id = None
+        self._default_local_sender_id = None
+        self._default_sender_node = None
 
     def set_node(self, node: NodeAbstract):
         self._node = node
 
-    def set_running_actor_local_id(self, local_id: str):
-        self._running_actor_local_id = local_id
+    def set_default_sender_node(self, node: NodeAbstract):
+        self._default_sender_node = node
 
-    def spawn(self, actor: ActorAbstract) -> ActorRef:
+    def set_default_local_sender_id(self, local_id: str):
+        self._default_local_sender_id = local_id
+
+    def spawn(self, actor: ActorAbstract, sender_node: NodeAbstract = None, local_sender_id: str = None) -> ActorRef:
         receiver_id = self._node.register(actor)
-        return ActorRef.create(self._node, self._running_actor_local_id, receiver_id)
+        local_sender_id = local_sender_id or self._default_local_sender_id
+        return ActorRef.create(sender_node or self._node, local_sender_id, receiver_id)

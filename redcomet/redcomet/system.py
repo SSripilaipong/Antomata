@@ -6,42 +6,38 @@ from redcomet.base.message.abstract import MessageAbstract
 from redcomet.cluster import Cluster
 from redcomet.executor import Executor
 from redcomet.inbox import Inbox
+from redcomet.node.gateway import GatewayNode
 from redcomet.node.synchronous import Node
 from redcomet.outbox import Outbox
 from redcomet.queue.default import DefaultQueue
 
 
-class DummyActor(ActorAbstract):  # TODO: make use of this
-
-    def receive(self, message: MessageAbstract, sender: ActorRefAbstract, me: ActorRefAbstract,
-                cluster: ClusterAbstract):
-        pass
-
-
 class ActorSystem:
-    def __init__(self, node_id: str = None):
-        self._node_id = node_id or "main"
+    def __init__(self):
         self._incoming_messages = DefaultQueue()
-        executor = Executor(self._node_id)
 
-        inbox = Inbox(self._node_id)
+        inbox = Inbox("main")
+        outbox = Outbox("main")
 
-        outbox = Outbox(self._node_id)
+        executor0 = Executor("node0")
+        inbox0 = Inbox("node0")
+        outbox0 = Outbox("node0")
+
         outbox.register_inbox(inbox, "main")
+        outbox.register_inbox(inbox0, "node0")
+        outbox0.register_inbox(inbox, "main")
+        outbox0.register_inbox(inbox0, "node0")
 
-        self._node = Node.create(self._node_id, executor, outbox, inbox)
+        self._gateway = GatewayNode.create("main", outbox, inbox, self._incoming_messages)
+        self._node = Node.create("node0", executor0, outbox0, inbox0)
+
         self._cluster = Cluster()
 
-        executor.set_cluster(self._cluster)
+        executor0.set_cluster(self._cluster)
         self._cluster.set_node(self._node)
 
-        global_id = self._node.register(DummyActor())
-        _, self._my_id = global_id.split(".")
-        self._ref = ActorRef.create(self._node, self._my_id, global_id)
-
     def spawn(self, actor: ActorAbstract) -> ActorRef:
-        global_id = self._node.register(actor)
-        return ActorRef.create(self._node, self._my_id, global_id)
+        return self._cluster.spawn(actor, self._gateway, "main")
 
     def __enter__(self) -> 'ActorSystem':
         return self
@@ -50,4 +46,4 @@ class ActorSystem:
         pass
 
     def fetch_message(self, timeout: float = None) -> MessageAbstract:
-        pass
+        return self._incoming_messages.get(timeout=timeout)

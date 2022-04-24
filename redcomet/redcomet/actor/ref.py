@@ -18,3 +18,6 @@ class ActorRef(ActorRefAbstract):
     @classmethod
     def create(cls, local_node: NodeAbstract, local_id: str, receiver_id: str) -> 'ActorRef':
         return ActorRef(local_node, local_id, receiver_id)
+
+    def __repr__(self) -> str:
+        return f"ActorRef(..., local_id={self._local_id!r}, receiver_id={self._receiver_id!r})"
