@@ -1,8 +1,8 @@
 from typing import Dict
 
 from redcomet.base.actor import ActorAbstract
-from redcomet.base.cluster.abstract import ClusterAbstract
 from redcomet.base.actor.executor import ActorExecutorAbstract
+from redcomet.base.cluster.abstract import ClusterAbstract
 from redcomet.base.messaging.message import MessageAbstract
 from redcomet.base.node import NodeAbstract
 from redcomet.cluster import Cluster

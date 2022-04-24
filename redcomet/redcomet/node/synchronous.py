@@ -1,9 +1,10 @@
+from redcomet.actor.executor import ActorExecutor
 from redcomet.actor.ref import ActorRef
 from redcomet.base.actor import ActorAbstract, ActorRefAbstract
 from redcomet.base.actor.executor import ActorExecutorAbstract
-from redcomet.base.node import NodeAbstract
 from redcomet.base.messaging.outbox import OutboxAbstract
-from redcomet.actor.executor import ActorExecutor
+from redcomet.base.node import NodeAbstract
+from redcomet.messaging.handler import MessageHandler
 from redcomet.messaging.inbox import Inbox
 from redcomet.messaging.outbox import Outbox
 
@@ -19,7 +20,7 @@ class Node(NodeAbstract):
     def create(cls, node_id: str, executor: ActorExecutor, outbox: Outbox, inbox: Inbox) -> 'Node':
         node = cls(node_id, executor, outbox)
         executor.set_node(node)
-        inbox.set_executor(executor)
+        inbox.set_handler(MessageHandler(executor))
         return node
 
     def issue_actor_ref(self, local_issuer_id: str, ref_id: str) -> ActorRefAbstract:

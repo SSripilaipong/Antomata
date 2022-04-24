@@ -2,8 +2,9 @@ from redcomet.actor.ref import ActorRef
 from redcomet.base.actor import ActorAbstract, ActorRefAbstract
 from redcomet.base.actor.executor import ActorExecutorAbstract
 from redcomet.base.messaging.message import MessageAbstract
-from redcomet.base.node import NodeAbstract
 from redcomet.base.messaging.outbox import OutboxAbstract
+from redcomet.base.node import NodeAbstract
+from redcomet.messaging.handler import MessageHandler
 from redcomet.messaging.inbox import Inbox
 from redcomet.messaging.outbox import Outbox
 from redcomet.queue.abstract import QueueAbstract
@@ -20,7 +21,7 @@ class GatewayNode(NodeAbstract):
     def create(cls, node_id: str, outbox: Outbox, inbox: Inbox, incoming_queue: QueueAbstract) -> 'GatewayNode':
         executor = EnqueueExecutor(incoming_queue)
         node = cls(node_id, executor, outbox, incoming_queue)
-        inbox.set_executor(executor)
+        inbox.set_handler(MessageHandler(executor))
         return node
 
     def issue_actor_ref(self, local_issuer_id: str, ref_id: str) -> ActorRefAbstract:
