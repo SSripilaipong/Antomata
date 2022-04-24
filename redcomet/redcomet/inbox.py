@@ -1,4 +1,3 @@
-from redcomet.base.actor import ActorAbstract
 from redcomet.base.executor import ExecutorAbstract
 from redcomet.base.inbox import InboxAbstract
 from redcomet.base.message.abstract import MessageAbstract
@@ -11,9 +10,6 @@ class Inbox(InboxAbstract):
 
     def set_executor(self, executor: ExecutorAbstract):
         self._executor = executor
-
-    def register(self, local_id: str, actor: ActorAbstract):
-        pass
 
     def receive(self, message: MessageAbstract, sender_id: str, receiver_id: str):
         local_receiver_id = receiver_id.split(".")[1]

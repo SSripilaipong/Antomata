@@ -1,7 +1,6 @@
 from redcomet.actor.ref import ActorRef
 from redcomet.base.actor import ActorAbstract, ActorRefAbstract
 from redcomet.base.executor import ExecutorAbstract
-from redcomet.base.inbox import InboxAbstract
 from redcomet.base.message.abstract import MessageAbstract
 from redcomet.base.node import NodeAbstract
 from redcomet.base.outbox import OutboxAbstract
@@ -11,18 +10,16 @@ from redcomet.queue.abstract import QueueAbstract
 
 
 class GatewayNode(NodeAbstract):
-    def __init__(self, node_id: str, executor: ExecutorAbstract, outbox: OutboxAbstract, inbox: InboxAbstract,
-                 incoming_queue: QueueAbstract):
+    def __init__(self, node_id: str, executor: ExecutorAbstract, outbox: OutboxAbstract, incoming_queue: QueueAbstract):
         self._node_id = node_id
         self._executor = executor
         self._outbox = outbox
-        self._inbox = inbox
         self._incoming_queue = incoming_queue
 
     @classmethod
     def create(cls, node_id: str, outbox: Outbox, inbox: Inbox, incoming_queue: QueueAbstract) -> 'GatewayNode':
         executor = EnqueueExecutor(incoming_queue)
-        node = cls(node_id, executor, outbox, inbox, incoming_queue)
+        node = cls(node_id, executor, outbox, incoming_queue)
         inbox.set_executor(executor)
         return node
 
