@@ -1,6 +1,6 @@
 from redcomet.actor.ref import ActorRef
 from redcomet.base.actor import ActorAbstract, ActorRefAbstract
-from redcomet.base.executor import ExecutorAbstract
+from redcomet.base.actor.executor import ActorExecutorAbstract
 from redcomet.base.messaging.message import MessageAbstract
 from redcomet.base.node import NodeAbstract
 from redcomet.base.messaging.outbox import OutboxAbstract
@@ -10,7 +10,7 @@ from redcomet.queue.abstract import QueueAbstract
 
 
 class GatewayNode(NodeAbstract):
-    def __init__(self, node_id: str, executor: ExecutorAbstract, outbox: OutboxAbstract, incoming_queue: QueueAbstract):
+    def __init__(self, node_id: str, executor: ActorExecutorAbstract, outbox: OutboxAbstract, incoming_queue: QueueAbstract):
         self._node_id = node_id
         self._executor = executor
         self._outbox = outbox
@@ -37,7 +37,7 @@ class GatewayNode(NodeAbstract):
         raise NotImplementedError()
 
 
-class EnqueueExecutor(ExecutorAbstract):
+class EnqueueExecutor(ActorExecutorAbstract):
     def __init__(self, queue: QueueAbstract):
         self._queue = queue
 

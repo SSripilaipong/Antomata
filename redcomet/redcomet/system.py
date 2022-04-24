@@ -6,7 +6,7 @@ from redcomet.base.cluster.abstract import ClusterAbstract
 from redcomet.base.messaging.message import MessageAbstract
 from redcomet.base.node import NodeAbstract
 from redcomet.cluster import Cluster
-from redcomet.executor import Executor
+from redcomet.actor.executor import ActorExecutor
 from redcomet.messaging.inbox import Inbox
 from redcomet.node.gateway import GatewayNode
 from redcomet.node.synchronous import Node
@@ -62,7 +62,7 @@ def _create_gateway_node(node_id: str, incoming_messages: DefaultQueue) -> (Gate
 
 
 def _create_worker_node(node_id: str, cluster: Cluster) -> (Node, Inbox, Outbox):
-    executor = Executor(node_id)
+    executor = ActorExecutor(node_id)
     inbox = Inbox(node_id)
     outbox = Outbox(node_id)
 

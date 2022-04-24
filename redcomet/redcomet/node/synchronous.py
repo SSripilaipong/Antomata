@@ -1,22 +1,22 @@
 from redcomet.actor.ref import ActorRef
 from redcomet.base.actor import ActorAbstract, ActorRefAbstract
-from redcomet.base.executor import ExecutorAbstract
+from redcomet.base.actor.executor import ActorExecutorAbstract
 from redcomet.base.node import NodeAbstract
 from redcomet.base.messaging.outbox import OutboxAbstract
-from redcomet.executor import Executor
+from redcomet.actor.executor import ActorExecutor
 from redcomet.messaging.inbox import Inbox
 from redcomet.messaging.outbox import Outbox
 
 
 class Node(NodeAbstract):
-    def __init__(self, node_id: str, executor: ExecutorAbstract, outbox: OutboxAbstract):
+    def __init__(self, node_id: str, executor: ActorExecutorAbstract, outbox: OutboxAbstract):
         self._node_id = node_id
 
         self._outbox = outbox
         self._executor = executor
 
     @classmethod
-    def create(cls, node_id: str, executor: Executor, outbox: Outbox, inbox: Inbox) -> 'Node':
+    def create(cls, node_id: str, executor: ActorExecutor, outbox: Outbox, inbox: Inbox) -> 'Node':
         node = cls(node_id, executor, outbox)
         executor.set_node(node)
         inbox.set_executor(executor)

@@ -2,13 +2,13 @@ from typing import Dict
 
 from redcomet.base.actor import ActorAbstract
 from redcomet.base.cluster.abstract import ClusterAbstract
-from redcomet.base.executor import ExecutorAbstract
+from redcomet.base.actor.executor import ActorExecutorAbstract
 from redcomet.base.messaging.message import MessageAbstract
 from redcomet.base.node import NodeAbstract
 from redcomet.cluster import Cluster
 
 
-class Executor(ExecutorAbstract):
+class ActorExecutor(ActorExecutorAbstract):
     def __init__(self, node_id: str, node: NodeAbstract = None, cluster: Cluster = None):
         self._node_id = node_id
         self._node = node

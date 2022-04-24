@@ -4,7 +4,7 @@ from redcomet.base.actor import ActorAbstract
 from redcomet.base.messaging.message import MessageAbstract
 
 
-class ExecutorAbstract(ABC):
+class ActorExecutorAbstract(ABC):
 
     @abstractmethod
     def register(self, local_id: str, actor: ActorAbstract):
