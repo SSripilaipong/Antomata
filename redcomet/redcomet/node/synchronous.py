@@ -25,9 +25,6 @@ class Node(NodeAbstract):
         inbox.set_executor(executor)
         return node
 
-    def send(self, message: MessageAbstract, local_id: str, receiver_id: str):
-        self._outbox.send(message, local_id, receiver_id)
-
     def make_global_id(self, local_id: str) -> str:
         return f"{self._node_id}.{local_id}"
 

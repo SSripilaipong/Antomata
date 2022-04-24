@@ -30,7 +30,7 @@ class Caller(ActorAbstract):
 
     def receive(self, message: MessageAbstract, sender: ActorRefAbstract, me: ActorRef,
                 cluster: ClusterAbstract):
-        self._provider = self._provider.for_actor(me)  # TODO: find better way to set local_id
+        self._provider = self._provider.bind(me)  # TODO: find better way to set local_id
         if isinstance(message, StartCommand):
             self._provider.tell(RequestMessage(self._data))
         elif isinstance(message, ResponseMessage):

@@ -7,10 +7,6 @@ from redcomet.base.message.abstract import MessageAbstract
 class NodeAbstract(ABC):
 
     @abstractmethod
-    def send(self, message: MessageAbstract, local_id: str, receiver_id: str):
-        pass
-
-    @abstractmethod
     def make_global_id(self, local_id: str) -> str:
         pass
 
