@@ -46,3 +46,6 @@ class ActorSystem:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         pass
+
+    def fetch_message(self, timeout: float = None) -> MessageAbstract:
+        pass
