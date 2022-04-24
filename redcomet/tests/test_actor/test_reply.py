@@ -53,7 +53,7 @@ class Provider(ActorAbstract):
 
 def test_should_response_back_to_sender():
     response_queue = DefaultQueue()
-    with ActorSystem() as system:
+    with ActorSystem.create() as system:
         provider = system.spawn(Provider("Paste"))
         caller = system.spawn(Caller("Copy", provider, response_queue))
         caller.tell(StartCommand())

@@ -22,8 +22,8 @@ class MyActor(ActorAbstract):
 
 
 def test_should_reply_to_gateway():
-    system = ActorSystem()
-    actor = system.spawn(MyActor())
-    actor.tell(Ping())
-    reply = system.fetch_message(timeout=1)
-    assert isinstance(reply, Pong)
+    with ActorSystem.create() as system:
+        actor = system.spawn(MyActor())
+        actor.tell(Ping())
+        reply = system.fetch_message(timeout=1)
+        assert isinstance(reply, Pong)

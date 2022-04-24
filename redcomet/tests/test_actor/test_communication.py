@@ -56,7 +56,7 @@ class Second(ActorAbstract):
 def test_should_communicate_between_actors():
     first_queue = DefaultQueue()
     second_queue = DefaultQueue()
-    with ActorSystem() as system:
+    with ActorSystem.create() as system:
         first = system.spawn(First(first_queue))
         second = system.spawn(Second(first, second_queue))
 

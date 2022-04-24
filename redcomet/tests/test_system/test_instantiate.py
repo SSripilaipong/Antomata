@@ -23,7 +23,7 @@ class MyActor(ActorAbstract):
 
 def test_should_tell_message():
     queue = DefaultQueue()
-    with ActorSystem() as system:
+    with ActorSystem.create() as system:
         ref = system.spawn(MyActor(queue))
         ref.tell(MyStringMessage("Hello"))
 

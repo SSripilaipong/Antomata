@@ -38,7 +38,7 @@ class AnotherActor(ActorAbstract):
 
 def test_should_tell_message_to_another_actor():
     queue = DefaultQueue()
-    with ActorSystem() as system:
+    with ActorSystem.create() as system:
         my_actor = system.spawn(MyActor(queue))
 
         my_actor.tell(MyStringMessage("start"))
