@@ -1,6 +1,5 @@
 from redcomet.base.actor import ActorRefAbstract
 from redcomet.base.message.abstract import MessageAbstract
-from redcomet.base.node import NodeAbstract
 from redcomet.base.outbox import OutboxAbstract
 
 
@@ -15,10 +14,6 @@ class ActorRef(ActorRefAbstract):
 
     def tell(self, message: MessageAbstract):
         self._outbox.send(message, self._local_id, self._receiver_id)
-
-    @classmethod
-    def create(cls, local_node: NodeAbstract, local_id: str, receiver_id: str) -> 'ActorRef':
-        return ActorRef(local_node._outbox, local_id, receiver_id)  # TODO: fix this
 
     def __repr__(self) -> str:
         return f"ActorRef(..., local_id={self._local_id!r}, receiver_id={self._receiver_id!r})"

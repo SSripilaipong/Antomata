@@ -1,3 +1,4 @@
+from redcomet.actor.ref import ActorRef
 from redcomet.base.actor import ActorAbstract, ActorRefAbstract
 from redcomet.base.executor import ExecutorAbstract
 from redcomet.base.inbox import InboxAbstract
@@ -25,6 +26,9 @@ class GatewayNode(NodeAbstract):
         inbox.set_node(node)
         inbox.set_executor(executor)
         return node
+
+    def issue_actor_ref(self, local_issuer_id: str, ref_id: str) -> ActorRefAbstract:
+        return ActorRef(self._outbox, local_issuer_id, ref_id)
 
     def make_global_id(self, local_id: str) -> str:
         return f"{self._node_id}.{local_id}"

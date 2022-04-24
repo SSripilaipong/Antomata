@@ -33,7 +33,7 @@ class Executor(ExecutorAbstract):
         if actor is None:
             raise NotImplementedError()
 
-        me = ActorRef.create(self._node, local_actor_id, self._node.make_global_id(local_actor_id))
+        me = self._node.issue_actor_ref(local_actor_id, self._node.make_global_id(local_actor_id))
         self._cluster.set_default_local_sender_id(local_actor_id)
         try:
             actor.receive(message, sender, me, self._cluster)

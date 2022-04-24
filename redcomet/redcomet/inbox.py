@@ -1,4 +1,3 @@
-from redcomet.actor.ref import ActorRef
 from redcomet.base.actor import ActorAbstract
 from redcomet.base.executor import ExecutorAbstract
 from redcomet.base.inbox import InboxAbstract
@@ -23,5 +22,5 @@ class Inbox(InboxAbstract):
 
     def receive(self, message: MessageAbstract, sender_id: str, receiver_id: str):
         local_receiver_id = receiver_id.split(".")[1]
-        sender = ActorRef.create(self._node, local_receiver_id, sender_id)
+        sender = self._node.issue_actor_ref(local_receiver_id, sender_id)
         self._executor.execute(message, sender, local_receiver_id)
