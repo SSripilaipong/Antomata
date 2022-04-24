@@ -17,6 +17,4 @@ class ActorRef(ActorRefAbstract):
 
     @classmethod
     def create(cls, local_node: NodeAbstract, local_id: str, receiver_id: str) -> 'ActorRef':
-        if len(receiver_id.split(".")) > 2:  # TODO: remove this
-            raise Exception()
         return ActorRef(local_node, local_id, receiver_id)

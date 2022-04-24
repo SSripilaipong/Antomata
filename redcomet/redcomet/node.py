@@ -16,7 +16,6 @@ class Node(NodeAbstract):
         self._executor = executor
 
     def send(self, message: MessageAbstract, local_id: str, receiver_id: str):
-        print('send', local_id, receiver_id)
         self._outbox.send(message, local_id, receiver_id)
 
     def receive(self, message: MessageAbstract, sender_id: str, receiver_id: str):
@@ -36,5 +35,4 @@ class Node(NodeAbstract):
         self._executor.register(local_id, actor)
         self._inbox.register(local_id, actor)
         global_id = self.make_global_id(local_id)
-        print('reg', global_id)
         return global_id
