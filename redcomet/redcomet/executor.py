@@ -1,6 +1,5 @@
 from typing import Dict
 
-from redcomet.actor.ref import ActorRef
 from redcomet.base.actor import ActorAbstract
 from redcomet.base.cluster.abstract import ClusterAbstract
 from redcomet.base.executor import ExecutorAbstract
@@ -28,7 +27,8 @@ class Executor(ExecutorAbstract):
 
         self._actor_map[local_id] = actor
 
-    def execute(self, message: MessageAbstract, sender: ActorRef, local_actor_id: str):
+    def execute(self, message: MessageAbstract, sender_id: str, local_actor_id: str):
+        sender = self._node.issue_actor_ref(local_actor_id, sender_id)
         actor = self._actor_map.get(local_actor_id)
         if actor is None:
             raise NotImplementedError()

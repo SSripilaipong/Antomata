@@ -22,5 +22,4 @@ class Inbox(InboxAbstract):
 
     def receive(self, message: MessageAbstract, sender_id: str, receiver_id: str):
         local_receiver_id = receiver_id.split(".")[1]
-        sender = self._node.issue_actor_ref(local_receiver_id, sender_id)
-        self._executor.execute(message, sender, local_receiver_id)
+        self._executor.execute(message, sender_id, local_receiver_id)

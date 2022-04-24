@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from redcomet.base.actor import ActorAbstract, ActorRefAbstract
+from redcomet.base.actor import ActorAbstract
 from redcomet.base.message.abstract import MessageAbstract
 
 
@@ -11,5 +11,5 @@ class ExecutorAbstract(ABC):
         pass
 
     @abstractmethod
-    def execute(self, message: MessageAbstract, sender: ActorRefAbstract, local_actor_id: str):
+    def execute(self, message: MessageAbstract, sender_id: str, local_actor_id: str):
         pass
