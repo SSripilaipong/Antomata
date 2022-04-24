@@ -23,7 +23,6 @@ class GatewayNode(NodeAbstract):
     def create(cls, node_id: str, outbox: Outbox, inbox: Inbox, incoming_queue: QueueAbstract) -> 'GatewayNode':
         executor = EnqueueExecutor(incoming_queue)
         node = cls(node_id, executor, outbox, inbox, incoming_queue)
-        inbox.set_node(node)
         inbox.set_executor(executor)
         return node
 

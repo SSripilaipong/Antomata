@@ -2,17 +2,12 @@ from redcomet.base.actor import ActorAbstract
 from redcomet.base.executor import ExecutorAbstract
 from redcomet.base.inbox import InboxAbstract
 from redcomet.base.message.abstract import MessageAbstract
-from redcomet.base.node import NodeAbstract
 
 
 class Inbox(InboxAbstract):
-    def __init__(self, node_id: str, node: NodeAbstract = None, executor: ExecutorAbstract = None):
+    def __init__(self, node_id: str, executor: ExecutorAbstract = None):
         self._node_id = node_id
-        self._node = node
         self._executor = executor
-
-    def set_node(self, node: NodeAbstract):
-        self._node = node
 
     def set_executor(self, executor: ExecutorAbstract):
         self._executor = executor

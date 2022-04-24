@@ -21,7 +21,6 @@ class Node(NodeAbstract):
     def create(cls, node_id: str, executor: Executor, outbox: Outbox, inbox: Inbox) -> 'Node':
         node = cls(node_id, executor, outbox, inbox)
         executor.set_node(node)
-        inbox.set_node(node)
         inbox.set_executor(executor)
         return node
 
