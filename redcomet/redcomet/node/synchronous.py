@@ -1,4 +1,3 @@
-from redcomet.actor.ref import ActorRef
 from redcomet.base.actor import ActorAbstract
 from redcomet.base.executor import ExecutorAbstract
 from redcomet.base.inbox import InboxAbstract
@@ -28,11 +27,6 @@ class Node(NodeAbstract):
 
     def send(self, message: MessageAbstract, local_id: str, receiver_id: str):
         self._outbox.send(message, local_id, receiver_id)
-
-    def receive(self, message: MessageAbstract, sender_id: str, receiver_id: str):
-        local_actor_id = receiver_id.split(".")[1]
-        sender = ActorRef.create(self, local_actor_id, sender_id)
-        self._executor.execute(message, sender, local_actor_id)
 
     def make_global_id(self, local_id: str) -> str:
         return f"{self._node_id}.{local_id}"

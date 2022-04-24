@@ -6,8 +6,9 @@ from redcomet.base.message.abstract import MessageAbstract
 from redcomet.cluster import Cluster
 from redcomet.executor import Executor
 from redcomet.inbox import Inbox
-from redcomet.node import Node
+from redcomet.node.synchronous import Node
 from redcomet.outbox import Outbox
+from redcomet.queue.default import DefaultQueue
 
 
 class DummyActor(ActorAbstract):  # TODO: make use of this
@@ -20,6 +21,7 @@ class DummyActor(ActorAbstract):  # TODO: make use of this
 class ActorSystem:
     def __init__(self, node_id: str = None):
         self._node_id = node_id or "main"
+        self._incoming_messages = DefaultQueue()
         executor = Executor(self._node_id)
 
         inbox = Inbox(self._node_id)
