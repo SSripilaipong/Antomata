@@ -15,10 +15,6 @@ class Node(NodeAbstract):
         self._outbox = outbox
         self._executor = executor
 
-    def spawn(self, actor: ActorAbstract) -> ActorRef:  # TODO: remove this
-        global_id = self.register(actor)
-        return ActorRef.create(self, self._node_id, global_id)
-
     def send(self, message: MessageAbstract, local_id: str, receiver_id: str):
         print('send', local_id, receiver_id)
         self._outbox.send(message, local_id, receiver_id)
