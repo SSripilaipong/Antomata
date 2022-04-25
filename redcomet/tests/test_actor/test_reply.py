@@ -2,7 +2,7 @@ from redcomet.actor.ref import ActorRef
 from redcomet.base.actor import ActorRefAbstract
 from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.base.actor.message import MessageAbstract
-from redcomet.base.cluster.abstract import ClusterAbstract
+from redcomet.base.cluster.ref import ClusterRefAbstract
 from redcomet.queue.abstract import QueueAbstract
 from redcomet.queue.default import DefaultQueue
 from redcomet.system import ActorSystem
@@ -29,7 +29,7 @@ class Caller(ActorAbstract):
         self._recv_queue = recv_queue
 
     def receive(self, message: MessageAbstract, sender: ActorRefAbstract, me: ActorRef,
-                cluster: ClusterAbstract):
+                cluster: ClusterRefAbstract):
         self._provider = self._provider.bind(me)  # TODO: find better way to set local_id
         if isinstance(message, StartCommand):
             self._provider.tell(RequestMessage(self._data))
@@ -44,7 +44,7 @@ class Provider(ActorAbstract):
         self._data = data
 
     def receive(self, message: MessageAbstract, sender: ActorRefAbstract, me: ActorRefAbstract,
-                cluster: ClusterAbstract):
+                cluster: ClusterRefAbstract):
         if isinstance(message, RequestMessage):
             sender.tell(ResponseMessage(message.value + self._data))
         else:

@@ -1,10 +1,9 @@
-from redcomet.base.actor import ActorRefAbstract
-from redcomet.base.actor.abstract import ActorAbstract
-from redcomet.base.cluster.abstract import ClusterAbstract
+from redcomet.base.actor import ActorAbstract, ActorRefAbstract
+from redcomet.base.cluster.ref import ClusterRefAbstract
 from redcomet.base.node import NodeAbstract
 
 
-class Cluster(ClusterAbstract):
+class ClusterRef(ClusterRefAbstract):
     def __init__(self, node: NodeAbstract = None):
         self._node = node
         self._default_local_sender_id = None

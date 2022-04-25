@@ -1,6 +1,6 @@
 from redcomet.base.actor import ActorAbstract, ActorRefAbstract
 from redcomet.base.actor.message import MessageAbstract
-from redcomet.base.cluster.abstract import ClusterAbstract
+from redcomet.base.cluster.ref import ClusterRefAbstract
 from redcomet.system import ActorSystem
 
 
@@ -14,7 +14,7 @@ class Pong(MessageAbstract):
 
 class MyActor(ActorAbstract):
     def receive(self, message: MessageAbstract, sender: ActorRefAbstract, me: ActorRefAbstract,
-                cluster: ClusterAbstract):
+                cluster: ClusterRefAbstract):
         if isinstance(message, Ping):
             sender.tell(Pong())
         else:

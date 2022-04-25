@@ -4,11 +4,11 @@ from redcomet.actor.executor import ActorExecutor
 from redcomet.base.actor import ActorRefAbstract
 from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.base.actor.message import MessageAbstract
-from redcomet.base.cluster.abstract import ClusterAbstract
+from redcomet.base.cluster.ref import ClusterRefAbstract
 from redcomet.base.messaging.inbox import Inbox
 from redcomet.base.messaging.outbox import Outbox
 from redcomet.base.node import NodeAbstract
-from redcomet.cluster import Cluster
+from redcomet.cluster.ref import ClusterRef
 from redcomet.node.gateway import GatewayNode
 from redcomet.node.synchronous import Node
 from redcomet.queue.abstract import QueueAbstract
@@ -16,7 +16,7 @@ from redcomet.queue.default import DefaultQueue
 
 
 class ActorSystem:
-    def __init__(self, cluster: ClusterAbstract, gateway: NodeAbstract, incoming_messages: QueueAbstract):
+    def __init__(self, cluster: ClusterRefAbstract, gateway: NodeAbstract, incoming_messages: QueueAbstract):
         self._cluster = cluster
         self._gateway = gateway
         self._incoming_messages = incoming_messages
@@ -25,7 +25,7 @@ class ActorSystem:
     def create(cls) -> 'ActorSystem':
         incoming_messages = DefaultQueue()
 
-        cluster = Cluster()
+        cluster = ClusterRef()
 
         gateway, gateway_inbox, gateway_outbox = _create_gateway_node("main", incoming_messages)
         node, inbox0, outbox0 = _create_worker_node("node0", cluster)
@@ -61,7 +61,7 @@ def _create_gateway_node(node_id: str, incoming_messages: DefaultQueue) -> (Gate
     return GatewayNode.create(node_id, outbox, inbox, incoming_messages), inbox, outbox
 
 
-def _create_worker_node(node_id: str, cluster: Cluster) -> (Node, Inbox, Outbox):
+def _create_worker_node(node_id: str, cluster: ClusterRef) -> (Node, Inbox, Outbox):
     executor = ActorExecutor(node_id)
     inbox = Inbox(node_id)
     outbox = Outbox(node_id)

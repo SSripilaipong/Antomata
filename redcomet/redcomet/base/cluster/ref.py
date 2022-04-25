@@ -5,7 +5,7 @@ from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.base.node import NodeAbstract
 
 
-class ClusterAbstract(ABC):
+class ClusterRefAbstract(ABC):
     @abstractmethod
     def spawn(self, actor: ActorAbstract, sender_node: NodeAbstract = None, local_sender_id: str = None) \
             -> ActorRefAbstract:
