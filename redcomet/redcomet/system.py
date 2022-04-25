@@ -5,6 +5,7 @@ from redcomet.base.actor import ActorRefAbstract
 from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
+from redcomet.base.actor.discovery import ActorDiscovery
 from redcomet.base.messaging.inbox import Inbox
 from redcomet.base.messaging.outbox import Outbox
 from redcomet.base.node import NodeAbstract
@@ -25,10 +26,13 @@ class ActorSystem:
     def create(cls) -> 'ActorSystem':
         incoming_messages = DefaultQueue()
 
+        discovery = ActorDiscovery()
+        discovery.register("main", "main")
+
         cluster = ClusterRef()
 
-        gateway, gateway_inbox, gateway_outbox = _create_gateway_node("main", incoming_messages)
-        node, inbox0, outbox0 = _create_worker_node("node0", cluster)
+        gateway, gateway_inbox, gateway_outbox = _create_gateway_node("main", incoming_messages, discovery)
+        node, inbox0, outbox0 = _create_worker_node("node0", cluster, discovery)
         cluster.set_node(node)
 
         _wire_outboxes_to_inboxes([("main", gateway_inbox), ("node0", inbox0)], [gateway_outbox, outbox0])
@@ -54,21 +58,22 @@ class ActorSystem:
         pass
 
 
-def _create_gateway_node(node_id: str, incoming_messages: DefaultQueue) -> (GatewayNode, Inbox, Outbox):
+def _create_gateway_node(node_id: str, incoming_messages: DefaultQueue, discovery: ActorDiscovery) \
+        -> (GatewayNode, Inbox, Outbox):
     inbox = Inbox(node_id)
-    outbox = Outbox(node_id)
+    outbox = Outbox(node_id, discovery)
 
-    return GatewayNode.create(node_id, outbox, inbox, incoming_messages), inbox, outbox
+    return GatewayNode.create(node_id, outbox, inbox, incoming_messages, discovery), inbox, outbox
 
 
-def _create_worker_node(node_id: str, cluster: ClusterRef) -> (Node, Inbox, Outbox):
+def _create_worker_node(node_id: str, cluster: ClusterRef, discovery: ActorDiscovery) -> (Node, Inbox, Outbox):
     executor = ActorExecutor(node_id)
     inbox = Inbox(node_id)
-    outbox = Outbox(node_id)
+    outbox = Outbox(node_id, discovery)
 
     executor.set_cluster(cluster)
 
-    return Node.create(node_id, executor, outbox, inbox), inbox, outbox
+    return Node.create(node_id, executor, outbox, inbox, discovery), inbox, outbox
 
 
 def _wire_outboxes_to_inboxes(inboxes: List[Tuple[str, Inbox]], outboxes: List[Outbox]):

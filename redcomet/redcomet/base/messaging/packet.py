@@ -22,3 +22,9 @@ class Packet:
     @property
     def receiver(self) -> Address:
         return self._receiver
+
+    def __repr__(self):
+        return f"Packet({self._content!r}, sender={self._sender!r}, receiver={self._receiver!r})"
+
+    def set_receiver_node_id(self, node_id: str):
+        self.receiver.set_node_id(node_id)

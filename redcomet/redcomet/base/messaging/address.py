@@ -21,6 +21,5 @@ class Address:
     def set_node_id(self, node_id: str):
         self._node_id = node_id
 
-    def to_str(self) -> str:
-        assert self._node_id is not None
-        return f"{self._node_id}.{self._target}"
+    def __repr__(self):
+        return f"Address({self._node_id!r}, {self.target!r})"

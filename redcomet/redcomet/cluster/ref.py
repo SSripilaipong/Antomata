@@ -20,6 +20,11 @@ class ClusterRef(ClusterRefAbstract):
 
     def spawn(self, actor: ActorAbstract, sender_node: NodeAbstract = None, local_sender_id: str = None) \
             -> ActorRefAbstract:
-        receiver_id = self._node.register(actor)
+        ref_id = _generate_actor_id(actor)
         local_sender_id = local_sender_id or self._default_local_sender_id
-        return (sender_node or self._node).issue_actor_ref(local_sender_id, receiver_id)
+        self._node.register(actor, ref_id)
+        return (sender_node or self._node).issue_actor_ref(local_sender_id, ref_id)
+
+
+def _generate_actor_id(actor: ActorAbstract) -> str:
+    return str(id(actor))

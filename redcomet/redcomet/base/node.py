@@ -10,15 +10,11 @@ class NodeAbstract(ABC):
     def issue_actor_ref(self, local_issuer_id: str, ref_id: str) -> ActorRefAbstract:
         pass
 
-    @abstractmethod
-    def make_global_id(self, local_id: str) -> str:
-        pass
-
     @property
     @abstractmethod
     def node_id(self) -> str:
         pass
 
     @abstractmethod
-    def register(self, actor: ActorAbstract) -> str:
+    def register(self, actor: ActorAbstract, actor_id: str):
         pass
