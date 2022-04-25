@@ -1,5 +1,6 @@
+from redcomet.actor.packet import ActorMessagePacket
 from redcomet.base.actor import ActorRefAbstract
-from redcomet.base.messaging.message import MessageAbstract
+from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.messaging.outbox import OutboxAbstract
 
 
@@ -13,7 +14,7 @@ class ActorRef(ActorRefAbstract):
         return ActorRef(ref._outbox, ref._local_issuer_id, self._ref_id)
 
     def tell(self, message: MessageAbstract):
-        self._outbox.send(message, self._local_issuer_id, self._ref_id)
+        self._outbox.send(ActorMessagePacket(message), self._local_issuer_id, self._ref_id)
 
     def __repr__(self) -> str:
         return f"ActorRef(..., local_issuer_id={self._local_issuer_id!r}, ref_id={self._ref_id!r})"

@@ -1,8 +1,8 @@
 from typing import Dict
 
 from redcomet.base.messaging.inbox import InboxAbstract
-from redcomet.base.messaging.message import MessageAbstract
 from redcomet.base.messaging.outbox import OutboxAbstract
+from redcomet.base.messaging.packet import PacketAbstract
 
 
 class Outbox(OutboxAbstract):
@@ -10,9 +10,9 @@ class Outbox(OutboxAbstract):
         self._node_id = node_id
         self._inboxes: Dict[str, InboxAbstract] = {}
 
-    def send(self, message: MessageAbstract, local_id: str, receiver_id: str):
+    def send(self, packet: PacketAbstract, local_id: str, receiver_id: str):
         sender_id = f'{self._node_id}.{local_id}'
-        self._find_inbox(receiver_id).receive(message, sender_id, receiver_id)
+        self._find_inbox(receiver_id).receive(packet, sender_id, receiver_id)
 
     def _find_inbox(self, receiver_id: str) -> InboxAbstract:
         node_id = receiver_id.split(".")[0]

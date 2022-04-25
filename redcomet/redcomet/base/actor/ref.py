@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from redcomet.base.messaging.message import MessageAbstract
+from redcomet.base.actor.message import MessageAbstract
 
 
 class ActorRefAbstract(ABC):

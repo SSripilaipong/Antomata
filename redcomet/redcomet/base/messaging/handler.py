@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
 
-from redcomet.base.messaging.message import MessageAbstract
+from redcomet.base.messaging.packet import PacketAbstract
 
 
-class MessageHandlerAbstract(ABC):
+class PacketHandlerAbstract(ABC):
 
     @abstractmethod
-    def handle(self, message: MessageAbstract, sender_id: str, receiver_id: str):
+    def handle(self, packet: PacketAbstract, sender_id: str, receiver_id: str):
         pass

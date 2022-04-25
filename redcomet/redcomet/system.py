@@ -3,8 +3,8 @@ from typing import List, Tuple
 from redcomet.actor.executor import ActorExecutor
 from redcomet.base.actor import ActorRefAbstract
 from redcomet.base.actor.abstract import ActorAbstract
+from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.cluster.abstract import ClusterAbstract
-from redcomet.base.messaging.message import MessageAbstract
 from redcomet.base.node import NodeAbstract
 from redcomet.cluster import Cluster
 from redcomet.messaging.inbox import Inbox
