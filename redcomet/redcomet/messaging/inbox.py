@@ -11,5 +11,5 @@ class Inbox(InboxAbstract):
     def set_handler(self, handler: PacketHandlerAbstract):
         self._handler = handler
 
-    def receive(self, packet: Packet, sender_id: str, receiver_id: str):
-        self._handler.handle(packet, sender_id, receiver_id)
+    def receive(self, packet: Packet):
+        self._handler.handle(packet)

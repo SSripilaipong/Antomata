@@ -10,10 +10,9 @@ class Outbox(OutboxAbstract):
         self._node_id = node_id
         self._inboxes: Dict[str, InboxAbstract] = {}
 
-    def send(self, packet: Packet, local_id: str, receiver_id: str):
-        sender_id = f'{self._node_id}.{local_id}'
+    def send(self, packet: Packet):
         packet.set_sender_node_id(self._node_id)
-        self._find_inbox(receiver_id).receive(packet, sender_id, receiver_id)
+        self._find_inbox(packet.receiver.to_str()).receive(packet)
 
     def _find_inbox(self, receiver_id: str) -> InboxAbstract:
         node_id = receiver_id.split(".")[0]

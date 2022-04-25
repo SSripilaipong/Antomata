@@ -6,5 +6,5 @@ from redcomet.base.messaging.packet import Packet
 class OutboxAbstract(ABC):
 
     @abstractmethod
-    def send(self, packet: Packet, local_id: str, receiver_id: str):
+    def send(self, packet: Packet):
         pass
