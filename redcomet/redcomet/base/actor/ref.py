@@ -12,3 +12,8 @@ class ActorRefAbstract(ABC):
     @abstractmethod
     def bind(self, ref: 'ActorRefAbstract') -> 'ActorRefAbstract':
         pass
+
+    @property
+    @abstractmethod
+    def ref_id(self) -> str:
+        pass

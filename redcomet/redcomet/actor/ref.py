@@ -20,5 +20,9 @@ class ActorRef(ActorRefAbstract):
                         receiver=Address(None, self._ref_id))
         self._outbox.send(packet)
 
+    @property
+    def ref_id(self) -> str:
+        return self._ref_id
+
     def __repr__(self) -> str:
         return f"ActorRef(..., local_issuer_id={self._local_issuer_id!r}, ref_id={self._ref_id!r})"
