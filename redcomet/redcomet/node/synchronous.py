@@ -1,8 +1,8 @@
 from redcomet.actor.executor import ActorExecutor
 from redcomet.actor.ref import ActorRef
 from redcomet.base.actor import ActorAbstract, ActorRefAbstract
-from redcomet.base.actor.executor import ActorExecutorAbstract
 from redcomet.base.actor.discovery import ActorDiscovery
+from redcomet.base.actor.executor import ActorExecutorAbstract
 from redcomet.base.messaging.inbox import Inbox
 from redcomet.base.messaging.outbox import Outbox
 from redcomet.base.node import NodeAbstract

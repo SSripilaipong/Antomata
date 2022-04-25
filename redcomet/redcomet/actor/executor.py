@@ -31,7 +31,9 @@ class ActorExecutor(ActorExecutorAbstract):
         sender = self._node.issue_actor_ref(local_actor_id, sender_id)
         actor = self._actor_map.get(local_actor_id)
         if actor is None:
-            raise NotImplementedError()
+            actor = self._on_no_actor(message, sender_id, local_actor_id)
+            if actor is None:
+                return
 
         me = self._node.issue_actor_ref(local_actor_id, local_actor_id)
         self._cluster.set_default_local_sender_id(local_actor_id)
@@ -39,3 +41,6 @@ class ActorExecutor(ActorExecutorAbstract):
             actor.receive(message, sender, me, self._cluster)
         except Exception:
             raise NotImplementedError()
+
+    def _on_no_actor(self, message: MessageAbstract, sender_id: str, local_actor_id: str) -> ActorAbstract:
+        raise NotImplementedError()
