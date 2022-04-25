@@ -11,10 +11,9 @@ class Outbox:
 
     def send(self, packet: Packet):
         packet.set_sender_node_id(self._node_id)
-        self._find_inbox(packet.receiver.to_str()).receive(packet)
+        self._find_inbox(packet.receiver.node_id).receive(packet)
 
-    def _find_inbox(self, receiver_id: str) -> Inbox:
-        node_id = receiver_id.split(".")[0]
+    def _find_inbox(self, node_id: str) -> Inbox:
         inbox = self._inboxes.get(node_id)
         if inbox is None:
             raise NotImplementedError()
