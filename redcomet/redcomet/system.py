@@ -32,6 +32,7 @@ class ActorSystem:
         cluster = ClusterRef()
 
         gateway, gateway_inbox, gateway_outbox = _create_gateway_node("main", cluster, incoming_messages, discovery)
+
         node, inbox0, outbox0 = _create_worker_node("node0", cluster, discovery)
         cluster.set_node(node)
 
@@ -61,20 +62,22 @@ class ActorSystem:
 def _create_gateway_node(node_id: str, cluster: ClusterRef, incoming_messages: DefaultQueue,
                          discovery: ActorDiscovery) -> (Node, Inbox, Outbox):
     executor = GatewayExecutor(node_id, incoming_messages, cluster=cluster)
-    inbox = Inbox(node_id)
-    outbox = Outbox(node_id, discovery)
-
-    return Node.create(node_id, executor, outbox, inbox, discovery), inbox, outbox
+    return _create_node(node_id, executor, discovery)
 
 
 def _create_worker_node(node_id: str, cluster: ClusterRef, discovery: ActorDiscovery) -> (Node, Inbox, Outbox):
-    executor = ActorExecutor(node_id)
+    executor = ActorExecutor(node_id, cluster=cluster)
+    return _create_node(node_id, executor, discovery)
+
+
+def _create_node(node_id: str, executor: ActorExecutor, discovery: ActorDiscovery) \
+        -> (Node, Inbox, Outbox):
     inbox = Inbox(node_id)
     outbox = Outbox(node_id, discovery)
 
-    executor.set_cluster(cluster)
+    node = Node.create(node_id, executor, outbox, inbox, discovery)
 
-    return Node.create(node_id, executor, outbox, inbox, discovery), inbox, outbox
+    return node, inbox, outbox
 
 
 def _wire_outboxes_to_inboxes(inboxes: List[Tuple[str, Inbox]], outboxes: List[Outbox]):
