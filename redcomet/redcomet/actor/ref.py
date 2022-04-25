@@ -15,7 +15,7 @@ class ActorRef(ActorRefAbstract):
         return ActorRef(ref._outbox, ref._local_issuer_id, self._ref_id)
 
     def tell(self, message: MessageAbstract):
-        packet = Packet(message, Address.of_local(self._local_issuer_id), Address(*self._ref_id.split(".")))
+        packet = Packet(message, Address.on_local(self._local_issuer_id), Address(*self._ref_id.split(".")))
         self._outbox.send(packet)
 
     def __repr__(self) -> str:

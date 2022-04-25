@@ -7,7 +7,7 @@ class Address:
         self._actor_id = actor_id
 
     @classmethod
-    def of_local(cls, actor_id: str) -> 'Address':
+    def on_local(cls, actor_id: str) -> 'Address':
         return cls(None, actor_id)
 
     @property
