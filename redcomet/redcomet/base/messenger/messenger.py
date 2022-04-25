@@ -23,10 +23,16 @@ class Messenger(ActorAbstract):
 
     def _forward(self, message: MessageForwardRequest, sender: ActorRefAbstract):
         sender_node_id = self._get_node_id(sender.ref_id)
-        packet = Packet(message,
+        packet = Packet(message.message,
                         sender=Address(self._node_id, sender.ref_id),
                         receiver=Address(sender_node_id, message.receiver_id))
         self._outbox.send(packet)
 
     def _get_node_id(self, ref_id: str) -> str:
         return self._discovery.query_node_id(ref_id)
+
+    def send(self, message: MessageAbstract, sender_id: str, receiver_id: str):
+        packet = Packet(MessageForwardRequest(message, receiver_id),
+                        sender=Address.on_local(sender_id),
+                        receiver=Address.on_local("messenger"))
+        self._outbox.send(packet)

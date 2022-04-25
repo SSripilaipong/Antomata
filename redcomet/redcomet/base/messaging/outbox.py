@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Optional
 
 from redcomet.base.actor.discovery import ActorDiscovery
 from redcomet.base.messaging.inbox import Inbox
@@ -13,14 +13,12 @@ class Outbox:
 
     def send(self, packet: Packet):
         packet.set_sender_node_id(self._node_id)
-        packet.set_receiver_node_id(self._find_node_id(packet.receiver.target))
+        if packet.receiver.target != "messenger":  # TODO: find better way for exceptions
+            packet.set_receiver_node_id(self._find_node_id(packet.receiver.target))
         self._find_inbox(packet.receiver.node_id).receive(packet)
 
-    def _find_inbox(self, node_id: str) -> Inbox:
-        inbox = self._inboxes.get(node_id)
-        if inbox is None:
-            raise NotImplementedError()
-        return inbox
+    def _find_inbox(self, node_id: Optional[str]) -> Inbox:
+        return self._inboxes.get(node_id or self._node_id)
 
     def register_inbox(self, inbox: Inbox, node_id: str):
         if node_id in self._inboxes:

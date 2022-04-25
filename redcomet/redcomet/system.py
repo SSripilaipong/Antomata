@@ -8,6 +8,7 @@ from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
 from redcomet.base.messaging.inbox import Inbox
 from redcomet.base.messaging.outbox import Outbox
+from redcomet.base.messenger.messenger import Messenger
 from redcomet.base.node import NodeAbstract
 from redcomet.cluster.ref import ClusterRef
 from redcomet.node.gateway import GatewayExecutor
@@ -74,8 +75,9 @@ def _create_node(node_id: str, executor: ActorExecutor, discovery: ActorDiscover
         -> (Node, Inbox, Outbox):
     inbox = Inbox(node_id)
     outbox = Outbox(node_id, discovery)
+    messenger = Messenger(node_id, outbox, discovery)
 
-    node = Node.create(node_id, executor, outbox, inbox, discovery)
+    node = Node.create(node_id, executor, messenger, inbox, discovery)
 
     return node, inbox, outbox
 
