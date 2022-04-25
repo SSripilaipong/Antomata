@@ -11,7 +11,7 @@ class PacketHandler(PacketHandlerAbstract):
     def handle(self, packet: Packet):
         content = packet.content
         if isinstance(content, MessageAbstract):
-            local_receiver_id = packet.receiver.local_id
+            local_receiver_id = packet.receiver.actor_id
             sender_id = packet.sender.to_str()
             self._actor_executor.execute(content, sender_id, local_receiver_id)
         else:
