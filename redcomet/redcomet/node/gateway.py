@@ -5,7 +5,7 @@ from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.messaging.outbox import OutboxAbstract
 from redcomet.base.node import NodeAbstract
 from redcomet.messaging.handler import PacketHandler
-from redcomet.messaging.inbox import Inbox
+from redcomet.base.messaging.inbox import Inbox
 from redcomet.messaging.outbox import Outbox
 from redcomet.queue.abstract import QueueAbstract
 

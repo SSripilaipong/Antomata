@@ -7,7 +7,7 @@ from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.cluster.abstract import ClusterAbstract
 from redcomet.base.node import NodeAbstract
 from redcomet.cluster import Cluster
-from redcomet.messaging.inbox import Inbox
+from redcomet.base.messaging.inbox import Inbox
 from redcomet.messaging.outbox import Outbox
 from redcomet.node.gateway import GatewayNode
 from redcomet.node.synchronous import Node
