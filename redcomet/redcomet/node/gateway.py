@@ -2,16 +2,15 @@ from redcomet.actor.ref import ActorRef
 from redcomet.base.actor import ActorAbstract, ActorRefAbstract
 from redcomet.base.actor.executor import ActorExecutorAbstract
 from redcomet.base.actor.message import MessageAbstract
-from redcomet.base.messaging.outbox import OutboxAbstract
+from redcomet.base.messaging.inbox import Inbox
+from redcomet.base.messaging.outbox import Outbox
 from redcomet.base.node import NodeAbstract
 from redcomet.messaging.handler import PacketHandler
-from redcomet.base.messaging.inbox import Inbox
-from redcomet.messaging.outbox import Outbox
 from redcomet.queue.abstract import QueueAbstract
 
 
 class GatewayNode(NodeAbstract):
-    def __init__(self, node_id: str, executor: ActorExecutorAbstract, outbox: OutboxAbstract,
+    def __init__(self, node_id: str, executor: ActorExecutorAbstract, outbox: Outbox,
                  incoming_queue: QueueAbstract):
         self._node_id = node_id
         self._executor = executor

@@ -1,12 +1,12 @@
 from redcomet.base.actor import ActorRefAbstract
 from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.messaging.address import Address
-from redcomet.base.messaging.outbox import OutboxAbstract
+from redcomet.base.messaging.outbox import Outbox
 from redcomet.base.messaging.packet import Packet
 
 
 class ActorRef(ActorRefAbstract):
-    def __init__(self, outbox: OutboxAbstract, local_issuer_id: str, ref_id: str):
+    def __init__(self, outbox: Outbox, local_issuer_id: str, ref_id: str):
         self._outbox = outbox
         self._local_issuer_id = local_issuer_id
         self._ref_id = ref_id
