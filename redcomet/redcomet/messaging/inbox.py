@@ -1,6 +1,6 @@
 from redcomet.base.messaging.handler import PacketHandlerAbstract
 from redcomet.base.messaging.inbox import InboxAbstract
-from redcomet.base.messaging.packet import PacketAbstract
+from redcomet.base.messaging.packet import Packet
 
 
 class Inbox(InboxAbstract):
@@ -11,5 +11,5 @@ class Inbox(InboxAbstract):
     def set_handler(self, handler: PacketHandlerAbstract):
         self._handler = handler
 
-    def receive(self, packet: PacketAbstract, sender_id: str, receiver_id: str):
+    def receive(self, packet: Packet, sender_id: str, receiver_id: str):
         self._handler.handle(packet, sender_id, receiver_id)

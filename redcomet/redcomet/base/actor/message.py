@@ -1,5 +1,5 @@
-from abc import ABC
+from redcomet.base.messaging.content import PacketContentAbstract
 
 
-class MessageAbstract(ABC):
+class MessageAbstract(PacketContentAbstract):
     pass
