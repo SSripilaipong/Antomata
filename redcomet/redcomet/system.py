@@ -62,7 +62,7 @@ class ActorSystem:
 def _create_gateway_node(node_id: str, cluster: ClusterRef, incoming_messages: DefaultQueue,
                          discovery: ActorDiscovery) -> (Node, Inbox, Outbox):
     executor = GatewayExecutor(node_id, incoming_messages, cluster=cluster)
-    executor.register("discovery", discovery)
+    executor.register(discovery.address.target, discovery)
     return _create_node(node_id, executor, discovery)
 
 
