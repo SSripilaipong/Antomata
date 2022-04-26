@@ -4,6 +4,7 @@ from redcomet.base.actor import ActorAbstract, ActorRefAbstract
 from redcomet.base.actor.executor import ActorExecutorAbstract
 from redcomet.base.discovery import ActorDiscovery
 from redcomet.base.discovery.register import RegisterAddressRequest
+from redcomet.base.messaging.address import Address
 from redcomet.base.messaging.inbox import Inbox
 from redcomet.base.messenger.messenger import Messenger
 from redcomet.base.node import NodeAbstract
@@ -11,7 +12,7 @@ from redcomet.messaging.handler import PacketHandler
 
 
 class Node(NodeAbstract):
-    def __init__(self, node_id: str, executor: ActorExecutorAbstract, messenger: Messenger, discovery: ActorDiscovery):
+    def __init__(self, node_id: str, executor: ActorExecutorAbstract, messenger: Messenger, discovery: Address):
         self._node_id = node_id
 
         self._executor = executor
@@ -21,10 +22,10 @@ class Node(NodeAbstract):
     @classmethod
     def create(cls, node_id: str, executor: ActorExecutor, messenger: Messenger, inbox: Inbox,
                discovery: ActorDiscovery) -> 'Node':
-        node = cls(node_id, executor, messenger, discovery)
+        node = cls(node_id, executor, messenger, discovery.address)
         executor.set_node(node)
         inbox.set_handler(PacketHandler(executor))
-        node._executor.register("messenger", messenger)
+        node._executor.register(messenger.actor_id, messenger)
         return node
 
     def issue_actor_ref(self, local_issuer_id: str, ref_id: str) -> ActorRefAbstract:
@@ -36,4 +37,4 @@ class Node(NodeAbstract):
 
     def register(self, actor: ActorAbstract, actor_id: str):
         self._executor.register(actor_id, actor)
-        self._messenger.send(RegisterAddressRequest(actor_id, self._node_id), self._node_id, "discovery")
+        self._messenger.send(RegisterAddressRequest(actor_id, self._node_id), self._node_id, self._discovery.target)
