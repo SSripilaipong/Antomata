@@ -3,6 +3,7 @@ from redcomet.actor.ref import ActorRef
 from redcomet.base.actor import ActorAbstract, ActorRefAbstract
 from redcomet.base.actor.executor import ActorExecutorAbstract
 from redcomet.base.discovery import ActorDiscovery
+from redcomet.base.discovery.register import RegisterAddressRequest
 from redcomet.base.messaging.inbox import Inbox
 from redcomet.base.messenger.messenger import Messenger
 from redcomet.base.node import NodeAbstract
@@ -35,4 +36,4 @@ class Node(NodeAbstract):
 
     def register(self, actor: ActorAbstract, actor_id: str):
         self._executor.register(actor_id, actor)
-        self._discovery.register(actor_id, self._node_id)
+        self._messenger.send(RegisterAddressRequest(actor_id, self._node_id), self._node_id, "discovery")

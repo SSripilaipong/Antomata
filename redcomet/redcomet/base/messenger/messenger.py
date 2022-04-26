@@ -39,9 +39,14 @@ class Messenger(ActorAbstract):
         self._outbox.send(Packet(message.message, sender=sender, receiver=receiver))
 
     def send(self, message: MessageAbstract, sender_id: str, receiver_id: str):
-        packet = Packet(MessageForwardRequest(message, sender_id, receiver_id),
-                        sender=Address.on_local(sender_id),
-                        receiver=Address.on_local("messenger"))
+        if receiver_id == "discovery":
+            packet = Packet(message,
+                            sender=Address(self._node_id, sender_id),
+                            receiver=Address("main", "discovery"))
+        else:
+            packet = Packet(MessageForwardRequest(message, sender_id, receiver_id),
+                            sender=Address.on_local(sender_id),
+                            receiver=Address.on_local("messenger"))
         self._outbox.send(packet)
 
     def _store_message(self, message: MessageForwardRequest, wait_for_address: str):
