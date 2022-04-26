@@ -12,9 +12,10 @@ from redcomet.base.messenger.request import MessageForwardRequest
 
 
 class Messenger(ActorAbstract):
-    def __init__(self, node_id: str, outbox: Outbox):
+    def __init__(self, node_id: str, outbox: Outbox, discovery: Address):
         self._node_id = node_id
         self._outbox = outbox
+        self._discovery = discovery
 
         self._address_cache = AddressCache()
         self._pending_messages: Dict[str, List[MessageForwardRequest]] = {}
@@ -40,10 +41,10 @@ class Messenger(ActorAbstract):
         self._outbox.send(Packet(message.message, sender=sender, receiver=receiver))
 
     def send(self, message: MessageAbstract, sender_id: str, receiver_id: str):
-        if receiver_id == "discovery":
+        if receiver_id == self._discovery.target:
             packet = Packet(message,
                             sender=Address(self._node_id, sender_id),
-                            receiver=Address("main", "discovery"))
+                            receiver=self._discovery)
         else:
             packet = Packet(MessageForwardRequest(message, sender_id, receiver_id),
                             sender=Address.on_local(sender_id),
@@ -54,9 +55,10 @@ class Messenger(ActorAbstract):
         self._pending_messages[wait_for_address] = self._pending_messages.get(wait_for_address, []) + [message]
 
     def _query_address_request(self, target: str):
-        self.send(QueryAddressRequest(target, self._node_id, "messenger"), "", "discovery")
+        self.send(QueryAddressRequest(target, self._node_id, "messenger"), "", self._discovery.target)
 
     def _query_address_response(self, response: QueryAddressResponse):
         for message in self._pending_messages.get(response.target, []):
             self._forward(message, Address(self._node_id, message.sender_id), response.address)
         self._pending_messages[response.target] = []
+        self._mapper: Dict[str, str] = {}
