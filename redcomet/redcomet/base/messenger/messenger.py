@@ -12,7 +12,8 @@ from redcomet.base.messenger.request import MessageForwardRequest
 
 
 class Messenger(ActorAbstract):
-    def __init__(self, node_id: str, outbox: Outbox, discovery: Address):
+    def __init__(self, actor_id: str, node_id: str, outbox: Outbox, discovery: Address):
+        self._actor_id = actor_id
         self._node_id = node_id
         self._outbox = outbox
         self._discovery = discovery
@@ -48,17 +49,21 @@ class Messenger(ActorAbstract):
         else:
             packet = Packet(MessageForwardRequest(message, sender_id, receiver_id),
                             sender=Address.on_local(sender_id),
-                            receiver=Address.on_local("messenger"))
+                            receiver=Address.on_local(self._actor_id))
         self._outbox.send(packet)
 
     def _store_message(self, message: MessageForwardRequest, wait_for_address: str):
         self._pending_messages[wait_for_address] = self._pending_messages.get(wait_for_address, []) + [message]
 
     def _query_address_request(self, target: str):
-        self.send(QueryAddressRequest(target, self._node_id, "messenger"), "", self._discovery.target)
+        self.send(QueryAddressRequest(target, self._node_id, self._actor_id), "", self._discovery.target)
 
     def _query_address_response(self, response: QueryAddressResponse):
         for message in self._pending_messages.get(response.target, []):
             self._forward(message, Address(self._node_id, message.sender_id), response.address)
         self._pending_messages[response.target] = []
         self._mapper: Dict[str, str] = {}
+
+    @property
+    def actor_id(self) -> str:
+        return self._actor_id

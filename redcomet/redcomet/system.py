@@ -75,7 +75,7 @@ def _create_node(node_id: str, executor: ActorExecutor, discovery: ActorDiscover
         -> (Node, Inbox, Outbox):
     inbox = Inbox(node_id)
     outbox = Outbox(node_id)
-    messenger = Messenger(node_id, outbox, discovery.address)
+    messenger = Messenger("messenger", node_id, outbox, discovery.address)
 
     node = Node.create(node_id, executor, messenger, inbox, discovery)
 
