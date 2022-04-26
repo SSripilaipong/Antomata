@@ -11,16 +11,15 @@ from redcomet.base.messaging.packet import Packet
 
 
 class ActorDiscovery(ActorAbstract):
-    def __init__(self, actor_id: str, node_id: str, outbox: Outbox = None):
-        self._actor_id = actor_id
-        self._node_id = node_id
+    def __init__(self, address: Address, outbox: Outbox = None):
+        self._address = address
         self._outbox = outbox
 
         self._mapper: Dict[str, str] = {}
 
     @classmethod
     def create(cls, actor_id: str, node_id: str) -> 'ActorDiscovery':
-        discovery = cls(actor_id, node_id)
+        discovery = cls(Address(node_id, actor_id))
         discovery._register(node_id, node_id)
         discovery._register(actor_id, node_id)
         return discovery
@@ -44,7 +43,7 @@ class ActorDiscovery(ActorAbstract):
         node_id = self._query_node_id(message.target)
         address = Address(node_id, message.target)
         packet = Packet(QueryAddressResponse(message.target, address),
-                        sender=Address(self._node_id, self._actor_id),
+                        sender=self._address,
                         receiver=Address(message.requester_node_id, message.requester_target))
         self._outbox.send(packet)
 
@@ -58,3 +57,7 @@ class ActorDiscovery(ActorAbstract):
         if node_id is None:
             raise NotImplementedError()
         return node_id
+
+    @property
+    def address(self) -> Address:
+        return self._address
