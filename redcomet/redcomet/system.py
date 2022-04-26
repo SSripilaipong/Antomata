@@ -8,9 +8,9 @@ from redcomet.base.cluster.ref import ClusterRefAbstract
 from redcomet.base.discovery import ActorDiscovery
 from redcomet.base.messaging.inbox import Inbox
 from redcomet.base.messaging.outbox import Outbox
-from redcomet.base.messenger.messenger import Messenger
 from redcomet.base.node import NodeAbstract
 from redcomet.cluster.ref import ClusterRef
+from redcomet.messenger import Messenger
 from redcomet.node.gateway import GatewayExecutor
 from redcomet.node.synchronous import Node
 from redcomet.queue.abstract import QueueAbstract
@@ -18,10 +18,12 @@ from redcomet.queue.default import DefaultQueue
 
 
 class ActorSystem:
-    def __init__(self, cluster: ClusterRefAbstract, gateway: NodeAbstract, incoming_messages: QueueAbstract):
+    def __init__(self, cluster: ClusterRefAbstract, gateway: NodeAbstract, incoming_messages: QueueAbstract,
+                 gateway_messenger: Messenger):
         self._cluster = cluster
         self._gateway = gateway
         self._incoming_messages = incoming_messages
+        self._gateway_messenger = gateway_messenger
 
     @classmethod
     def create(cls) -> 'ActorSystem':
@@ -30,17 +32,18 @@ class ActorSystem:
         discovery = ActorDiscovery.create("discovery", "main")
         cluster = ClusterRef()
 
-        gateway, gateway_inbox, gateway_outbox = _create_gateway_node("main", cluster, incoming_messages, discovery)
+        gateway, gateway_inbox, gateway_outbox, gateway_messenger \
+            = _create_gateway_node("main", cluster, incoming_messages, discovery)
         discovery.set_outbox(gateway_outbox)
 
-        node, inbox0, outbox0 = _create_worker_node("node0", cluster, discovery)
-        cluster.set_node(node)
+        node, inbox0, outbox0, messenger0 = _create_worker_node("node0", cluster, discovery)
+        cluster.set_messenger(messenger0)
 
         _wire_outboxes_to_inboxes([("main", gateway_inbox), ("node0", inbox0)], [gateway_outbox, outbox0])
-        return cls(cluster, gateway, incoming_messages)
+        return cls(cluster, gateway, incoming_messages, gateway_messenger)
 
     def spawn(self, actor: ActorAbstract) -> ActorRefAbstract:
-        return self._cluster.spawn(actor, self._gateway, "main")
+        return self._cluster.spawn(actor, self._gateway_messenger, "main")
 
     def __enter__(self) -> 'ActorSystem':
         self.start()
@@ -60,26 +63,27 @@ class ActorSystem:
 
 
 def _create_gateway_node(node_id: str, cluster: ClusterRef, incoming_messages: DefaultQueue,
-                         discovery: ActorDiscovery) -> (Node, Inbox, Outbox):
+                         discovery: ActorDiscovery) -> (Node, Inbox, Outbox, Messenger):
     executor = GatewayExecutor(incoming_messages, cluster=cluster)
     executor.register(discovery.address.target, discovery)
     return _create_node(node_id, executor, discovery)
 
 
-def _create_worker_node(node_id: str, cluster: ClusterRef, discovery: ActorDiscovery) -> (Node, Inbox, Outbox):
+def _create_worker_node(node_id: str, cluster: ClusterRef, discovery: ActorDiscovery) \
+        -> (Node, Inbox, Outbox, Messenger):
     executor = ActorExecutor(cluster=cluster)
     return _create_node(node_id, executor, discovery)
 
 
 def _create_node(node_id: str, executor: ActorExecutor, discovery: ActorDiscovery) \
-        -> (Node, Inbox, Outbox):
+        -> (Node, Inbox, Outbox, Messenger):
     inbox = Inbox(node_id)
     outbox = Outbox(node_id)
     messenger = Messenger("messenger", node_id, outbox, discovery.address)
 
-    node = Node.create(node_id, executor, messenger, inbox, discovery)
+    node = Node.create(node_id, executor, messenger, inbox, outbox, discovery)
 
-    return node, inbox, outbox
+    return node, inbox, outbox, messenger
 
 
 def _wire_outboxes_to_inboxes(inboxes: List[Tuple[str, Inbox]], outboxes: List[Outbox]):

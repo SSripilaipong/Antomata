@@ -1,10 +1,10 @@
 from redcomet.base.actor import ActorRefAbstract
 from redcomet.base.actor.message import MessageAbstract
-from redcomet.base.messenger.messenger import Messenger
+from redcomet.base.messenger.messenger import MessengerAbstract
 
 
 class ActorRef(ActorRefAbstract):
-    def __init__(self, messenger: Messenger, local_issuer_id: str, ref_id: str):
+    def __init__(self, messenger: MessengerAbstract, local_issuer_id: str, ref_id: str):
         self._messenger = messenger
         self._local_issuer_id = local_issuer_id
         self._ref_id = ref_id
