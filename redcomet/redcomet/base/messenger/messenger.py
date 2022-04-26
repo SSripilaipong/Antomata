@@ -4,6 +4,7 @@ from redcomet.base.actor import ActorAbstract, ActorRefAbstract
 from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
 from redcomet.base.discovery import ActorDiscovery
+from redcomet.base.discovery.query import QueryAddressRequest, QueryAddressResponse
 from redcomet.base.messaging.address import Address
 from redcomet.base.messaging.outbox import Outbox
 from redcomet.base.messaging.packet import Packet
@@ -24,6 +25,8 @@ class Messenger(ActorAbstract):
                 cluster: ClusterRefAbstract):
         if isinstance(message, MessageForwardRequest):
             self._forward_or_query_address(message)
+        elif isinstance(message, QueryAddressResponse):
+            self._query_address_response(message)
         else:
             raise NotImplementedError()
 
@@ -53,11 +56,9 @@ class Messenger(ActorAbstract):
         self._pending_messages[wait_for_address] = self._pending_messages.get(wait_for_address, []) + [message]
 
     def _query_address_request(self, target: str):
-        node_id = self._discovery.query_node_id(target)
+        self.send(QueryAddressRequest(target, self._node_id, "messenger"), "", "discovery")
 
-        self._query_address_response(target, Address(node_id, target))
-
-    def _query_address_response(self, target: str, receiver: Address):
-        for message in self._pending_messages.get(target, []):
-            self._forward(message, Address(self._node_id, message.sender_id), receiver)
-        self._pending_messages[target] = []
+    def _query_address_response(self, response: QueryAddressResponse):
+        for message in self._pending_messages.get(response.target, []):
+            self._forward(message, Address(self._node_id, message.sender_id), response.address)
+        self._pending_messages[response.target] = []
