@@ -3,7 +3,6 @@ from typing import Dict, List
 from redcomet.base.actor import ActorAbstract, ActorRefAbstract
 from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
-from redcomet.base.discovery import ActorDiscovery
 from redcomet.base.discovery.query import QueryAddressRequest, QueryAddressResponse
 from redcomet.base.messaging.address import Address
 from redcomet.base.messaging.outbox import Outbox
@@ -13,10 +12,9 @@ from redcomet.base.messenger.request import MessageForwardRequest
 
 
 class Messenger(ActorAbstract):
-    def __init__(self, node_id: str, outbox: Outbox, discovery: ActorDiscovery):
+    def __init__(self, node_id: str, outbox: Outbox):
         self._node_id = node_id
         self._outbox = outbox
-        self._discovery = discovery
 
         self._address_cache = AddressCache()
         self._pending_messages: Dict[str, List[MessageForwardRequest]] = {}
