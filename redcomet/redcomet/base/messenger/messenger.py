@@ -22,10 +22,10 @@ class Messenger(ActorAbstract):
             raise NotImplementedError()
 
     def _forward(self, message: MessageForwardRequest, sender: ActorRefAbstract):
-        sender_node_id = self._get_node_id(sender.ref_id)
+        receiver_node_id = self._get_node_id(message.receiver_id)
         packet = Packet(message.message,
                         sender=Address(self._node_id, sender.ref_id),
-                        receiver=Address(sender_node_id, message.receiver_id))
+                        receiver=Address(receiver_node_id, message.receiver_id))
         self._outbox.send(packet)
 
     def _get_node_id(self, ref_id: str) -> str:
