@@ -11,15 +11,18 @@ from redcomet.base.messaging.packet import Packet
 
 
 class ActorDiscovery(ActorAbstract):
-    def __init__(self, outbox: Outbox = None):
-        self._mapper: Dict[str, str] = {}
+    def __init__(self, actor_id: str, node_id: str, outbox: Outbox = None):
+        self._actor_id = actor_id
+        self._node_id = node_id
         self._outbox = outbox
 
+        self._mapper: Dict[str, str] = {}
+
     @classmethod
-    def create(cls, node_id: str) -> 'ActorDiscovery':
-        discovery = cls()
+    def create(cls, actor_id: str, node_id: str) -> 'ActorDiscovery':
+        discovery = cls(actor_id, node_id)
         discovery._register(node_id, node_id)
-        discovery._register("discovery", node_id)
+        discovery._register(actor_id, node_id)
         return discovery
 
     def set_outbox(self, outbox: Outbox):
@@ -41,7 +44,7 @@ class ActorDiscovery(ActorAbstract):
         node_id = self._query_node_id(message.target)
         address = Address(node_id, message.target)
         packet = Packet(QueryAddressResponse(message.target, address),
-                        sender=Address("main", "discovery"),
+                        sender=Address(self._node_id, self._actor_id),
                         receiver=Address(message.requester_node_id, message.requester_target))
         self._outbox.send(packet)
 

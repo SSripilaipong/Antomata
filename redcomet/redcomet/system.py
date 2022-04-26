@@ -27,7 +27,7 @@ class ActorSystem:
     def create(cls) -> 'ActorSystem':
         incoming_messages = DefaultQueue()
 
-        discovery = ActorDiscovery.create("main")
+        discovery = ActorDiscovery.create("discovery", "main")
         cluster = ClusterRef()
 
         gateway, gateway_inbox, gateway_outbox = _create_gateway_node("main", cluster, incoming_messages, discovery)
