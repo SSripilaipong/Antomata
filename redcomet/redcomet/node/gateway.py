@@ -9,8 +9,8 @@ from redcomet.queue.abstract import QueueAbstract
 
 
 class GatewayExecutor(ActorExecutor):
-    def __init__(self, node_id: str, queue: QueueAbstract, node: NodeAbstract = None, cluster: ClusterRef = None):
-        super().__init__(node_id=node_id, node=node, cluster=cluster)
+    def __init__(self, queue: QueueAbstract, node: NodeAbstract = None, cluster: ClusterRef = None):
+        super().__init__(node=node, cluster=cluster)
 
         self._queue = queue
 

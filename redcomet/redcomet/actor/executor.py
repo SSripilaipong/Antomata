@@ -9,8 +9,7 @@ from redcomet.cluster.ref import ClusterRef
 
 
 class ActorExecutor(ActorExecutorAbstract):
-    def __init__(self, node_id: str, node: NodeAbstract = None, cluster: ClusterRef = None):
-        self._node_id = node_id
+    def __init__(self, node: NodeAbstract = None, cluster: ClusterRef = None):
         self._node = node
         self._cluster = cluster
         self._actor_map: Dict[str, ActorAbstract] = {}
