@@ -3,9 +3,9 @@ from typing import List, Tuple
 from redcomet.actor.executor import ActorExecutor
 from redcomet.base.actor import ActorRefAbstract
 from redcomet.base.actor.abstract import ActorAbstract
-from redcomet.base.actor.discovery import ActorDiscovery
 from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
+from redcomet.base.discovery import ActorDiscovery
 from redcomet.base.messaging.inbox import Inbox
 from redcomet.base.messaging.outbox import Outbox
 from redcomet.base.messenger.messenger import Messenger
