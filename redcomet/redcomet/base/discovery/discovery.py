@@ -8,6 +8,7 @@ from redcomet.base.discovery.register import RegisterAddressRequest
 from redcomet.base.messaging.address import Address
 from redcomet.base.messaging.outbox import Outbox
 from redcomet.base.messaging.packet import Packet
+from redcomet.base.node import NodeAbstract
 
 
 class ActorDiscovery(ActorAbstract):
@@ -24,8 +25,8 @@ class ActorDiscovery(ActorAbstract):
         discovery.register_address(actor_id, node_id)
         return discovery
 
-    def set_outbox(self, outbox: Outbox):
-        self._outbox = outbox
+    def set_node(self, node: NodeAbstract):
+        self._outbox = node.outbox
 
     def receive(self, message: MessageAbstract, sender: ActorRefAbstract, me: ActorRefAbstract,
                 cluster: ClusterRefAbstract):

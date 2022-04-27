@@ -8,11 +8,10 @@ from redcomet.node.synchronous import Node
 from redcomet.queue.default import DefaultQueue
 
 
-def create_gateway_node(node_id: str, incoming_messages: DefaultQueue, discovery: ActorDiscovery) \
-        -> (Node, Inbox, Outbox, Messenger):
+def create_gateway_node(node_id: str, incoming_messages: DefaultQueue, discovery: ActorDiscovery) -> Node:
     node, inbox, outbox, messenger = _create_node(node_id, GatewayExecutor(incoming_messages), discovery)
     node.register_executable_actor(discovery, discovery.address.target)
-    return node, inbox, outbox, messenger
+    return node
 
 
 def create_worker_node(node_id: str, discovery: ActorDiscovery) -> Node:
