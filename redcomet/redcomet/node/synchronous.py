@@ -27,15 +27,20 @@ class Node(NodeAbstract):
         self._discovery = discovery
 
     @classmethod
-    def create(cls, executor: ActorExecutor, messenger: Messenger, inbox: Inbox, outbox: Outbox) -> 'Node':
+    def create(cls, executor: ActorExecutor, inbox: Inbox, outbox: Outbox) -> 'Node':
+        messenger = Messenger("messenger")
         node = cls(executor, inbox, outbox, messenger)
+
+        messenger.set_node(node)
         executor.set_node(node)
+
         inbox.set_handler(PacketHandler(executor))
-        node._executor.register(messenger.actor_id, messenger)
 
         manager = NodeManager("manager", node)
-        executor.register("manager", manager)
         node._manager = manager
+
+        executor.register(messenger.actor_id, messenger)
+        executor.register("manager", manager)
 
         return node
 

@@ -1,7 +1,6 @@
 from redcomet.actor.executor import ActorExecutor
 from redcomet.base.messaging.inbox import Inbox
 from redcomet.base.messaging.outbox import Outbox
-from redcomet.messenger import Messenger
 from redcomet.node.gateway import GatewayExecutor
 from redcomet.node.synchronous import Node
 from redcomet.queue.default import DefaultQueue
@@ -16,8 +15,4 @@ def create_worker_node(node_id: str) -> Node:
 
 
 def _create_node(node_id: str, executor: ActorExecutor) -> Node:
-    outbox = Outbox(node_id)
-    messenger = Messenger("messenger")
-    node = Node.create(executor, messenger, Inbox(node_id), outbox)
-    messenger.set_node(node)
-    return node
+    return Node.create(executor, Inbox(node_id), Outbox(node_id))
