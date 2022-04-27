@@ -32,6 +32,8 @@ class ClusterManager(ActorAbstract):
         self._request_register_address(node_id, message.actor_id, message.actor)
 
     def _get_node_id(self) -> str:
+        if self._node_index >= len(self._nodes):
+            self._node_index = 0
         node_id = self._nodes[self._node_index]
         self._node_index += 1
         return node_id

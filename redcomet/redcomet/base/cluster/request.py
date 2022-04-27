@@ -14,3 +14,6 @@ class SpawnActorRequest(MessageAbstract):
     @property
     def actor_id(self) -> str:
         return self._actor_id
+
+    def __repr__(self) -> str:
+        return f"SpawnActorRequest(actor={self.actor}, actor_id={self.actor_id})"

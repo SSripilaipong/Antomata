@@ -44,6 +44,7 @@ class ActorSystem:
         _wire_outboxes_to_inboxes([("main", gateway_inbox), ("node0", inbox0)], [gateway_outbox, outbox0])
 
         cluster = ClusterManager(gateway_messenger, "cluster")
+        cluster.add_node("node0")
         _register_cluster(cluster, gateway_messenger)
         return cls(ClusterRef(gateway_messenger, "main"), gateway, incoming_messages, gateway_messenger)
 
