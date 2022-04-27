@@ -7,6 +7,7 @@ from redcomet.base.discovery import ActorDiscovery
 from redcomet.base.messaging.address import Address
 from redcomet.base.messaging.inbox import Inbox
 from redcomet.base.messaging.outbox import Outbox
+from redcomet.base.messenger.messenger import MessengerAbstract
 from redcomet.base.node import NodeAbstract
 from redcomet.cluster.ref import ClusterRef
 from redcomet.messaging.handler import PacketHandler
@@ -29,7 +30,7 @@ class Node(NodeAbstract):
         executor.set_node(node)
         inbox.set_handler(PacketHandler(executor))
         node._executor.register(messenger.actor_id, messenger)
-        manager = NodeManager("manager", node, outbox, executor, discovery.address)
+        manager = NodeManager("manager", node, executor, discovery.address)
         executor.register("manager", manager)
         return node
 
@@ -42,3 +43,7 @@ class Node(NodeAbstract):
     @property
     def node_id(self) -> str:
         return self._node_id
+
+    @property
+    def messenger(self) -> MessengerAbstract:
+        return self._messenger

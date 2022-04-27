@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 
 from redcomet.base.actor import ActorRefAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
+from redcomet.base.messenger.messenger import MessengerAbstract
 
 
 class NodeAbstract(ABC):
@@ -17,4 +18,9 @@ class NodeAbstract(ABC):
     @property
     @abstractmethod
     def node_id(self) -> str:
+        pass
+
+    @property
+    @abstractmethod
+    def messenger(self) -> MessengerAbstract:
         pass

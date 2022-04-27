@@ -4,18 +4,16 @@ from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
 from redcomet.base.discovery.register import RegisterAddressRequest
 from redcomet.base.messaging.address import Address
-from redcomet.base.messaging.outbox import Outbox
 from redcomet.base.messaging.packet import Packet
 from redcomet.base.node import NodeAbstract
 from redcomet.node.register import RegisterActorRequest
 
 
 class NodeManager(ActorAbstract):
-    def __init__(self, actor_id: str, node: NodeAbstract, outbox: Outbox, executor: ActorExecutorAbstract,
+    def __init__(self, actor_id: str, node: NodeAbstract, executor: ActorExecutorAbstract,
                  discovery: Address):
         self._actor_id = actor_id
         self._node = node
-        self._outbox = outbox
         self._executor = executor
         self._discovery = discovery
 
@@ -32,4 +30,4 @@ class NodeManager(ActorAbstract):
         packet = Packet(RegisterAddressRequest(request.actor_id, self._node.node_id),
                         sender=Address.on_local(self._actor_id),
                         receiver=self._discovery)
-        self._outbox.send(packet)
+        self._node.messenger.send_packet(packet)
