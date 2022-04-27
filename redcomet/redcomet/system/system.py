@@ -37,12 +37,12 @@ class ActorSystem:
             = create_gateway_node("main", incoming_messages, discovery)
         discovery.set_outbox(gateway_outbox)
 
-        inbox0, outbox0 = create_worker_node("node0", discovery)
+        node0, inbox0, outbox0 = create_worker_node("node0", discovery)
 
         _wire_outboxes_to_inboxes([("main", gateway_inbox), ("node0", inbox0)], [gateway_outbox, outbox0])
 
         cluster = ClusterManager(gateway_messenger, "cluster")
-        cluster.add_node("node0")
+        cluster.add_node(node0, "node0")
         _register_cluster(cluster, gateway_messenger)
         return cls(ClusterRef(gateway_messenger, "main"), gateway, incoming_messages, gateway_messenger)
 

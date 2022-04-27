@@ -15,10 +15,10 @@ def create_gateway_node(node_id: str, incoming_messages: DefaultQueue, discovery
     return _create_node(node_id, executor, discovery)
 
 
-def create_worker_node(node_id: str, discovery: ActorDiscovery) -> (Inbox, Outbox):
+def create_worker_node(node_id: str, discovery: ActorDiscovery) -> (Node, Inbox, Outbox):
     executor = ActorExecutor()
-    _, inbox, outbox, _ = _create_node(node_id, executor, discovery)
-    return inbox, outbox
+    node, inbox, outbox, _ = _create_node(node_id, executor, discovery)
+    return node, inbox, outbox
 
 
 def _create_node(node_id: str, executor: ActorExecutor, discovery: ActorDiscovery) -> (Node, Inbox, Outbox, Messenger):

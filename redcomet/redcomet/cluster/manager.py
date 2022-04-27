@@ -4,6 +4,7 @@ from redcomet.base.cluster.ref import ClusterRefAbstract
 from redcomet.base.cluster.request import SpawnActorRequest
 from redcomet.base.messaging.address import Address
 from redcomet.base.messaging.packet import Packet
+from redcomet.base.node import NodeAbstract
 from redcomet.messenger import Messenger
 from redcomet.node.register import RegisterActorRequest
 
@@ -15,7 +16,7 @@ class ClusterManager(ActorAbstract):
         self._nodes = []
         self._node_index = 0
 
-    def add_node(self, node_id: str):
+    def add_node(self, node: NodeAbstract, node_id: str):
         if node_id in self._nodes:
             raise NotImplementedError()
         self._nodes.append(node_id)
