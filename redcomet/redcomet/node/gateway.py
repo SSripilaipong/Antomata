@@ -4,13 +4,12 @@ from redcomet.actor.executor import ActorExecutor
 from redcomet.base.actor import ActorAbstract
 from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.node import NodeAbstract
-from redcomet.cluster.ref import ClusterRef
 from redcomet.queue.abstract import QueueAbstract
 
 
 class GatewayExecutor(ActorExecutor):
-    def __init__(self, queue: QueueAbstract, node: NodeAbstract = None, cluster: ClusterRef = None):
-        super().__init__(node=node, cluster=cluster)
+    def __init__(self, queue: QueueAbstract, node: NodeAbstract = None):
+        super().__init__(node=node)
 
         self._queue = queue
 

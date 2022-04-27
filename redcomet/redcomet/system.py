@@ -30,20 +30,18 @@ class ActorSystem:
         incoming_messages = DefaultQueue()
 
         discovery = ActorDiscovery.create("discovery", "main")
-        cluster = ClusterRef()
 
         gateway, gateway_inbox, gateway_outbox, gateway_messenger \
-            = _create_gateway_node("main", cluster, incoming_messages, discovery)
+            = _create_gateway_node("main", incoming_messages, discovery)
         discovery.set_outbox(gateway_outbox)
 
-        node, inbox0, outbox0, messenger0 = _create_worker_node("node0", cluster, discovery)
-        cluster.set_messenger(messenger0)
+        node, inbox0, outbox0, messenger0 = _create_worker_node("node0", discovery)
 
         _wire_outboxes_to_inboxes([("main", gateway_inbox), ("node0", inbox0)], [gateway_outbox, outbox0])
-        return cls(cluster, gateway, incoming_messages, gateway_messenger)
+        return cls(ClusterRef(gateway_messenger, "main"), gateway, incoming_messages, gateway_messenger)
 
     def spawn(self, actor: ActorAbstract) -> ActorRefAbstract:
-        return self._cluster.spawn(actor, self._gateway_messenger, "main")
+        return self._cluster.spawn(actor)
 
     def __enter__(self) -> 'ActorSystem':
         self.start()
@@ -62,16 +60,16 @@ class ActorSystem:
         pass
 
 
-def _create_gateway_node(node_id: str, cluster: ClusterRef, incoming_messages: DefaultQueue,
+def _create_gateway_node(node_id: str, incoming_messages: DefaultQueue,
                          discovery: ActorDiscovery) -> (Node, Inbox, Outbox, Messenger):
-    executor = GatewayExecutor(incoming_messages, cluster=cluster)
+    executor = GatewayExecutor(incoming_messages)
     executor.register(discovery.address.target, discovery)
     return _create_node(node_id, executor, discovery)
 
 
-def _create_worker_node(node_id: str, cluster: ClusterRef, discovery: ActorDiscovery) \
+def _create_worker_node(node_id: str, discovery: ActorDiscovery) \
         -> (Node, Inbox, Outbox, Messenger):
-    executor = ActorExecutor(cluster=cluster)
+    executor = ActorExecutor()
     return _create_node(node_id, executor, discovery)
 
 
