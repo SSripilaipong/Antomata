@@ -49,3 +49,6 @@ class Node(NodeAbstract):
     @property
     def messenger(self) -> MessengerAbstract:
         return self._messenger
+
+    def make_connection_with(self, node: NodeAbstract):
+        pass

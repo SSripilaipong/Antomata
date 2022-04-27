@@ -1,3 +1,5 @@
+from typing import List
+
 from redcomet.base.actor import ActorAbstract, ActorRefAbstract
 from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
@@ -13,13 +15,17 @@ class ClusterManager(ActorAbstract):
     def __init__(self, messenger: Messenger, actor_id: str):
         self._messenger = messenger
         self._actor_id = actor_id
-        self._nodes = []
+        self._nodes: List[NodeAbstract] = []
         self._node_index = 0
 
     def add_node(self, node: NodeAbstract, node_id: str):
         if node_id in self._nodes:
             raise NotImplementedError()
-        self._nodes.append(node_id)
+
+        for existing_node in self._nodes:
+            existing_node.make_connection_with(node)
+
+        self._nodes.append(node)
 
     def receive(self, message: MessageAbstract, sender: ActorRefAbstract, me: ActorRefAbstract,
                 cluster: ClusterRefAbstract):
@@ -35,7 +41,7 @@ class ClusterManager(ActorAbstract):
     def _get_node_id(self) -> str:
         if self._node_index >= len(self._nodes):
             self._node_index = 0
-        node_id = self._nodes[self._node_index]
+        node_id = self._nodes[self._node_index].node_id
         self._node_index += 1
         return node_id
 

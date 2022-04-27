@@ -28,3 +28,7 @@ class NodeAbstract(ABC):
     @abstractmethod
     def messenger(self) -> MessengerAbstract:
         pass
+
+    @abstractmethod
+    def make_connection_with(self, node: 'NodeAbstract'):
+        pass
