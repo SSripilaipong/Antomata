@@ -15,4 +15,4 @@ def create_worker_node(node_id: str) -> Node:
 
 
 def _create_node(node_id: str, executor: ActorExecutor) -> Node:
-    return Node.create(executor, Inbox(node_id), Outbox(node_id))
+    return Node.create(executor, Inbox(), Outbox(node_id))
