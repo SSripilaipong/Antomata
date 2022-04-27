@@ -26,6 +26,7 @@ class ClusterManager(ActorAbstract):
         cluster = cls(node, actor_id, discovery)
         discovery.register_address("cluster", "main")
 
+        node.assign_node_id("main")
         node.bind_discovery(discovery.address)
         node.make_connection_to(node)
         discovery.set_node(node)
@@ -37,6 +38,7 @@ class ClusterManager(ActorAbstract):
         if node in self._nodes or node is self._node:
             raise NotImplementedError()
 
+        node.assign_node_id(node_id)
         node.bind_discovery(self._discovery.address)
         node.make_connection_with(self._node)
         for existing_node in self._nodes:

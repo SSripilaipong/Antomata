@@ -15,8 +15,8 @@ from redcomet.node.manager import NodeManager
 
 
 class Node(NodeAbstract):
-    def __init__(self, node_id: str, executor: ActorExecutorAbstract, inbox: Inbox, outbox: Outbox,
-                 messenger: Messenger, manager: NodeManager = None):
+    def __init__(self, executor: ActorExecutorAbstract, inbox: Inbox, outbox: Outbox,
+                 messenger: Messenger, node_id: str = None, manager: NodeManager = None):
         self._node_id = node_id
         self._inbox = inbox
         self._outbox = outbox
@@ -26,9 +26,8 @@ class Node(NodeAbstract):
         self._manager = manager
 
     @classmethod
-    def create(cls, node_id: str, executor: ActorExecutor, messenger: Messenger, inbox: Inbox, outbox: Outbox) \
-            -> 'Node':
-        node = cls(node_id, executor, inbox, outbox, messenger)
+    def create(cls, executor: ActorExecutor, messenger: Messenger, inbox: Inbox, outbox: Outbox) -> 'Node':
+        node = cls(executor, inbox, outbox, messenger)
         executor.set_node(node)
         inbox.set_handler(PacketHandler(executor))
         node._executor.register(messenger.actor_id, messenger)
@@ -58,6 +57,12 @@ class Node(NodeAbstract):
 
     def make_connection_to(self, node: NodeAbstract):
         self.outbox.register_inbox(node.inbox, node.node_id)
+
+    def assign_node_id(self, node_id: str):
+        if self._node_id is not None:
+            if self._node_id != node_id:
+                raise NotImplementedError()
+        self._node_id = node_id
 
     @property
     def outbox(self) -> Outbox:

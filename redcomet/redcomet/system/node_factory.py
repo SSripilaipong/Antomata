@@ -17,4 +17,4 @@ def create_worker_node(node_id: str) -> Node:
 
 def _create_node(node_id: str, executor: ActorExecutor) -> Node:
     outbox = Outbox(node_id)
-    return Node.create(node_id, executor, Messenger("messenger", node_id, outbox), Inbox(node_id), outbox)
+    return Node.create(executor, Messenger("messenger", node_id, outbox), Inbox(node_id), outbox)

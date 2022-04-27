@@ -26,6 +26,10 @@ class NodeAbstract(ABC):
     def register_executable_actor(self, actor: ActorAbstract, actor_id: str):
         pass
 
+    @abstractmethod
+    def assign_node_id(self, node_id: str):
+        pass
+
     @property
     @abstractmethod
     def node_id(self) -> str:
