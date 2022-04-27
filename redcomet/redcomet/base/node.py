@@ -2,6 +2,8 @@ from abc import ABC, abstractmethod
 
 from redcomet.base.actor import ActorRefAbstract, ActorAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
+from redcomet.base.messaging.inbox import Inbox
+from redcomet.base.messaging.outbox import Outbox
 from redcomet.base.messenger.messenger import MessengerAbstract
 
 
@@ -29,6 +31,20 @@ class NodeAbstract(ABC):
     def messenger(self) -> MessengerAbstract:
         pass
 
+    @property
+    @abstractmethod
+    def outbox(self) -> Outbox:
+        pass
+
+    @property
+    @abstractmethod
+    def inbox(self) -> Inbox:
+        pass
+
     @abstractmethod
     def make_connection_with(self, node: 'NodeAbstract'):
+        pass
+
+    @abstractmethod
+    def make_connection_to(self, node: 'NodeAbstract'):
         pass

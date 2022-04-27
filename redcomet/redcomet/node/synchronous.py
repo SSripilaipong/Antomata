@@ -6,6 +6,7 @@ from redcomet.base.cluster.ref import ClusterRefAbstract
 from redcomet.base.discovery import ActorDiscovery
 from redcomet.base.messaging.address import Address
 from redcomet.base.messaging.inbox import Inbox
+from redcomet.base.messaging.outbox import Outbox
 from redcomet.base.messenger.messenger import MessengerAbstract
 from redcomet.base.node import NodeAbstract
 from redcomet.cluster.ref import ClusterRef
@@ -15,17 +16,20 @@ from redcomet.node.manager import NodeManager
 
 
 class Node(NodeAbstract):
-    def __init__(self, node_id: str, executor: ActorExecutorAbstract, messenger: Messenger, discovery: Address):
+    def __init__(self, node_id: str, executor: ActorExecutorAbstract, inbox: Inbox, outbox: Outbox,
+                 messenger: Messenger, discovery: Address):
         self._node_id = node_id
+        self._inbox = inbox
+        self._outbox = outbox
 
         self._executor = executor
         self._messenger = messenger
         self._discovery = discovery
 
     @classmethod
-    def create(cls, node_id: str, executor: ActorExecutor, messenger: Messenger, inbox: Inbox,
+    def create(cls, node_id: str, executor: ActorExecutor, messenger: Messenger, inbox: Inbox, outbox: Outbox,
                discovery: ActorDiscovery) -> 'Node':
-        node = cls(node_id, executor, messenger, discovery.address)
+        node = cls(node_id, executor, inbox, outbox, messenger, discovery.address)
         executor.set_node(node)
         inbox.set_handler(PacketHandler(executor))
         node._executor.register(messenger.actor_id, messenger)
@@ -42,6 +46,21 @@ class Node(NodeAbstract):
     def issue_actor_ref(self, local_issuer_id: str, ref_id: str) -> ActorRefAbstract:
         return ActorRef(self._messenger, local_issuer_id, ref_id)
 
+    def make_connection_with(self, node: NodeAbstract):
+        self.make_connection_to(node)
+        node.make_connection_to(self)
+
+    def make_connection_to(self, node: NodeAbstract):
+        self.outbox.register_inbox(node.inbox, node.node_id)
+
+    @property
+    def outbox(self) -> Outbox:
+        return self._outbox
+
+    @property
+    def inbox(self) -> Inbox:
+        return self._inbox
+
     @property
     def node_id(self) -> str:
         return self._node_id
@@ -49,6 +68,3 @@ class Node(NodeAbstract):
     @property
     def messenger(self) -> MessengerAbstract:
         return self._messenger
-
-    def make_connection_with(self, node: NodeAbstract):
-        pass

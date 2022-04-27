@@ -12,18 +12,23 @@ from redcomet.node.register import RegisterActorRequest
 
 
 class ClusterManager(ActorAbstract):
-    def __init__(self, messenger: Messenger, actor_id: str):
+    def __init__(self, node: NodeAbstract, messenger: Messenger, actor_id: str):
+        self._node = node
         self._messenger = messenger
         self._actor_id = actor_id
         self._nodes: List[NodeAbstract] = []
         self._node_index = 0
 
+        self._node.make_connection_to(self._node)
+
     def add_node(self, node: NodeAbstract, node_id: str):
-        if node_id in self._nodes:
+        if node in self._nodes or node is self._node:
             raise NotImplementedError()
 
+        node.make_connection_with(self._node)
         for existing_node in self._nodes:
             existing_node.make_connection_with(node)
+        node.make_connection_to(node)
 
         self._nodes.append(node)
 

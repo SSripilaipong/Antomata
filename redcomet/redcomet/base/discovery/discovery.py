@@ -20,8 +20,8 @@ class ActorDiscovery(ActorAbstract):
     @classmethod
     def create(cls, actor_id: str, node_id: str) -> 'ActorDiscovery':
         discovery = cls(Address(node_id, actor_id))
-        discovery._register(node_id, node_id)
-        discovery._register(actor_id, node_id)
+        discovery.register_address(node_id, node_id)
+        discovery.register_address(actor_id, node_id)
         return discovery
 
     def set_outbox(self, outbox: Outbox):
@@ -37,7 +37,7 @@ class ActorDiscovery(ActorAbstract):
             raise NotImplementedError()
 
     def _process_register_request(self, message: RegisterAddressRequest):
-        self._register(message.target, message.node_id)
+        self.register_address(message.target, message.node_id)
 
     def _process_query_address_request(self, message: QueryAddressRequest):
         node_id = self._query_node_id(message.target)
@@ -47,7 +47,7 @@ class ActorDiscovery(ActorAbstract):
                         receiver=Address(message.requester_node_id, message.requester_target))
         self._outbox.send(packet)
 
-    def _register(self, target: str, node_id: str):
+    def register_address(self, target: str, node_id: str):
         if target in self._mapper:
             raise NotImplementedError()
         self._mapper[target] = node_id
