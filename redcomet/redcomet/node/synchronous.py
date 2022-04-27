@@ -29,7 +29,7 @@ class Node(NodeAbstract):
         executor.set_node(node)
         inbox.set_handler(PacketHandler(executor))
         node._executor.register(messenger.actor_id, messenger)
-        manager = NodeManager("manager", node_id, outbox, executor, discovery.address)
+        manager = NodeManager("manager", node, outbox, executor, discovery.address)
         executor.register("manager", manager)
         return node
 
