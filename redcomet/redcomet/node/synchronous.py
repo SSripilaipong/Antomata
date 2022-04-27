@@ -16,7 +16,7 @@ from redcomet.node.manager import NodeManager
 
 class Node(NodeAbstract):
     def __init__(self, executor: ActorExecutorAbstract, inbox: Inbox, outbox: Outbox,
-                 messenger: Messenger, node_id: str = None, manager: NodeManager = None):
+                 messenger: Messenger, node_id: str = None, manager: NodeManager = None, discovery: Address = None):
         self._node_id = node_id
         self._inbox = inbox
         self._outbox = outbox
@@ -24,6 +24,7 @@ class Node(NodeAbstract):
         self._executor = executor
         self._messenger = messenger
         self._manager = manager
+        self._discovery = discovery
 
     @classmethod
     def create(cls, executor: ActorExecutor, messenger: Messenger, inbox: Inbox, outbox: Outbox) -> 'Node':
@@ -39,8 +40,8 @@ class Node(NodeAbstract):
         return node
 
     def bind_discovery(self, address: Address):
+        self._discovery = address
         self._manager.bind_discovery(address)
-        self._messenger.bind_discovery(address)
 
     def register_executable_actor(self, actor: ActorAbstract, actor_id: str):
         self._executor.register(actor_id, actor)
@@ -79,3 +80,7 @@ class Node(NodeAbstract):
     @property
     def messenger(self) -> MessengerAbstract:
         return self._messenger
+
+    @property
+    def discovery(self) -> Address:
+        return self._discovery

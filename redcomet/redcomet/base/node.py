@@ -10,6 +10,11 @@ from redcomet.base.messenger.messenger import MessengerAbstract
 
 class NodeAbstract(ABC):
 
+    @property
+    @abstractmethod
+    def discovery(self) -> Address:
+        pass
+
     @abstractmethod
     def bind_discovery(self, address: Address):
         pass
