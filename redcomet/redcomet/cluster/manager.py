@@ -31,7 +31,7 @@ class ClusterManager(ActorAbstract):
         node.make_connection_to(node)
         discovery.set_node(node)
 
-        node.register_executable_actor(cluster, "cluster")
+        node.register_executable_actor(cluster, actor_id)
         node.register_executable_actor(discovery, discovery.address.target)
 
         return cluster
