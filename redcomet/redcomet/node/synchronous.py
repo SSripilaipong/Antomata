@@ -69,6 +69,7 @@ class Node(NodeAbstract):
             if self._node_id != node_id:
                 raise NotImplementedError()
         self._node_id = node_id
+        self._outbox.assign_node_id(node_id)
 
     @property
     def outbox(self) -> Outbox:

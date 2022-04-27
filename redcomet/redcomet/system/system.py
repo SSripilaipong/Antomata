@@ -19,9 +19,8 @@ class ActorSystem:
     def create(cls) -> 'ActorSystem':
         incoming_messages = DefaultQueue()
 
-        gateway = create_gateway_node("main", incoming_messages)
-
-        node0 = create_worker_node("node0")
+        gateway = create_gateway_node(incoming_messages)
+        node0 = create_worker_node()
 
         cluster = ClusterManager.create(gateway, "cluster")
         cluster.add_node(node0, "node0")

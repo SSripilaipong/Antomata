@@ -6,13 +6,13 @@ from redcomet.node.synchronous import Node
 from redcomet.queue.default import DefaultQueue
 
 
-def create_gateway_node(node_id: str, incoming_messages: DefaultQueue) -> Node:
-    return _create_node(node_id, GatewayExecutor(incoming_messages))
+def create_gateway_node(incoming_messages: DefaultQueue) -> Node:
+    return _create_node(GatewayExecutor(incoming_messages))
 
 
-def create_worker_node(node_id: str) -> Node:
-    return _create_node(node_id, ActorExecutor())
+def create_worker_node() -> Node:
+    return _create_node(ActorExecutor())
 
 
-def _create_node(node_id: str, executor: ActorExecutor) -> Node:
-    return Node.create(executor, Inbox(), Outbox(node_id))
+def _create_node(executor: ActorExecutor) -> Node:
+    return Node.create(executor, Inbox(), Outbox())
