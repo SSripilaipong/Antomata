@@ -9,10 +9,13 @@ from redcomet.node.register import RegisterActorRequest
 
 
 class NodeManager(ActorAbstract):
-    def __init__(self, actor_id: str, node: NodeAbstract, discovery: Address):
+    def __init__(self, actor_id: str, node: NodeAbstract, discovery: Address = None):
         self._actor_id = actor_id
         self._node = node
         self._discovery = discovery
+
+    def bind_discovery(self, address: Address):
+        self._discovery = address
 
     def receive(self, message: MessageAbstract, sender: ActorRefAbstract, me: ActorRefAbstract,
                 cluster: ClusterRefAbstract):

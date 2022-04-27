@@ -2,7 +2,6 @@ from redcomet.base.actor import ActorRefAbstract
 from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
-from redcomet.base.discovery import ActorDiscovery
 from redcomet.base.node import NodeAbstract
 from redcomet.cluster.manager import ClusterManager
 from redcomet.queue.abstract import QueueAbstract
@@ -20,17 +19,13 @@ class ActorSystem:
     def create(cls) -> 'ActorSystem':
         incoming_messages = DefaultQueue()
 
-        discovery = ActorDiscovery.create("discovery", "main")
+        gateway = create_gateway_node("main", incoming_messages)
 
-        gateway = create_gateway_node("main", incoming_messages, discovery)
-        discovery.set_node(gateway)
+        node0 = create_worker_node("node0")
 
-        node0 = create_worker_node("node0", discovery)
-
-        cluster = ClusterManager(gateway, "cluster")
+        cluster = ClusterManager.create(gateway, "cluster")
         cluster.add_node(node0, "node0")
         gateway.register_executable_actor(cluster, "cluster")
-        discovery.register_address("cluster", "main")
 
         return cls(gateway.issue_cluster_ref("main"), gateway, incoming_messages)
 

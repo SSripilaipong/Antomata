@@ -2,12 +2,17 @@ from abc import ABC, abstractmethod
 
 from redcomet.base.actor import ActorRefAbstract, ActorAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
+from redcomet.base.messaging.address import Address
 from redcomet.base.messaging.inbox import Inbox
 from redcomet.base.messaging.outbox import Outbox
 from redcomet.base.messenger.messenger import MessengerAbstract
 
 
 class NodeAbstract(ABC):
+
+    @abstractmethod
+    def bind_discovery(self, address: Address):
+        pass
 
     @abstractmethod
     def issue_actor_ref(self, local_issuer_id: str, ref_id: str) -> ActorRefAbstract:

@@ -4,6 +4,7 @@ from redcomet.base.actor import ActorAbstract, ActorRefAbstract
 from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
 from redcomet.base.cluster.request import SpawnActorRequest
+from redcomet.base.discovery import ActorDiscovery
 from redcomet.base.messaging.address import Address
 from redcomet.base.messaging.packet import Packet
 from redcomet.base.node import NodeAbstract
@@ -11,18 +12,32 @@ from redcomet.node.register import RegisterActorRequest
 
 
 class ClusterManager(ActorAbstract):
-    def __init__(self, node: NodeAbstract, actor_id: str):
+    def __init__(self, node: NodeAbstract, actor_id: str, discovery: ActorDiscovery):
         self._node = node
         self._actor_id = actor_id
+        self._discovery = discovery
+
         self._nodes: List[NodeAbstract] = []
         self._node_index = 0
 
-        self._node.make_connection_to(self._node)
+    @classmethod
+    def create(cls, node: NodeAbstract, actor_id: str) -> 'ClusterManager':
+        discovery = ActorDiscovery.create("discovery", "main")
+        cluster = cls(node, actor_id, discovery)
+        discovery.register_address("cluster", "main")
+
+        node.bind_discovery(discovery.address)
+        node.make_connection_to(node)
+        discovery.set_node(node)
+        node.register_executable_actor(discovery, discovery.address.target)
+
+        return cluster
 
     def add_node(self, node: NodeAbstract, node_id: str):
         if node in self._nodes or node is self._node:
             raise NotImplementedError()
 
+        node.bind_discovery(self._discovery.address)
         node.make_connection_with(self._node)
         for existing_node in self._nodes:
             existing_node.make_connection_with(node)

@@ -3,7 +3,6 @@ from redcomet.actor.ref import ActorRef
 from redcomet.base.actor import ActorRefAbstract, ActorAbstract
 from redcomet.base.actor.executor import ActorExecutorAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
-from redcomet.base.discovery import ActorDiscovery
 from redcomet.base.messaging.address import Address
 from redcomet.base.messaging.inbox import Inbox
 from redcomet.base.messaging.outbox import Outbox
@@ -17,25 +16,32 @@ from redcomet.node.manager import NodeManager
 
 class Node(NodeAbstract):
     def __init__(self, node_id: str, executor: ActorExecutorAbstract, inbox: Inbox, outbox: Outbox,
-                 messenger: Messenger, discovery: Address):
+                 messenger: Messenger, manager: NodeManager = None):
         self._node_id = node_id
         self._inbox = inbox
         self._outbox = outbox
 
         self._executor = executor
         self._messenger = messenger
-        self._discovery = discovery
+        self._manager = manager
 
     @classmethod
-    def create(cls, node_id: str, executor: ActorExecutor, messenger: Messenger, inbox: Inbox, outbox: Outbox,
-               discovery: ActorDiscovery) -> 'Node':
-        node = cls(node_id, executor, inbox, outbox, messenger, discovery.address)
+    def create(cls, node_id: str, executor: ActorExecutor, messenger: Messenger, inbox: Inbox, outbox: Outbox) \
+            -> 'Node':
+        node = cls(node_id, executor, inbox, outbox, messenger)
         executor.set_node(node)
         inbox.set_handler(PacketHandler(executor))
         node._executor.register(messenger.actor_id, messenger)
-        manager = NodeManager("manager", node, discovery.address)
+
+        manager = NodeManager("manager", node)
         executor.register("manager", manager)
+        node._manager = manager
+
         return node
+
+    def bind_discovery(self, address: Address):
+        self._manager.bind_discovery(address)
+        self._messenger.bind_discovery(address)
 
     def register_executable_actor(self, actor: ActorAbstract, actor_id: str):
         self._executor.register(actor_id, actor)

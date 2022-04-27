@@ -13,7 +13,7 @@ from redcomet.base.messenger.request import MessageForwardRequest
 
 
 class Messenger(ActorAbstract, MessengerAbstract):
-    def __init__(self, actor_id: str, node_id: str, outbox: Outbox, discovery: Address):
+    def __init__(self, actor_id: str, node_id: str, outbox: Outbox, discovery: Address = None):
         self._actor_id = actor_id
         self._node_id = node_id
         self._outbox = outbox
@@ -21,6 +21,9 @@ class Messenger(ActorAbstract, MessengerAbstract):
 
         self._address_cache = AddressCache()
         self._pending_messages: Dict[str, List[MessageForwardRequest]] = {}
+
+    def bind_discovery(self, address: Address):
+        self._discovery = address
 
     def receive(self, message: MessageAbstract, sender: ActorRefAbstract, me: ActorRefAbstract,
                 cluster: ClusterRefAbstract):
