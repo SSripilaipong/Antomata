@@ -21,15 +21,17 @@ class ClusterManager(ActorAbstract):
         self._node_index = 0
 
     @classmethod
-    def create(cls, node: NodeAbstract, actor_id: str) -> 'ClusterManager':
-        discovery = ActorDiscovery.create("discovery", "main")
+    def create(cls, node: NodeAbstract, node_id: str, actor_id: str) -> 'ClusterManager':
+        discovery = ActorDiscovery.create("discovery", node_id)
         cluster = cls(node, actor_id, discovery)
-        discovery.register_address("cluster", "main")
+        discovery.register_address(actor_id, node_id)
 
-        node.assign_node_id("main")
+        node.assign_node_id(node_id)
         node.bind_discovery(discovery.address)
         node.make_connection_to(node)
         discovery.set_node(node)
+
+        node.register_executable_actor(cluster, "cluster")
         node.register_executable_actor(discovery, discovery.address.target)
 
         return cluster

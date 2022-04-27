@@ -22,9 +22,8 @@ class ActorSystem:
         gateway = create_gateway_node(incoming_messages)
         node0 = create_worker_node()
 
-        cluster = ClusterManager.create(gateway, "cluster")
+        cluster = ClusterManager.create(gateway, "main", "cluster")
         cluster.add_node(node0, "node0")
-        gateway.register_executable_actor(cluster, "cluster")
 
         return cls(gateway.issue_cluster_ref("main"), gateway, incoming_messages)
 
