@@ -4,7 +4,6 @@ from redcomet.base.actor import ActorRefAbstract
 from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
-from redcomet.base.node import NodeAbstract
 from redcomet.cluster.manager import ClusterManager
 from redcomet.node.ref import NodeRef
 from redcomet.queue.abstract import QueueAbstract
@@ -13,9 +12,8 @@ from redcomet.system.node_factory import create_gateway_node, create_worker_node
 
 
 class ActorSystem:
-    def __init__(self, cluster: ClusterRefAbstract, gateway: NodeAbstract, incoming_messages: QueueAbstract):
+    def __init__(self, cluster: ClusterRefAbstract, incoming_messages: QueueAbstract):
         self._cluster = cluster
-        self._gateway = gateway
         self._incoming_messages = incoming_messages
 
     @classmethod
@@ -28,7 +26,7 @@ class ActorSystem:
         cluster = ClusterManager.create(gateway, "main", "cluster")
         cluster.add_node(node0, "node0")
 
-        return cls(gateway.issue_cluster_ref("main"), gateway, incoming_messages)
+        return cls(gateway.issue_cluster_ref("main"), incoming_messages)
 
     def spawn(self, actor: ActorAbstract) -> ActorRefAbstract:
         return self._cluster.spawn(actor)
