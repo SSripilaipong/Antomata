@@ -17,7 +17,7 @@ class ActorSystem:
         self._incoming_messages = incoming_messages
 
     @classmethod
-    def create(cls, n_worker_nodes: int = 1) -> 'ActorSystem':
+    def create(cls, n_worker_nodes: int = 1, node_id_prefix: str = "node") -> 'ActorSystem':
         incoming_messages = DefaultQueue()
 
         gateway = create_gateway_node(incoming_messages)
