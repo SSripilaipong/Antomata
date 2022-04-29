@@ -24,7 +24,7 @@ class ActorSystem:
         node0 = create_worker_node()
 
         cluster = ClusterManager.create(gateway, "main", "cluster")
-        cluster.add_node(node0, "node0")
+        cluster.add_node(node0, f"{node_id_prefix}0")
 
         return cls(gateway.issue_cluster_ref("main"), incoming_messages)
 
@@ -48,4 +48,4 @@ class ActorSystem:
         pass
 
     def get_active_nodes(self, timeout: float) -> List[NodeRef]:
-        return [NodeRef()]
+        return self._cluster.get_active_nodes(timeout=timeout)

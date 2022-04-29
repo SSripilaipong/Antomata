@@ -2,6 +2,7 @@ from typing import List
 
 from redcomet.base.actor import ActorAbstract, ActorRefAbstract
 from redcomet.base.actor.message import MessageAbstract
+from redcomet.base.cluster.message.list_active_node import ListActiveNodeRequest
 from redcomet.base.cluster.ref import ClusterRefAbstract
 from redcomet.base.cluster.request import SpawnActorRequest
 from redcomet.base.discovery import ActorDiscovery
@@ -53,8 +54,13 @@ class ClusterManager(ActorAbstract):
                 cluster: ClusterRefAbstract):
         if isinstance(message, SpawnActorRequest):
             self._process_spawn_request(message)
+        elif isinstance(message, ListActiveNodeRequest):
+            self._process_list_active_node_request(message)
         else:
             raise NotImplementedError()
+
+    def _process_list_active_node_request(self, message: ListActiveNodeRequest):
+        message.reply.put([node.node_id for node in self._nodes])
 
     def _process_spawn_request(self, message: SpawnActorRequest):
         node_id = self._get_node_id()
