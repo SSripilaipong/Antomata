@@ -21,10 +21,10 @@ class ActorSystem:
         incoming_messages = DefaultQueue()
 
         gateway = create_gateway_node(incoming_messages)
-        node0 = create_worker_node()
 
         cluster = ClusterManager.create(gateway, "main", "cluster")
-        cluster.add_node(node0, f"{node_id_prefix}0")
+        for i in range(n_worker_nodes):
+            cluster.add_node(create_worker_node(), f"{node_id_prefix}{i}")
 
         return cls(gateway.issue_cluster_ref("main"), incoming_messages)
 
