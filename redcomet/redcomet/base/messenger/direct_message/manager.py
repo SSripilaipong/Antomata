@@ -10,6 +10,10 @@ class DirectMessageManagerAbstract(ABC):
         pass
 
     @abstractmethod
+    def get_message_box(self, ref_id: str) -> DirectMessageBoxAbstract:
+        pass
+
+    @abstractmethod
     def destroy_message_box(self, ref_id: str):
         pass
 
