@@ -1,9 +1,12 @@
+from typing import List
+
 from redcomet.base.actor import ActorRefAbstract
 from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
 from redcomet.base.node import NodeAbstract
 from redcomet.cluster.manager import ClusterManager
+from redcomet.node.ref import NodeRef
 from redcomet.queue.abstract import QueueAbstract
 from redcomet.queue.default import DefaultQueue
 from redcomet.system.node_factory import create_gateway_node, create_worker_node
@@ -16,7 +19,7 @@ class ActorSystem:
         self._incoming_messages = incoming_messages
 
     @classmethod
-    def create(cls) -> 'ActorSystem':
+    def create(cls, n_worker_nodes: int = 1) -> 'ActorSystem':
         incoming_messages = DefaultQueue()
 
         gateway = create_gateway_node(incoming_messages)
@@ -45,3 +48,6 @@ class ActorSystem:
 
     def stop(self):
         pass
+
+    def get_active_nodes(self, timeout: float) -> List[NodeRef]:
+        return [NodeRef()]
