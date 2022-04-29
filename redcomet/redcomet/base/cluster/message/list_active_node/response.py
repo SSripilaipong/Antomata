@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List
 
 from redcomet.base.actor.message import MessageAbstract
 
