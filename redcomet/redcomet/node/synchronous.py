@@ -1,7 +1,7 @@
+from redcomet.actor.abstract import ActorAbstract
 from redcomet.actor.executor import ActorExecutor
 from redcomet.actor.ref import ActorRef
-from redcomet.base.actor import ActorRefAbstract, ActorAbstract
-from redcomet.base.actor.executor import ActorExecutorAbstract
+from redcomet.base.actor import ActorRefAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
 from redcomet.base.messaging.address import Address
 from redcomet.base.messaging.inbox import Inbox
@@ -15,7 +15,7 @@ from redcomet.node.manager import NodeManager
 
 
 class Node(NodeAbstract):
-    def __init__(self, executor: ActorExecutorAbstract, inbox: Inbox, outbox: Outbox,
+    def __init__(self, executor: ActorExecutor, inbox: Inbox, outbox: Outbox,
                  messenger: Messenger, node_id: str = None, manager: NodeManager = None, discovery: Address = None):
         self._node_id = node_id
         self._inbox = inbox

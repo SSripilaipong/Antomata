@@ -1,12 +1,11 @@
 from typing import Dict
 
-from redcomet.base.actor import ActorAbstract
-from redcomet.base.actor.executor import ActorExecutorAbstract
+from redcomet.actor.abstract import ActorAbstract
 from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.node import NodeAbstract
 
 
-class ActorExecutor(ActorExecutorAbstract):
+class ActorExecutor:
     def __init__(self, node: NodeAbstract = None):
         self._node = node
         self._actor_map: Dict[str, ActorAbstract] = {}

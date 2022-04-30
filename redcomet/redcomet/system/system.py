@@ -1,7 +1,7 @@
 from typing import List
 
+from redcomet.actor.abstract import ActorAbstract
 from redcomet.base.actor import ActorRefAbstract
-from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
 from redcomet.cluster.manager import ClusterManager

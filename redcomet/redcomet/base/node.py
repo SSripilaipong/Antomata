@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 
-from redcomet.base.actor import ActorRefAbstract, ActorAbstract
+from redcomet.actor.abstract import ActorAbstract
+from redcomet.base.actor import ActorRefAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
 from redcomet.base.messaging.address import Address
 from redcomet.base.messaging.inbox import Inbox

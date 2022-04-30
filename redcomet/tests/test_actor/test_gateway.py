@@ -1,4 +1,5 @@
-from redcomet.base.actor import ActorAbstract, ActorRefAbstract
+from redcomet.actor.abstract import ActorAbstract
+from redcomet.base.actor import ActorRefAbstract
 from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
 from redcomet.system import ActorSystem
