@@ -9,6 +9,7 @@ from redcomet.base.messaging.outbox import Outbox
 from redcomet.base.messenger.abstract import MessengerAbstract
 from redcomet.base.node.abstract import NodeAbstract
 from redcomet.cluster.ref import ClusterRef
+from redcomet.discovery.ref import ActorDiscoveryRef
 from redcomet.messaging.handler import PacketHandler
 from redcomet.messenger import Messenger
 from redcomet.node.manager import NodeManager
@@ -17,6 +18,7 @@ from redcomet.node.manager import NodeManager
 class Node(NodeAbstract):
     def __init__(self, executor: ActorExecutor, messenger: Messenger, node_id: str = None, manager: NodeManager = None):
         self._node_id = node_id
+        self._actor_id = node_id
 
         self._executor = executor
         self._messenger = messenger
@@ -40,7 +42,7 @@ class Node(NodeAbstract):
         return node
 
     def bind_discovery(self, address: Address):
-        self._manager.bind_discovery(address)
+        self._manager.bind_discovery(ActorDiscoveryRef(self._messenger, address, self._actor_id))
         self._messenger.bind_discovery(address)
 
     def register_executable_actor(self, actor: ActorAbstract, actor_id: str):
@@ -64,6 +66,7 @@ class Node(NodeAbstract):
             if self._node_id != node_id:
                 raise NotImplementedError()
         self._node_id = node_id
+        self._actor_id = node_id
         self._messenger.assign_node_id(node_id)
 
     @property
