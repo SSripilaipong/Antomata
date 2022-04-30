@@ -9,7 +9,7 @@ from redcomet.base.discovery.register import RegisterAddressRequest
 from redcomet.base.messaging.address import Address
 from redcomet.base.messaging.outbox import Outbox
 from redcomet.base.messaging.packet import Packet
-from redcomet.base.node import NodeAbstract
+from redcomet.base.node.abstract import NodeAbstract
 
 
 class ActorDiscovery(ActorAbstract):

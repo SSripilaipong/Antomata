@@ -2,7 +2,7 @@ from typing import Dict
 
 from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.base.actor.message import MessageAbstract
-from redcomet.base.node import NodeAbstract
+from redcomet.base.node.abstract import NodeAbstract
 
 
 class ActorExecutor:

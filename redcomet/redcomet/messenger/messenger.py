@@ -10,7 +10,7 @@ from redcomet.base.messaging.packet import Packet
 from redcomet.messenger.address_cache import AddressCache
 from redcomet.base.messenger.abstract import MessengerAbstract
 from redcomet.messenger.request import MessageForwardRequest
-from redcomet.base.node import NodeAbstract
+from redcomet.base.node.abstract import NodeAbstract
 
 
 class Messenger(ActorAbstract, MessengerAbstract):

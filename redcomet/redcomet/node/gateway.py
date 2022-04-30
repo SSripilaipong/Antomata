@@ -3,7 +3,7 @@ from typing import Optional
 from redcomet.actor.executor import ActorExecutor
 from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.base.actor.message import MessageAbstract
-from redcomet.base.node import NodeAbstract
+from redcomet.base.node.abstract import NodeAbstract
 from redcomet.queue.abstract import QueueAbstract
 
 

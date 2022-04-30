@@ -7,7 +7,7 @@ from redcomet.base.messaging.address import Address
 from redcomet.base.messaging.inbox import Inbox
 from redcomet.base.messaging.outbox import Outbox
 from redcomet.base.messenger.abstract import MessengerAbstract
-from redcomet.base.node import NodeAbstract
+from redcomet.base.node.abstract import NodeAbstract
 from redcomet.cluster.ref import ClusterRef
 from redcomet.messaging.handler import PacketHandler
 from redcomet.messenger import Messenger
