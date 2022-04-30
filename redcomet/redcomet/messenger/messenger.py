@@ -70,8 +70,10 @@ class Messenger(ActorAbstract, MessengerAbstract):
     def send_packet(self, packet: Packet):
         self._outbox.send(packet)
 
-    def make_connection_to(self, other: 'MessengerAbstract'):
-        self.outbox.register_inbox(other.inbox, other.node_id)
+    def make_connection_to(self, other: MessengerAbstract):
+        if not isinstance(other, Messenger):
+            raise TypeError("Messenger can only connect with another messenger")
+        self._outbox.register_inbox(other._inbox, other.node_id)
 
     def _store_message(self, message: MessageForwardRequest, wait_for_address: str):
         self._pending_messages[wait_for_address] = self._pending_messages.get(wait_for_address, []) + [message]
@@ -92,11 +94,3 @@ class Messenger(ActorAbstract, MessengerAbstract):
     @property
     def node_id(self) -> str:
         return self._node_id
-
-    @property
-    def inbox(self) -> Inbox:
-        return self._inbox
-
-    @property
-    def outbox(self) -> Outbox:
-        return self._outbox
