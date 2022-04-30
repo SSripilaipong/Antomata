@@ -7,9 +7,9 @@ from redcomet.base.cluster.ref import ClusterRefAbstract
 from redcomet.base.discovery.query import QueryAddressRequest, QueryAddressResponse
 from redcomet.base.messaging.address import Address
 from redcomet.base.messaging.packet import Packet
-from redcomet.base.messenger.address_cache import AddressCache
-from redcomet.base.messenger.messenger import MessengerAbstract
-from redcomet.base.messenger.request import MessageForwardRequest
+from redcomet.messenger.address_cache import AddressCache
+from redcomet.base.messenger.abstract import MessengerAbstract
+from redcomet.messenger.request import MessageForwardRequest
 from redcomet.base.node import NodeAbstract
 
 

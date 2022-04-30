@@ -6,7 +6,7 @@ from redcomet.base.cluster.ref import ClusterRefAbstract
 from redcomet.base.messaging.address import Address
 from redcomet.base.messaging.inbox import Inbox
 from redcomet.base.messaging.outbox import Outbox
-from redcomet.base.messenger.messenger import MessengerAbstract
+from redcomet.base.messenger.abstract import MessengerAbstract
 
 
 class NodeAbstract(ABC):

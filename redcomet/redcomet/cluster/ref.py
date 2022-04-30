@@ -9,7 +9,7 @@ from redcomet.cluster.message.spawn_actor.request import SpawnActorRequest
 from redcomet.base.cluster.ref import ClusterRefAbstract
 from redcomet.base.messaging.address import Address
 from redcomet.base.messaging.packet import Packet
-from redcomet.base.messenger.messenger import MessengerAbstract
+from redcomet.base.messenger.abstract import MessengerAbstract
 from redcomet.node.ref import NodeRef
 
 
