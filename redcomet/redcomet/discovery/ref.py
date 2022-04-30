@@ -1,4 +1,7 @@
-from redcomet.base.discovery.query import QueryAddressRequest
+from typing import Callable, Any
+
+from redcomet.base.actor.message import MessageAbstract
+from redcomet.base.discovery.query import QueryAddressRequest, QueryAddressResponse
 from redcomet.base.discovery.ref import ActorDiscoveryRefAbstract
 from redcomet.base.discovery.register import RegisterAddressRequest
 from redcomet.base.messaging.address import Address
@@ -23,3 +26,9 @@ class ActorDiscoveryRef(ActorDiscoveryRefAbstract):
                         sender=Address.on_local(""),
                         receiver=self._address)
         self._messenger.send_packet(packet)
+
+    def call_on_query_address_response(self, message: MessageAbstract, func: Callable[[str, Address], Any]) -> bool:
+        if isinstance(message, QueryAddressResponse):
+            func(message.target, message.address)
+            return True
+        return False
