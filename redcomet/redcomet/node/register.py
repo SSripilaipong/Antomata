@@ -1,4 +1,4 @@
-from redcomet.actor.abstract import ActorAbstract
+from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.base.actor.message import MessageAbstract
 
 

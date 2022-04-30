@@ -1,7 +1,7 @@
 from typing import Dict
 
-from redcomet.actor.abstract import ActorAbstract
 from redcomet.base.actor import ActorRefAbstract
+from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
 from redcomet.base.discovery.query import QueryAddressRequest, QueryAddressResponse

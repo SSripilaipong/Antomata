@@ -1,6 +1,6 @@
 from typing import List
 
-from redcomet.actor.abstract import ActorAbstract, ActorRefAbstract
+from redcomet.base.actor.abstract import ActorAbstract, ActorRefAbstract
 from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.cluster.message.list_active_node.request import ListActiveNodeRequest
 from redcomet.base.cluster.message.spawn_actor.request import SpawnActorRequest

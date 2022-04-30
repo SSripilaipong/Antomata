@@ -1,9 +1,9 @@
 from multiprocessing import Queue
 from typing import List
 
-from redcomet.actor.abstract import ActorAbstract
 from redcomet.actor.ref import ActorRef
 from redcomet.base.actor import ActorRefAbstract
+from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.base.cluster.message.list_active_node.request import ListActiveNodeRequest
 from redcomet.base.cluster.message.spawn_actor.request import SpawnActorRequest
 from redcomet.base.cluster.ref import ClusterRefAbstract

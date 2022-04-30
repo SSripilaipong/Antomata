@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from redcomet.actor.abstract import ActorAbstract
 from redcomet.base.actor import ActorRefAbstract
+from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.node.ref import NodeRef
 
 
