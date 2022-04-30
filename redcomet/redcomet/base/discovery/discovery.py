@@ -7,15 +7,15 @@ from redcomet.base.cluster.ref import ClusterRefAbstract
 from redcomet.base.discovery.query import QueryAddressRequest, QueryAddressResponse
 from redcomet.base.discovery.register import RegisterAddressRequest
 from redcomet.base.messaging.address import Address
-from redcomet.base.messaging.outbox import Outbox
 from redcomet.base.messaging.packet import Packet
+from redcomet.base.messenger.abstract import MessengerAbstract
 from redcomet.base.node.abstract import NodeAbstract
 
 
 class ActorDiscovery(ActorAbstract):
-    def __init__(self, address: Address, outbox: Outbox = None):
+    def __init__(self, address: Address, messenger: MessengerAbstract = None):
         self._address = address
-        self._outbox = outbox
+        self._messenger = messenger
 
         self._mapper: Dict[str, str] = {}
 
@@ -27,7 +27,7 @@ class ActorDiscovery(ActorAbstract):
         return discovery
 
     def set_node(self, node: NodeAbstract):
-        self._outbox = node.outbox
+        self._messenger = node.messenger
 
     def receive(self, message: MessageAbstract, sender: ActorRefAbstract, me: ActorRefAbstract,
                 cluster: ClusterRefAbstract):
@@ -47,7 +47,7 @@ class ActorDiscovery(ActorAbstract):
         packet = Packet(QueryAddressResponse(message.target, address),
                         sender=self._address,
                         receiver=Address(message.requester_node_id, message.requester_target))
-        self._outbox.send(packet)
+        self._messenger.send_packet(packet)
 
     def register_address(self, target: str, node_id: str):
         if target in self._mapper:

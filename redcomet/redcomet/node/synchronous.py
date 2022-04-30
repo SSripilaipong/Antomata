@@ -15,23 +15,18 @@ from redcomet.node.manager import NodeManager
 
 
 class Node(NodeAbstract):
-    def __init__(self, executor: ActorExecutor, inbox: Inbox, outbox: Outbox,
-                 messenger: Messenger, node_id: str = None, manager: NodeManager = None, discovery: Address = None):
+    def __init__(self, executor: ActorExecutor, messenger: Messenger, node_id: str = None, manager: NodeManager = None):
         self._node_id = node_id
-        self._inbox = inbox
-        self._outbox = outbox
 
         self._executor = executor
         self._messenger = messenger
         self._manager = manager
-        self._discovery = discovery
 
     @classmethod
     def create(cls, executor: ActorExecutor, inbox: Inbox, outbox: Outbox) -> 'Node':
-        messenger = Messenger("messenger")
-        node = cls(executor, inbox, outbox, messenger)
+        messenger = Messenger("messenger", inbox, outbox)
+        node = cls(executor, messenger)
 
-        messenger.set_node(node)
         executor.set_node(node)
 
         inbox.set_handler(PacketHandler(executor))
@@ -45,8 +40,8 @@ class Node(NodeAbstract):
         return node
 
     def bind_discovery(self, address: Address):
-        self._discovery = address
         self._manager.bind_discovery(address)
+        self._messenger.bind_discovery(address)
 
     def register_executable_actor(self, actor: ActorAbstract, actor_id: str):
         self._executor.register(actor_id, actor)
@@ -62,22 +57,14 @@ class Node(NodeAbstract):
         node.make_connection_to(self)
 
     def make_connection_to(self, node: NodeAbstract):
-        self.outbox.register_inbox(node.inbox, node.node_id)
+        self._messenger.make_connection_to(node.messenger)
 
     def assign_node_id(self, node_id: str):
         if self._node_id is not None:
             if self._node_id != node_id:
                 raise NotImplementedError()
         self._node_id = node_id
-        self._outbox.assign_node_id(node_id)
-
-    @property
-    def outbox(self) -> Outbox:
-        return self._outbox
-
-    @property
-    def inbox(self) -> Inbox:
-        return self._inbox
+        self._messenger.assign_node_id(node_id)
 
     @property
     def node_id(self) -> str:
@@ -86,7 +73,3 @@ class Node(NodeAbstract):
     @property
     def messenger(self) -> MessengerAbstract:
         return self._messenger
-
-    @property
-    def discovery(self) -> Address:
-        return self._discovery
