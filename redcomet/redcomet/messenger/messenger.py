@@ -5,8 +5,8 @@ from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
 from redcomet.base.messaging.address import Address
-from redcomet.base.messaging.inbox import Inbox
-from redcomet.base.messaging.outbox import Outbox
+from redcomet.messenger.inbox import Inbox
+from redcomet.messenger.outbox import Outbox
 from redcomet.base.messaging.packet import Packet
 from redcomet.base.messenger.abstract import MessengerAbstract
 from redcomet.discovery.ref import ActorDiscoveryRef
