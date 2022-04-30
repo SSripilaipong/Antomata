@@ -1,3 +1,4 @@
+from redcomet.base.discovery.query import QueryAddressRequest
 from redcomet.base.discovery.ref import ActorDiscoveryRefAbstract
 from redcomet.base.discovery.register import RegisterAddressRequest
 from redcomet.base.messaging.address import Address
@@ -14,5 +15,11 @@ class ActorDiscoveryRef(ActorDiscoveryRefAbstract):
     def register_address(self, target: str, node_id: str):
         packet = Packet(RegisterAddressRequest(target, node_id),
                         sender=Address.on_local(self._issuer_id),
+                        receiver=self._address)
+        self._messenger.send_packet(packet)
+
+    def query_address(self, target: str, requester_node_id: str, requester_target: str):
+        packet = Packet(QueryAddressRequest(target, requester_node_id, requester_target),
+                        sender=Address.on_local(""),
                         receiver=self._address)
         self._messenger.send_packet(packet)

@@ -4,23 +4,26 @@ from redcomet.base.actor import ActorRefAbstract
 from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
-from redcomet.base.discovery.query import QueryAddressRequest, QueryAddressResponse
+from redcomet.base.discovery.query import QueryAddressResponse
 from redcomet.base.messaging.address import Address
 from redcomet.base.messaging.inbox import Inbox
 from redcomet.base.messaging.outbox import Outbox
 from redcomet.base.messaging.packet import Packet
 from redcomet.base.messenger.abstract import MessengerAbstract
+from redcomet.discovery.ref import ActorDiscoveryRef
 from redcomet.messenger.address_cache import AddressCache
 from redcomet.messenger.request import MessageForwardRequest
 
 
 class Messenger(ActorAbstract, MessengerAbstract):
-    def __init__(self, actor_id: str, inbox: Inbox, outbox: Outbox, node_id: str = None, discovery: Address = None):
+    def __init__(self, actor_id: str, inbox: Inbox, outbox: Outbox, node_id: str = None, discovery: Address = None,
+                 discovery_ref: ActorDiscoveryRef = None):
         self._actor_id = actor_id
         self._inbox = inbox
         self._outbox = outbox
         self._node_id = node_id
-        self._discovery = discovery
+        self._discovery_address = discovery
+        self._discovery = discovery_ref
 
         self._address_cache = AddressCache()
         self._pending_messages: Dict[str, List[MessageForwardRequest]] = {}
@@ -29,8 +32,9 @@ class Messenger(ActorAbstract, MessengerAbstract):
         self._node_id = node_id
         self._outbox.assign_node_id(node_id)
 
-    def bind_discovery(self, address: Address):
-        self._discovery = address
+    def bind_discovery(self, address: Address, ref: ActorDiscoveryRef):
+        self._discovery_address = address
+        self._discovery = ref
 
     def receive(self, message: MessageAbstract, sender: ActorRefAbstract, me: ActorRefAbstract,
                 cluster: ClusterRefAbstract):
@@ -53,10 +57,10 @@ class Messenger(ActorAbstract, MessengerAbstract):
         self.send_packet(Packet(message.message, sender=sender, receiver=receiver))
 
     def send(self, message: MessageAbstract, sender_id: str, receiver_id: str):
-        if receiver_id == self._discovery:
+        if receiver_id == self._discovery_address:
             packet = Packet(message,
                             sender=Address(self._node_id, sender_id),
-                            receiver=self._discovery)
+                            receiver=self._discovery_address)
         else:
             packet = Packet(MessageForwardRequest(message, sender_id, receiver_id),
                             sender=Address.on_local(sender_id),
@@ -74,10 +78,7 @@ class Messenger(ActorAbstract, MessengerAbstract):
         self._pending_messages[wait_for_address] = self._pending_messages.get(wait_for_address, []) + [message]
 
     def _query_address_request(self, target: str):
-        packet = Packet(QueryAddressRequest(target, self._node_id, self._actor_id),
-                        sender=Address.on_local(""),
-                        receiver=self._discovery)
-        self.send_packet(packet)
+        self._discovery.query_address(target, self._node_id, self._actor_id)
 
     def _query_address_response(self, response: QueryAddressResponse):
         for message in self._pending_messages.get(response.target, []):
