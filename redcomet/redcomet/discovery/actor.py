@@ -4,12 +4,13 @@ from redcomet.base.actor import ActorRefAbstract
 from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
-from redcomet.base.discovery.query import QueryAddressRequest, QueryAddressResponse
-from redcomet.base.discovery.register import RegisterAddressRequest
 from redcomet.base.messaging.address import Address
 from redcomet.base.messaging.packet import Packet
 from redcomet.base.messenger.abstract import MessengerAbstract
 from redcomet.base.node.abstract import NodeAbstract
+from redcomet.discovery.message.query.request import QueryAddressRequest
+from redcomet.discovery.message.query.response import QueryAddressResponse
+from redcomet.discovery.message.register.request import RegisterAddressRequest
 
 
 class ActorDiscovery(ActorAbstract):

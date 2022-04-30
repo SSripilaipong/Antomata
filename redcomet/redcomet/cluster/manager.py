@@ -3,12 +3,12 @@ from typing import List
 from redcomet.base.actor.abstract import ActorAbstract, ActorRefAbstract
 from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
-from redcomet.base.discovery import ActorDiscovery
 from redcomet.base.messaging.address import Address
 from redcomet.base.messaging.packet import Packet
 from redcomet.base.node.abstract import NodeAbstract
 from redcomet.cluster.message.list_active_node.request import ListActiveNodeRequest
 from redcomet.cluster.message.spawn_actor.request import SpawnActorRequest
+from redcomet.discovery.actor import ActorDiscovery
 from redcomet.node.register import RegisterActorRequest
 
 

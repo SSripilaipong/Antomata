@@ -1,12 +1,13 @@
 from typing import Callable, Any
 
 from redcomet.base.actor.message import MessageAbstract
-from redcomet.base.discovery.query import QueryAddressRequest, QueryAddressResponse
 from redcomet.base.discovery.ref import ActorDiscoveryRefAbstract
-from redcomet.base.discovery.register import RegisterAddressRequest
 from redcomet.base.messaging.address import Address
 from redcomet.base.messaging.packet import Packet
 from redcomet.base.messenger.abstract import MessengerAbstract
+from redcomet.discovery.message.query.request import QueryAddressRequest
+from redcomet.discovery.message.query.response import QueryAddressResponse
+from redcomet.discovery.message.register.request import RegisterAddressRequest
 
 
 class ActorDiscoveryRef(ActorDiscoveryRefAbstract):
