@@ -1,7 +1,7 @@
 from typing import Dict, Optional
 
-from redcomet.messenger.inbox import Inbox
 from redcomet.base.messaging.packet import Packet
+from redcomet.messenger.inbox import Inbox
 
 
 class Outbox:

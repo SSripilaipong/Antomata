@@ -5,6 +5,7 @@ from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
 from redcomet.base.messaging.address import Address
 from redcomet.base.messenger.abstract import MessengerAbstract
+from redcomet.node.ref import NodeRef
 
 
 class NodeAbstract(ABC):
@@ -19,6 +20,10 @@ class NodeAbstract(ABC):
 
     @abstractmethod
     def issue_cluster_ref(self, local_issuer_id: str) -> ClusterRefAbstract:
+        pass
+
+    @abstractmethod
+    def issue_node_ref(self, local_issuer_id: str, node_id: str) -> NodeRef:
         pass
 
     @abstractmethod

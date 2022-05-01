@@ -4,15 +4,16 @@ from redcomet.base.actor import ActorRefAbstract
 from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
 from redcomet.base.messaging.address import Address
-from redcomet.messenger.inbox import Inbox
-from redcomet.messenger.outbox import Outbox
 from redcomet.base.messenger.abstract import MessengerAbstract
 from redcomet.base.node.abstract import NodeAbstract
 from redcomet.cluster.ref import ClusterRef
 from redcomet.discovery.ref import ActorDiscoveryRef
 from redcomet.messaging.handler import PacketHandler
 from redcomet.messenger import Messenger
+from redcomet.messenger.inbox import Inbox
+from redcomet.messenger.outbox import Outbox
 from redcomet.node.manager import NodeManager
+from redcomet.node.ref import NodeRef
 
 
 class Node(NodeAbstract):
@@ -54,6 +55,9 @@ class Node(NodeAbstract):
 
     def issue_actor_ref(self, local_issuer_id: str, ref_id: str) -> ActorRefAbstract:
         return ActorRef(self._messenger, local_issuer_id, ref_id)
+
+    def issue_node_ref(self, local_issuer_id: str, node_id: str) -> NodeRef:
+        return NodeRef(self._messenger, local_issuer_id, node_id)
 
     def make_connection_with(self, node: NodeAbstract):
         self.make_connection_to(node)

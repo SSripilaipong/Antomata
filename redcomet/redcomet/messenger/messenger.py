@@ -5,12 +5,12 @@ from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
 from redcomet.base.messaging.address import Address
-from redcomet.messenger.inbox import Inbox
-from redcomet.messenger.outbox import Outbox
 from redcomet.base.messaging.packet import Packet
 from redcomet.base.messenger.abstract import MessengerAbstract
 from redcomet.discovery.ref import ActorDiscoveryRef
 from redcomet.messenger.address_cache import AddressCache
+from redcomet.messenger.inbox import Inbox
+from redcomet.messenger.outbox import Outbox
 from redcomet.messenger.request import MessageForwardRequest
 
 

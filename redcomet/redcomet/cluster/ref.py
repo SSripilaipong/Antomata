@@ -33,7 +33,7 @@ class ClusterRef(ClusterRefAbstract):
                         receiver=Address("main", "cluster"))
         self._messenger.send_packet(packet)
         node_ids = reply_queue.get(timeout=timeout)
-        return [NodeRef(node_id) for node_id in node_ids]
+        return [NodeRef(self._messenger, self._issuer_id, node_id) for node_id in node_ids]
 
 
 def _generate_actor_id(actor: ActorAbstract) -> str:
