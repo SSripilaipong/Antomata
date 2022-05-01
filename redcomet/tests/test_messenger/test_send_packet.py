@@ -16,8 +16,8 @@ class MockPacketHandler(PacketHandlerAbstract):
 
 
 def test_should_send_packet():
-    sender = create_messenger("sender-node", MockPacketHandler())
-    receiver = create_messenger("receiver-node", MockPacketHandler())
+    sender = create_messenger(MockPacketHandler(), node_id="sender-node")
+    receiver = create_messenger(MockPacketHandler(), node_id="receiver-node")
     sender.make_connection_to(receiver)
 
     sender.send_packet(Packet(DummyPacketContent(), Address.on_local("me"), Address("receiver-node", "you")))
