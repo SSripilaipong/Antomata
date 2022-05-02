@@ -29,6 +29,7 @@ class Messenger(ActorAbstract, MessengerAbstract):
     def assign_node_id(self, node_id: str):
         self._node_id = node_id
         self._outbox.assign_node_id(node_id)
+        self._outbox.register_inbox(self._inbox, node_id)
 
     def bind_discovery(self, ref: ActorDiscoveryRef):
         self._discovery = ref
@@ -64,6 +65,8 @@ class Messenger(ActorAbstract, MessengerAbstract):
         self._outbox.send(packet)
 
     def make_connection_to(self, other: MessengerAbstract):
+        if other is self:
+            raise NotImplementedError
         if not isinstance(other, Messenger):
             raise TypeError("Messenger can only connect with another messenger")
         self._outbox.register_inbox(other._inbox, other.node_id)

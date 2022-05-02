@@ -26,7 +26,6 @@ class ClusterManager(ActorAbstract):
 
         node.assign_node_id(node_id)
         node.bind_discovery(discovery.address)
-        node.make_connection_to(node)
         discovery.set_node(node)
 
         node.register_executable_actor(cluster, actor_id)
@@ -43,7 +42,6 @@ class ClusterManager(ActorAbstract):
         node.make_connection_with(self._node)
         for existing_node in self._nodes:
             existing_node.make_connection_with(node)
-        node.make_connection_to(node)
 
         self._nodes.append(node)
 

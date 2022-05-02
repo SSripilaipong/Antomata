@@ -9,5 +9,6 @@ def create_messenger(handler: PacketHandlerAbstract, *, actor_id: str = "messeng
         -> MessengerAbstract:
     inbox = Inbox(handler)
     outbox = Outbox(node_id)
-    outbox.register_inbox(inbox, node_id)
+    if node_id is not None:
+        outbox.register_inbox(inbox, node_id)
     return Messenger(actor_id, inbox, outbox, node_id=node_id)
