@@ -4,10 +4,10 @@ from redcomet.base.actor import ActorRefAbstract
 from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
+from redcomet.base.discovery.ref import ActorDiscoveryRefAbstract
 from redcomet.base.messaging.address import Address
 from redcomet.base.messaging.packet import Packet
 from redcomet.base.messenger.abstract import MessengerAbstract
-from redcomet.discovery.ref import ActorDiscoveryRef
 from redcomet.messenger.address_cache import AddressCache
 from redcomet.messenger.inbox import Inbox
 from redcomet.messenger.outbox import Outbox
@@ -16,7 +16,7 @@ from redcomet.messenger.request import MessageForwardRequest
 
 class Messenger(ActorAbstract, MessengerAbstract):
     def __init__(self, actor_id: str, inbox: Inbox, outbox: Outbox, node_id: str = None,
-                 discovery: ActorDiscoveryRef = None):
+                 discovery: ActorDiscoveryRefAbstract = None):
         self._actor_id = actor_id
         self._inbox = inbox
         self._outbox = outbox
@@ -31,7 +31,7 @@ class Messenger(ActorAbstract, MessengerAbstract):
         self._outbox.assign_node_id(node_id)
         self._outbox.register_inbox(self._inbox, node_id)
 
-    def bind_discovery(self, ref: ActorDiscoveryRef):
+    def bind_discovery(self, ref: ActorDiscoveryRefAbstract):
         self._discovery = ref
 
     def receive(self, message: MessageAbstract, sender: ActorRefAbstract, me: ActorRefAbstract,

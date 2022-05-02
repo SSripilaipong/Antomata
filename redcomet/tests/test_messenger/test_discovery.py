@@ -1,4 +1,8 @@
+from typing import Callable, Any
+
 from redcomet.base.actor.message import MessageAbstract
+from redcomet.base.discovery.ref import ActorDiscoveryRefAbstract
+from redcomet.base.messaging.address import Address
 from redcomet.base.messaging.handler import PacketHandlerAbstract
 from redcomet.base.messaging.packet import Packet
 from redcomet.messenger.factory import create_messenger
@@ -18,6 +22,20 @@ class MockPacketHandler(PacketHandlerAbstract):
         self.received_packet = packet
 
 
+class MockActorDiscoveryRef(ActorDiscoveryRefAbstract):
+    def __init__(self):
+        self.queried_address = None
+
+    def register_address(self, target: str, node_id: str):
+        pass
+
+    def query_address(self, target: str, requester_node_id: str, requester_target: str):
+        self.queried_address = target, requester_node_id, requester_target
+
+    def call_on_query_address_response(self, message: MessageAbstract, func: Callable[[str, Address], Any]) -> bool:
+        pass
+
+
 def _create_messenger_with_node_id(handler: PacketHandlerAbstract, node_id: str):
     messenger = create_messenger(handler, actor_id="messenger")
     messenger.assign_node_id(node_id)
@@ -32,3 +50,11 @@ def test_should_forward_message_to_be_process_later():
 
     content = handler.received_packet.content
     assert isinstance(content, MessageForwardRequest) and content.message.value == 123
+
+
+def test_should_send_query_message_to_discovery_when_address_is_unknown():
+    discovery = MockActorDiscoveryRef()
+    me = _create_messenger_with_node_id(..., "me")
+    me.bind_discovery(discovery)
+    me.receive(MessageForwardRequest(DummyMessage(123), "mine", "yours"), ..., ..., ...)
+    assert discovery.queried_address == ("yours", "me", "messenger")
