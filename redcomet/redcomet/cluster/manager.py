@@ -65,7 +65,8 @@ class ClusterManager(ActorAbstract):
             raise NotImplementedError()
 
     def _process_list_active_node_request(self, message: ListActiveNodeRequest, sender: ActorRefAbstract):
-        sender.tell(ListActiveNodeResponse([], ref_id=message.reply_ref_id))
+        node_ids = [node_id for node_id in self._node_refs.keys()]
+        sender.tell(ListActiveNodeResponse(node_ids, ref_id=message.reply_ref_id))
 
     def _process_spawn_request(self, message: SpawnActorRequest):
         node_id = self._get_node_id()
