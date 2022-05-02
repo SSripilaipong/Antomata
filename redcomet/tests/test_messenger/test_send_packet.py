@@ -21,8 +21,10 @@ class MockPacketHandler(PacketHandlerAbstract):
 
 
 def test_should_send_packet():
-    sender = create_messenger(MockPacketHandler(), node_id="sender-node")
-    receiver = create_messenger(MockPacketHandler(), node_id="receiver-node")
+    sender = create_messenger(MockPacketHandler())
+    receiver = create_messenger(MockPacketHandler())
+    sender.assign_node_id("sender-node")
+    receiver.assign_node_id("receiver-node")
     sender.make_connection_to(receiver)
 
     sender.send_packet(Packet(DummyPacketContent(), Address.on_local("me"), Address("receiver-node", "you")))
@@ -30,8 +32,10 @@ def test_should_send_packet():
 
 def test_should_receive_packet():
     receiver_handler = MockPacketHandler()
-    sender = create_messenger(MockPacketHandler(), node_id="sender-node")
-    receiver = create_messenger(receiver_handler, node_id="receiver-node")
+    sender = create_messenger(MockPacketHandler())
+    receiver = create_messenger(receiver_handler)
+    sender.assign_node_id("sender-node")
+    receiver.assign_node_id("receiver-node")
     sender.make_connection_to(receiver)
 
     sender.send_packet(Packet(DummyPacketContent(123), Address.on_local("me"), Address("receiver-node", "you")))
@@ -41,7 +45,8 @@ def test_should_receive_packet():
 
 def test_should_send_and_receive_packet_on_local_messenger():
     handler = MockPacketHandler()
-    messenger = create_messenger(handler, node_id="node")
+    messenger = create_messenger(handler)
+    messenger.assign_node_id("node")
 
     messenger.send_packet(Packet(DummyPacketContent(123), Address.on_local("me"), Address.on_local("me-again")))
     content: DummyPacketContent = handler.received_packet.content

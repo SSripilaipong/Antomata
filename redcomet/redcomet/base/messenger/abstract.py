@@ -15,6 +15,10 @@ class MessengerAbstract(ABC):
         pass
 
     @abstractmethod
+    def assign_node_id(self, node_id: str):
+        pass
+
+    @abstractmethod
     def make_connection_to(self, other: 'MessengerAbstract'):
         pass
 
