@@ -31,3 +31,11 @@ def test_should_put_message_with_ref_id_to_direct_message_box():
 def test_should_ignore_message_when_ref_id_is_invalid():
     messenger = create_messenger(...)
     messenger.receive(DummyMessage("Hello", ref_id="abc"), ..., ..., ...)
+
+
+def test_should_ignore_operations_after_box_is_closed():
+    messenger = create_messenger(...)
+    with messenger.create_direct_message_box() as box:
+        pass
+    messenger.receive(DummyMessage("Hello", ref_id=box.ref_id), ..., ..., ...)
+    assert box.get(timeout=0.1) is None
