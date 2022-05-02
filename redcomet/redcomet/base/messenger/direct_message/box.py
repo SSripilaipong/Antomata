@@ -11,8 +11,3 @@ class DirectMessageBoxAbstract(ABC):
     @abstractmethod
     def put(self, item: MessageAbstract):
         pass
-
-    @property
-    @abstractmethod
-    def ref_id(self) -> str:
-        pass

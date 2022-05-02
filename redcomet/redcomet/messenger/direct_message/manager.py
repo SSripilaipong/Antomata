@@ -13,8 +13,9 @@ class DirectMessageManager(DirectMessageManagerAbstract):
         self._lock = Lock()
 
     def create_message_box(self) -> DirectMessageBoxRef:
-        box = self._create_box_with_ref_id()
-        return DirectMessageBoxRef(box=box)
+        ref_id = self._generate_ref_id()
+        box = self._create_box(ref_id)
+        return DirectMessageBoxRef(ref_id, box, self)
 
     def get_message_box(self, ref_id: str) -> DirectMessageBoxAbstract:
         with self._lock:
@@ -26,17 +27,15 @@ class DirectMessageManager(DirectMessageManagerAbstract):
             if ref_id in self._boxes:
                 del self._boxes[ref_id]
 
-    def _create_box_with_ref_id(self) -> DirectMessageBoxAbstract:
+    def _generate_ref_id(self) -> str:
         while True:
             ref_id = uuid.uuid4().hex
-            box = self._create_box(ref_id)
-            if box is not None:
-                return box
+            with self._lock:
+                if ref_id not in self._boxes:
+                    return ref_id
 
     def _create_box(self, ref_id: str) -> Optional[DirectMessageBoxAbstract]:
         with self._lock:
-            if ref_id in self._boxes:
-                return None
-            box = DirectMessageBox(ref_id)
+            box = DirectMessageBox()
             self._boxes[ref_id] = box
         return box

@@ -5,8 +5,7 @@ from redcomet.base.messenger.direct_message.box import DirectMessageBoxAbstract
 
 
 class DirectMessageBox(DirectMessageBoxAbstract):
-    def __init__(self, ref_id: str):
-        self._ref_id = ref_id
+    def __init__(self):
         self._queue = Queue()
 
     def get(self, timeout: float) -> MessageAbstract:
@@ -14,7 +13,3 @@ class DirectMessageBox(DirectMessageBoxAbstract):
 
     def put(self, item: MessageAbstract):
         self._queue.put(item)
-
-    @property
-    def ref_id(self) -> str:
-        return self._ref_id
