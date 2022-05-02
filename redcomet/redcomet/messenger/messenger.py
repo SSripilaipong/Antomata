@@ -15,14 +15,13 @@ from redcomet.messenger.request import MessageForwardRequest
 
 
 class Messenger(ActorAbstract, MessengerAbstract):
-    def __init__(self, actor_id: str, inbox: Inbox, outbox: Outbox, node_id: str = None, discovery: Address = None,
-                 discovery_ref: ActorDiscoveryRef = None):
+    def __init__(self, actor_id: str, inbox: Inbox, outbox: Outbox, node_id: str = None,
+                 discovery: ActorDiscoveryRef = None):
         self._actor_id = actor_id
         self._inbox = inbox
         self._outbox = outbox
         self._node_id = node_id
-        self._discovery_address = discovery
-        self._discovery = discovery_ref
+        self._discovery = discovery
 
         self._address_cache = AddressCache()
         self._pending_messages: Dict[str, List[MessageForwardRequest]] = {}
@@ -31,8 +30,7 @@ class Messenger(ActorAbstract, MessengerAbstract):
         self._node_id = node_id
         self._outbox.assign_node_id(node_id)
 
-    def bind_discovery(self, address: Address, ref: ActorDiscoveryRef):
-        self._discovery_address = address
+    def bind_discovery(self, ref: ActorDiscoveryRef):
         self._discovery = ref
 
     def receive(self, message: MessageAbstract, sender: ActorRefAbstract, me: ActorRefAbstract,
@@ -56,14 +54,9 @@ class Messenger(ActorAbstract, MessengerAbstract):
         self.send_packet(Packet(message.message, sender=sender, receiver=receiver))
 
     def send(self, message: MessageAbstract, sender_id: str, receiver_id: str):
-        if receiver_id == self._discovery_address:
-            packet = Packet(message,
-                            sender=Address(self._node_id, sender_id),
-                            receiver=self._discovery_address)
-        else:
-            packet = Packet(MessageForwardRequest(message, sender_id, receiver_id),
-                            sender=Address.on_local(sender_id),
-                            receiver=Address.on_local(self._actor_id))
+        packet = Packet(MessageForwardRequest(message, sender_id, receiver_id),
+                        sender=Address.on_local(sender_id),
+                        receiver=Address.on_local(self._actor_id))
 
         self.send_packet(packet)
 

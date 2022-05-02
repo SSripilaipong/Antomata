@@ -45,7 +45,7 @@ class Node(NodeAbstract):
     def bind_discovery(self, address: Address):
         ref = ActorDiscoveryRef(self._messenger, address, self._actor_id)
         self._manager.bind_discovery(ref)
-        self._messenger.bind_discovery(address, ref)
+        self._messenger.bind_discovery(ref)
 
     def register_executable_actor(self, actor: ActorAbstract, actor_id: str):
         self._executor.register(actor_id, actor)
