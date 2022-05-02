@@ -1,10 +1,12 @@
 from typing import Any
 
+from redcomet.base.actor import ActorRefAbstract
 from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.discovery.ref import ActorDiscoveryRefAbstract
 from redcomet.base.messaging.packet import Packet
 from redcomet.base.messenger.abstract import MessengerAbstract
 from redcomet.base.messenger.direct_message.ref import DirectMessageBoxRefAbstract
+from redcomet.cluster.manager import ClusterManager
 from redcomet.cluster.message.list_active_node.request import ListActiveNodeRequest
 from redcomet.cluster.message.list_active_node.response import ListActiveNodeResponse
 from redcomet.cluster.ref import ClusterRef
@@ -75,3 +77,26 @@ def test_should_get_node_ids_in_list_active_response_from_direct_message_box():
     cluster = ClusterRef(messenger, "me", "main", "cluster")
 
     assert [node.node_id for node in cluster.get_active_nodes(timeout=0.001)] == ["node1", "node999"]
+
+
+class MockActorRef(ActorRefAbstract):
+    def __init__(self):
+        self.told_message = None
+
+    def tell(self, message: MessageAbstract):
+        self.told_message = message
+
+    def bind(self, ref: 'ActorRefAbstract') -> 'ActorRefAbstract':
+        pass
+
+    @property
+    def ref_id(self) -> str:
+        return ""
+
+
+def test_manager_should_send_back_list_active_response_with_ref_id():
+    cluster = ClusterManager(..., "cluster", ...)
+    sender = MockActorRef()
+    cluster.receive(ListActiveNodeRequest("abc"), sender, ..., ...)
+    response: ListActiveNodeResponse = sender.told_message
+    assert response.ref_id == "abc"
