@@ -12,14 +12,15 @@ from redcomet.cluster.ref import ClusterRef
 
 
 class MockDirectMessageBoxRef(DirectMessageBoxRefAbstract):
-    def __init__(self, ref_id: str = None):
+    def __init__(self, ref_id: str = None, active_node_response: MessageAbstract = None):
         self._ref_id = ref_id
+        self._active_node_response = active_node_response or ListActiveNodeResponse([])
 
     def put(self, item: MessageAbstract):
         pass
 
     def get(self, timeout: float) -> Any:
-        return ListActiveNodeResponse([])
+        return self._active_node_response
 
     @property
     def ref_id(self) -> str:
@@ -34,10 +35,11 @@ class MockDirectMessageBoxRef(DirectMessageBoxRefAbstract):
 
 class MockMessenger(MessengerAbstract):
     def create_direct_message_box(self) -> DirectMessageBoxRefAbstract:
-        return MockDirectMessageBoxRef(self._generated_ref_id)
+        return MockDirectMessageBoxRef(self._generated_ref_id, active_node_response=self._active_node_response)
 
-    def __init__(self, generated_ref_id: str = None):
+    def __init__(self, generated_ref_id: str = None, active_node_response: MessageAbstract = None):
         self._generated_ref_id = generated_ref_id
+        self._active_node_response = active_node_response
         self.sent_packet = None
 
     def send(self, message: MessageAbstract, sender_id: str, receiver_id: str):
@@ -68,3 +70,10 @@ def test_should_send_list_active_node_message_cluster_manager():
         cluster.get_active_nodes(timeout=0.001)
 
     assert isinstance(messenger.sent_packet.content, ListActiveNodeRequest)
+
+
+def test_should_get_node_ids_in_list_active_response_from_direct_message_box():
+    messenger = MockMessenger(active_node_response=ListActiveNodeResponse(["node1", "node999"]))
+    cluster = ClusterRef(messenger, "me", "main", "cluster")
+
+    assert [node.node_id for node in cluster.get_active_nodes(timeout=0.001)] == ["node1", "node999"]
