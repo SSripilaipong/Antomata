@@ -110,7 +110,7 @@ def test_should_cache_queried_address():
     assert cache.get_address("yours") == Address("you", "yours")
 
 
-def test_should_cached_address_if_exists():
+def test_should_use_cached_address_if_exists():
     cache = AddressCache()
     cache.update_cache(Address("you", "yours"))
     your_handler = MockPacketHandler()
