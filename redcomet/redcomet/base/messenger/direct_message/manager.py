@@ -3,7 +3,6 @@ from typing import Any
 
 from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.messenger.direct_message.box import DirectMessageBoxAbstract
-from redcomet.messenger.direct_message.box import DirectMessageBox
 
 
 class DirectMessageManagerAbstract(ABC):
@@ -22,7 +21,7 @@ class DirectMessageManagerAbstract(ABC):
 
 
 class DirectMessageBoxRef:
-    def __init__(self, box: DirectMessageBox):
+    def __init__(self, box: DirectMessageBoxAbstract):
         self._box = box
 
     def put(self, item: MessageAbstract):

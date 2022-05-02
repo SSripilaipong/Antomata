@@ -1,4 +1,3 @@
-import uuid
 from typing import Dict, List
 
 from redcomet.base.actor import ActorRefAbstract
@@ -11,7 +10,7 @@ from redcomet.base.messaging.packet import Packet
 from redcomet.base.messenger.abstract import MessengerAbstract
 from redcomet.base.messenger.direct_message.manager import DirectMessageBoxRef
 from redcomet.messenger.address_cache import AddressCache
-from redcomet.messenger.direct_message.box import DirectMessageBox
+from redcomet.messenger.direct_message.manager import DirectMessageManager
 from redcomet.messenger.inbox import Inbox
 from redcomet.messenger.outbox import Outbox
 from redcomet.messenger.request import MessageForwardRequest
@@ -28,7 +27,7 @@ class Messenger(ActorAbstract, MessengerAbstract):
 
         self._address_cache = address_cache or AddressCache()
         self._pending_messages: Dict[str, List[MessageForwardRequest]] = {}
-        self._direct_message: Dict[str, DirectMessageBoxRef] = {}
+        self._direct_message_manager = DirectMessageManager()
 
     def assign_node_id(self, node_id: str):
         self._node_id = node_id
@@ -99,13 +98,7 @@ class Messenger(ActorAbstract, MessengerAbstract):
         return self._node_id
 
     def create_direct_message_box(self) -> DirectMessageBoxRef:
-        ref_id = None
-        while not ref_id or ref_id in self._direct_message:
-            ref_id = uuid.uuid4().hex
-
-        box = DirectMessageBoxRef(DirectMessageBox(ref_id))
-        self._direct_message[ref_id] = box
-        return box
+        return self._direct_message_manager.create_message_box()
 
     def _put_to_direct_message_box(self, message: MessageAbstract):
-        self._direct_message[message.ref_id].put(message)
+        self._direct_message_manager.get_message_box(message.ref_id).put(message)
