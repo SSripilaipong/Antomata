@@ -51,7 +51,7 @@ class Node(NodeAbstract):
         self._executor.register(actor_id, actor)
 
     def issue_cluster_ref(self, local_issuer_id: str) -> ClusterRefAbstract:
-        return ClusterRef(self._messenger, local_issuer_id)
+        return ClusterRef(self._messenger, local_issuer_id, "main", "cluster")
 
     def issue_actor_ref(self, local_issuer_id: str, ref_id: str) -> ActorRefAbstract:
         return ActorRef(self._messenger, local_issuer_id, ref_id)

@@ -42,7 +42,7 @@ class MyActor(ActorAbstract):
 
 def test_should_send_spawn_message_to_cluster_manager():
     messenger = MockMessenger()
-    cluster = ClusterRef(messenger, "me")
+    cluster = ClusterRef(messenger, "me", "main", "cluster")
     my_actor = MyActor()
 
     cluster.spawn(my_actor)
