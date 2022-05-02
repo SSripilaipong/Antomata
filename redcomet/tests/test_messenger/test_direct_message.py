@@ -1,3 +1,5 @@
+from pytest import raises
+
 from redcomet.base.actor.message import MessageAbstract
 from redcomet.messenger.factory import create_messenger
 
@@ -39,3 +41,10 @@ def test_should_ignore_operations_after_box_is_closed():
         pass
     messenger.receive(DummyMessage("Hello", ref_id=box.ref_id), ..., ..., ...)
     assert box.get(timeout=0.1) is None
+
+
+def test_should_raise_timeout_error():
+    messenger = create_messenger(...)
+    with messenger.create_direct_message_box() as box:
+        with raises(TimeoutError):
+            box.get(timeout=0.0001)
