@@ -37,3 +37,12 @@ def test_should_receive_packet():
     sender.send_packet(Packet(DummyPacketContent(123), Address.on_local("me"), Address("receiver-node", "you")))
     content: DummyPacketContent = receiver_handler.received_packet.content
     assert content.value == 123
+
+
+def test_should_send_and_receive_packet_on_local_messenger():
+    handler = MockPacketHandler()
+    messenger = create_messenger(handler, node_id="node")
+
+    messenger.send_packet(Packet(DummyPacketContent(123), Address.on_local("me"), Address.on_local("me-again")))
+    content: DummyPacketContent = handler.received_packet.content
+    assert content.value == 123
