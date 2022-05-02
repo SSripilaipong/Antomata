@@ -5,7 +5,6 @@ from redcomet.base.discovery.ref import ActorDiscoveryRefAbstract
 from redcomet.base.messaging.address import Address
 from redcomet.base.messaging.handler import PacketHandlerAbstract
 from redcomet.base.messaging.packet import Packet
-from redcomet.discovery.message.query.response import QueryAddressResponse
 from redcomet.messenger.factory import create_messenger
 from redcomet.messenger.request import MessageForwardRequest
 
@@ -80,3 +79,18 @@ def test_should_forward_message_to_queried_address():
     me.receive(DummyQueryAddressResponse(), ..., ..., ...)
 
     assert your_handler.received_packet.content.value == 123
+
+
+def test_should_not_forward_message_when_queried_address_is_empty():
+    your_handler = MockPacketHandler()
+    my_handler = MockPacketHandler()
+    me = _create_messenger_with_node_id(my_handler, "me")
+    you = _create_messenger_with_node_id(your_handler, "you")
+    me.make_connection_to(you)
+    me.bind_discovery(MockActorDiscoveryRef(query_response_params=("yours", None)))
+
+    me.receive(MessageForwardRequest(DummyMessage(123), "mine", "yours"), ..., ..., ...)
+    me.receive(DummyQueryAddressResponse(), ..., ..., ...)
+
+    assert your_handler.received_packet is None
+    assert my_handler.received_packet is None
