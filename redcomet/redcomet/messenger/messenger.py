@@ -78,10 +78,10 @@ class Messenger(ActorAbstract, MessengerAbstract):
         self._discovery.query_address(target, self._node_id, self._actor_id)
 
     def _query_address_response(self, target: str, address: Address):
-        for message in self._pending_messages.get(target, []):
-            self._forward(message, Address(self._node_id, message.sender_id), address)
+        if address is not None:
+            for message in self._pending_messages.get(target, []):
+                self._forward(message, Address(self._node_id, message.sender_id), address)
         self._pending_messages[target] = []
-        self._mapper: Dict[str, str] = {}
 
     @property
     def actor_id(self) -> str:
