@@ -1,6 +1,7 @@
 from abc import abstractmethod, ABC
 from typing import Any
 
+from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.messenger.direct_message.box import DirectMessageBoxAbstract
 
 
@@ -23,7 +24,7 @@ class DirectMessageBoxRef:
     def __init__(self):
         pass
 
-    def put(self, value: Any):
+    def put(self, value: MessageAbstract):
         pass
 
     def get(self, timeout: float) -> Any:
