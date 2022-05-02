@@ -15,15 +15,15 @@ from redcomet.messenger.request import MessageForwardRequest
 
 
 class Messenger(ActorAbstract, MessengerAbstract):
-    def __init__(self, actor_id: str, inbox: Inbox, outbox: Outbox, node_id: str = None,
-                 discovery: ActorDiscoveryRefAbstract = None):
+    def __init__(self, actor_id: str, inbox: Inbox, outbox: Outbox, address_cache: AddressCache = None,
+                 node_id: str = None, discovery: ActorDiscoveryRefAbstract = None):
         self._actor_id = actor_id
         self._inbox = inbox
         self._outbox = outbox
         self._node_id = node_id
         self._discovery = discovery
 
-        self._address_cache = AddressCache()
+        self._address_cache = address_cache or AddressCache()
         self._pending_messages: Dict[str, List[MessageForwardRequest]] = {}
 
     def assign_node_id(self, node_id: str):
@@ -79,6 +79,7 @@ class Messenger(ActorAbstract, MessengerAbstract):
 
     def _query_address_response(self, target: str, address: Address):
         if address is not None:
+            self._address_cache.update_cache(address)
             for message in self._pending_messages.get(target, []):
                 self._forward(message, Address(self._node_id, message.sender_id), address)
         self._pending_messages[target] = []

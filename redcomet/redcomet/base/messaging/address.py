@@ -26,3 +26,9 @@ class Address:
 
     def __repr__(self):
         return f"Address({self._node_id!r}, {self.target!r})"
+
+    def __eq__(self, other):
+        if other.__class__ is not self.__class__:
+            return False
+        assert isinstance(other, Address)
+        return self._node_id == other._node_id and self._target == other.target
