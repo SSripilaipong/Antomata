@@ -1,12 +1,10 @@
-from multiprocessing.queues import Queue
-
 from redcomet.base.actor.message import MessageAbstract
 
 
 class ListActiveNodeRequest(MessageAbstract):
-    def __init__(self, reply: Queue):
-        self._reply = reply
+    def __init__(self, reply_ref_id: str):
+        self._reply_ref_id = reply_ref_id
 
     @property
-    def reply(self) -> Queue:
-        return self._reply
+    def reply_ref_id(self) -> str:
+        return self._reply_ref_id
