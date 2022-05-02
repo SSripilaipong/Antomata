@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.discovery.ref import ActorDiscoveryRefAbstract
 from redcomet.base.messaging.packet import Packet
+from redcomet.base.messenger.direct_message.ref import DirectMessageBoxRefAbstract
 
 
 class MessengerAbstract(ABC):
@@ -25,6 +26,10 @@ class MessengerAbstract(ABC):
 
     @abstractmethod
     def make_connection_to(self, other: 'MessengerAbstract'):
+        pass
+
+    @abstractmethod
+    def create_direct_message_box(self) -> DirectMessageBoxRefAbstract:
         pass
 
     @property

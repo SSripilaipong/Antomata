@@ -1,27 +1,13 @@
-from abc import abstractmethod, ABC
 from typing import Any
 
 from redcomet.base.actor.message import MessageAbstract
-from redcomet.base.messenger.direct_message.box import DirectMessageBoxAbstract
+from redcomet.base.messenger.direct_message.ref import DirectMessageBoxRefAbstract
+from redcomet.messenger.direct_message.box import DirectMessageBox
+from redcomet.messenger.direct_message.manager import DirectMessageManager
 
 
-class DirectMessageManagerAbstract(ABC):
-
-    @abstractmethod
-    def create_message_box(self) -> 'DirectMessageBoxRef':
-        pass
-
-    @abstractmethod
-    def get_message_box(self, ref_id: str) -> DirectMessageBoxAbstract:
-        pass
-
-    @abstractmethod
-    def destroy_message_box(self, ref_id: str):
-        pass
-
-
-class DirectMessageBoxRef:
-    def __init__(self, ref_id: str, box: DirectMessageBoxAbstract, manager: 'DirectMessageManagerAbstract'):
+class DirectMessageBoxRef(DirectMessageBoxRefAbstract):
+    def __init__(self, ref_id: str, box: DirectMessageBox, manager: DirectMessageManager):
         self._ref_id = ref_id
         self._box = box
         self._manager = manager

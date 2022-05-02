@@ -6,6 +6,7 @@ from redcomet.base.discovery.ref import ActorDiscoveryRefAbstract
 from redcomet.base.messaging.address import Address
 from redcomet.base.messaging.packet import Packet
 from redcomet.base.messenger.abstract import MessengerAbstract
+from redcomet.base.messenger.direct_message.ref import DirectMessageBoxRefAbstract
 from redcomet.base.node.ref import NodeRefAbstract
 from redcomet.cluster.manager import ClusterManager
 from redcomet.cluster.message.spawn_actor.request import SpawnActorRequest
@@ -13,6 +14,9 @@ from redcomet.cluster.ref import ClusterRef
 
 
 class MockMessenger(MessengerAbstract):
+    def create_direct_message_box(self) -> DirectMessageBoxRefAbstract:
+        pass
+
     def __init__(self):
         self.sent_packet = None
 

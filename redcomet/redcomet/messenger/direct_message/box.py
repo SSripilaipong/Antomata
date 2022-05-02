@@ -1,10 +1,9 @@
 from queue import Queue
 
 from redcomet.base.actor.message import MessageAbstract
-from redcomet.base.messenger.direct_message.box import DirectMessageBoxAbstract
 
 
-class DirectMessageBox(DirectMessageBoxAbstract):
+class DirectMessageBox:
     def __init__(self):
         self._queue = Queue()
 

@@ -8,7 +8,7 @@ from redcomet.base.discovery.ref import ActorDiscoveryRefAbstract
 from redcomet.base.messaging.address import Address
 from redcomet.base.messaging.packet import Packet
 from redcomet.base.messenger.abstract import MessengerAbstract
-from redcomet.base.messenger.direct_message.manager import DirectMessageBoxRef
+from redcomet.base.messenger.direct_message.ref import DirectMessageBoxRefAbstract
 from redcomet.messenger.address_cache import AddressCache
 from redcomet.messenger.direct_message.manager import DirectMessageManager
 from redcomet.messenger.inbox import Inbox
@@ -97,7 +97,7 @@ class Messenger(ActorAbstract, MessengerAbstract):
     def node_id(self) -> str:
         return self._node_id
 
-    def create_direct_message_box(self) -> DirectMessageBoxRef:
+    def create_direct_message_box(self) -> DirectMessageBoxRefAbstract:
         return self._direct_message_manager.create_message_box()
 
     def _put_to_direct_message_box(self, message: MessageAbstract):
