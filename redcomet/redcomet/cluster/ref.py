@@ -1,4 +1,3 @@
-from multiprocessing import Queue
 from typing import List
 
 from redcomet.actor.ref import ActorRef
