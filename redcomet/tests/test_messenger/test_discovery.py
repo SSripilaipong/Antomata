@@ -39,6 +39,8 @@ class MockActorDiscoveryRef(ActorDiscoveryRefAbstract):
         self.queried_address = target, requester_node_id, requester_target
 
     def call_on_query_address_response(self, message: MessageAbstract, func: Callable[[str, Address], Any]) -> bool:
+        if not isinstance(message, DummyQueryAddressResponse):
+            return False
         if self._query_response_params:
             func(*self._query_response_params)
             return True
