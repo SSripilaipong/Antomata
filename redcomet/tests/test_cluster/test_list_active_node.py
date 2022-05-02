@@ -15,7 +15,7 @@ from redcomet.cluster.ref import ClusterRef
 class MockDirectMessageBoxRef(DirectMessageBoxRefAbstract):
     def __init__(self, ref_id: str = None, active_node_response: MessageAbstract = None):
         self._ref_id = ref_id
-        self._active_node_response = active_node_response or ListActiveNodeResponse([])
+        self._active_node_response = active_node_response or ListActiveNodeResponse([], "")
 
     def put(self, item: MessageAbstract):
         pass
@@ -73,7 +73,7 @@ def test_should_send_list_active_node_message_cluster_manager():
 
 
 def test_should_get_node_ids_in_list_active_response_from_direct_message_box():
-    messenger = MockMessenger(active_node_response=ListActiveNodeResponse(["node1", "node999"]))
+    messenger = MockMessenger(active_node_response=ListActiveNodeResponse(["node1", "node999"], ""))
     cluster = ClusterRef(messenger, "me", "main", "cluster")
 
     assert [node.node_id for node in cluster.get_active_nodes(timeout=0.001)] == ["node1", "node999"]

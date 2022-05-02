@@ -6,6 +6,7 @@ from redcomet.base.cluster.ref import ClusterRefAbstract
 from redcomet.base.node.abstract import NodeAbstract
 from redcomet.base.node.ref import NodeRefAbstract
 from redcomet.cluster.message.list_active_node.request import ListActiveNodeRequest
+from redcomet.cluster.message.list_active_node.response import ListActiveNodeResponse
 from redcomet.cluster.message.spawn_actor.request import SpawnActorRequest
 from redcomet.discovery.actor import ActorDiscovery
 
@@ -59,12 +60,12 @@ class ClusterManager(ActorAbstract):
         if isinstance(message, SpawnActorRequest):
             self._process_spawn_request(message)
         elif isinstance(message, ListActiveNodeRequest):
-            self._process_list_active_node_request(message)
+            self._process_list_active_node_request(message, sender)
         else:
             raise NotImplementedError()
 
-    def _process_list_active_node_request(self, message: ListActiveNodeRequest):
-        message.reply.put([node.node_id for node in self._node_ref_list])
+    def _process_list_active_node_request(self, message: ListActiveNodeRequest, sender: ActorRefAbstract):
+        sender.tell(ListActiveNodeResponse([], ref_id=message.reply_ref_id))
 
     def _process_spawn_request(self, message: SpawnActorRequest):
         node_id = self._get_node_id()
