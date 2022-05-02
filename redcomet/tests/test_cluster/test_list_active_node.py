@@ -100,3 +100,11 @@ def test_manager_should_send_back_list_active_response_with_ref_id():
     cluster.receive(ListActiveNodeRequest("abc"), sender, ..., ...)
     response: ListActiveNodeResponse = sender.told_message
     assert response.ref_id == "abc"
+
+
+def test_manager_should_send_back_list_active_response_with_node_ids():
+    cluster = ClusterManager(..., "cluster", ..., node_refs={"node0": ..., "node999": ...})
+    sender = MockActorRef()
+    cluster.receive(ListActiveNodeRequest("abc"), sender, ..., ...)
+    response: ListActiveNodeResponse = sender.told_message
+    assert sorted(response.node_ids) == ["node0", "node999"]
