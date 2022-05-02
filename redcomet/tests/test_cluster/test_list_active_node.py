@@ -63,6 +63,21 @@ class MockMessenger(MessengerAbstract):
         return ""
 
 
+class MockActorRef(ActorRefAbstract):
+    def __init__(self):
+        self.told_message = None
+
+    def tell(self, message: MessageAbstract):
+        self.told_message = message
+
+    def bind(self, ref: 'ActorRefAbstract') -> 'ActorRefAbstract':
+        pass
+
+    @property
+    def ref_id(self) -> str:
+        return ""
+
+
 def test_should_send_list_active_node_message_cluster_manager():
     messenger = MockMessenger()
     cluster = ClusterRef(messenger, "me", "main", "cluster")
@@ -77,21 +92,6 @@ def test_should_get_node_ids_in_list_active_response_from_direct_message_box():
     cluster = ClusterRef(messenger, "me", "main", "cluster")
 
     assert [node.node_id for node in cluster.get_active_nodes(timeout=0.001)] == ["node1", "node999"]
-
-
-class MockActorRef(ActorRefAbstract):
-    def __init__(self):
-        self.told_message = None
-
-    def tell(self, message: MessageAbstract):
-        self.told_message = message
-
-    def bind(self, ref: 'ActorRefAbstract') -> 'ActorRefAbstract':
-        pass
-
-    @property
-    def ref_id(self) -> str:
-        return ""
 
 
 def test_manager_should_send_back_list_active_response_with_ref_id():
