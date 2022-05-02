@@ -3,6 +3,7 @@ from typing import Any
 
 from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.messenger.direct_message.box import DirectMessageBoxAbstract
+from redcomet.messenger.direct_message.box import DirectMessageBox
 
 
 class DirectMessageManagerAbstract(ABC):
@@ -21,14 +22,14 @@ class DirectMessageManagerAbstract(ABC):
 
 
 class DirectMessageBoxRef:
-    def __init__(self):
-        pass
+    def __init__(self, box: DirectMessageBox):
+        self._box = box
 
-    def put(self, value: MessageAbstract):
-        pass
+    def put(self, item: MessageAbstract):
+        self._box.put(item)
 
     def get(self, timeout: float) -> Any:
-        pass
+        return self._box.get(timeout=timeout)
 
     @property
     def ref_id(self) -> str:

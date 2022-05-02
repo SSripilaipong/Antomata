@@ -10,6 +10,7 @@ from redcomet.base.messaging.packet import Packet
 from redcomet.base.messenger.abstract import MessengerAbstract
 from redcomet.base.messenger.direct_message.manager import DirectMessageBoxRef
 from redcomet.messenger.address_cache import AddressCache
+from redcomet.messenger.direct_message.box import DirectMessageBox
 from redcomet.messenger.inbox import Inbox
 from redcomet.messenger.outbox import Outbox
 from redcomet.messenger.request import MessageForwardRequest
@@ -94,4 +95,4 @@ class Messenger(ActorAbstract, MessengerAbstract):
         return self._node_id
 
     def create_direct_message_box(self) -> DirectMessageBoxRef:
-        return DirectMessageBoxRef()
+        return DirectMessageBoxRef(DirectMessageBox(...))
