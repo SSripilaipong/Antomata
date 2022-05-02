@@ -19,8 +19,6 @@ class DirectMessageManager(DirectMessageManagerAbstract):
     def get_message_box(self, ref_id: str) -> DirectMessageBoxAbstract:
         with self._lock:
             box = self._boxes.get(ref_id, None)
-        if box is None:
-            raise KeyError("Direct message box with specified ref_id not found.")
         return box
 
     def destroy_message_box(self, ref_id: str):

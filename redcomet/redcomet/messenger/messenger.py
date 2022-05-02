@@ -101,4 +101,7 @@ class Messenger(ActorAbstract, MessengerAbstract):
         return self._direct_message_manager.create_message_box()
 
     def _put_to_direct_message_box(self, message: MessageAbstract):
-        self._direct_message_manager.get_message_box(message.ref_id).put(message)
+        box = self._direct_message_manager.get_message_box(message.ref_id)
+        if box is None:
+            return
+        box.put(message)
