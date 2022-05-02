@@ -28,3 +28,6 @@ class Packet:
 
     def set_receiver_node_id(self, node_id: str):
         self.receiver.set_node_id(node_id)
+
+    def is_local_receiver(self) -> bool:
+        return self._receiver.is_local()

@@ -5,5 +5,9 @@ from redcomet.messenger.inbox import Inbox
 from redcomet.messenger.outbox import Outbox
 
 
-def create_messenger(handler: PacketHandlerAbstract, *, node_id: str = None) -> MessengerAbstract:
-    return Messenger("messenger", Inbox(handler), Outbox(node_id), node_id=node_id)
+def create_messenger(handler: PacketHandlerAbstract, *, actor_id: str = "messenger", node_id: str = None) \
+        -> MessengerAbstract:
+    inbox = Inbox(handler)
+    outbox = Outbox(node_id)
+    outbox.register_inbox(inbox, node_id)
+    return Messenger(actor_id, inbox, outbox, node_id=node_id)

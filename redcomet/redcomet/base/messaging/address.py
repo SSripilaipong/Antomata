@@ -8,7 +8,7 @@ class Address:
 
     @classmethod
     def on_local(cls, target: str) -> 'Address':
-        return cls(None, target)
+        return cls("__LOCAL", target)
 
     @property
     def node_id(self) -> str:
@@ -20,6 +20,9 @@ class Address:
 
     def set_node_id(self, node_id: str):
         self._node_id = node_id
+
+    def is_local(self) -> bool:
+        return self._node_id == "__LOCAL"
 
     def __repr__(self):
         return f"Address({self._node_id!r}, {self.target!r})"

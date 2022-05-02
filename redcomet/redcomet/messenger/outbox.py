@@ -17,6 +17,8 @@ class Outbox:
 
     def send(self, packet: Packet):
         packet.set_sender_node_id(self._node_id)
+        if packet.is_local_receiver():
+            packet.set_receiver_node_id(self._node_id)
         self._find_inbox(packet.receiver.node_id).receive(packet)
 
     def _find_inbox(self, node_id: Optional[str]) -> Inbox:
