@@ -1,4 +1,4 @@
-from queue import Queue
+from queue import Queue, Empty
 
 from redcomet.base.actor.message import MessageAbstract
 
@@ -8,7 +8,10 @@ class DirectMessageBox:
         self._queue = Queue()
 
     def get(self, timeout: float) -> MessageAbstract:
-        return self._queue.get(timeout=timeout)
+        try:
+            return self._queue.get(timeout=timeout)
+        except Empty:
+            raise TimeoutError()
 
     def put(self, item: MessageAbstract):
         self._queue.put(item)
