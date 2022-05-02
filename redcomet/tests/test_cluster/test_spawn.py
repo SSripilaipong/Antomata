@@ -37,11 +37,16 @@ class MockMessenger(MessengerAbstract):
 
 
 class MockNodeRef(NodeRefAbstract):
-    def __init__(self):
+    def __init__(self, node_id: str):
+        self._node_id = node_id
         self.registered_address = None
 
     def register_address(self, actor_id: str, actor: ActorAbstract):
         self.registered_address = (actor_id, actor)
+
+    @property
+    def node_id(self) -> str:
+        return self._node_id
 
 
 class MyActor(ActorAbstract):
@@ -64,7 +69,7 @@ def test_should_send_spawn_message_to_cluster_manager():
 
 
 def test_should_send_register_actor_message_to_node_manager():
-    node = MockNodeRef()
+    node = MockNodeRef("node0")
     my_actor = MyActor()
     request = SpawnActorRequest(my_actor, "abc")
     cluster = ClusterManager(..., "cluster", ..., node_refs={"node0": node})

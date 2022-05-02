@@ -18,7 +18,10 @@ class ClusterManager(ActorAbstract):
         self._discovery = discovery
 
         self._nodes: List[NodeAbstract] = []
-        self._node_index = 0
+
+        self._node_refs = node_refs or {}
+        self._node_ref_list: List[NodeRefAbstract] = [ref for ref in self._node_refs.values()]
+        self._node_spawn_index = 0
 
     @classmethod
     def create(cls, node: NodeAbstract, node_id: str, actor_id: str) -> 'ClusterManager':
@@ -47,6 +50,10 @@ class ClusterManager(ActorAbstract):
 
         self._nodes.append(node)
 
+        ref = self._node.issue_node_ref(self._actor_id, node_id)
+        self._node_refs[node_id] = ref
+        self._node_ref_list.append(ref)
+
     def receive(self, message: MessageAbstract, sender: ActorRefAbstract, me: ActorRefAbstract,
                 cluster: ClusterRefAbstract):
         if isinstance(message, SpawnActorRequest):
@@ -57,18 +64,21 @@ class ClusterManager(ActorAbstract):
             raise NotImplementedError()
 
     def _process_list_active_node_request(self, message: ListActiveNodeRequest):
-        message.reply.put([node.node_id for node in self._nodes])
+        message.reply.put([node.node_id for node in self._node_ref_list])
 
     def _process_spawn_request(self, message: SpawnActorRequest):
         node_id = self._get_node_id()
         self._request_register_address(node_id, message.actor_id, message.actor)
 
     def _get_node_id(self) -> str:
-        if self._node_index >= len(self._nodes):
-            self._node_index = 0
-        node_id = self._nodes[self._node_index].node_id
-        self._node_index += 1
+        if self._node_spawn_index >= len(self._node_ref_list):
+            self._node_spawn_index = 0
+        node_id = self._node_ref_list[self._node_spawn_index].node_id
+        self._node_spawn_index += 1
         return node_id
 
     def _request_register_address(self, node_id: str, actor_id: str, actor: ActorAbstract):
-        self._node.issue_node_ref(self._actor_id, node_id).register_address(actor_id, actor)
+        ref = self._node_refs.get(node_id)
+        if ref is None:
+            raise NotImplementedError()
+        ref.register_address(actor_id, actor)
