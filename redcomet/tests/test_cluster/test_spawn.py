@@ -6,6 +6,8 @@ from redcomet.base.discovery.ref import ActorDiscoveryRefAbstract
 from redcomet.base.messaging.address import Address
 from redcomet.base.messaging.packet import Packet
 from redcomet.base.messenger.abstract import MessengerAbstract
+from redcomet.base.node.ref import NodeRefAbstract
+from redcomet.cluster.manager import ClusterManager
 from redcomet.cluster.message.spawn_actor.request import SpawnActorRequest
 from redcomet.cluster.ref import ClusterRef
 
@@ -34,6 +36,14 @@ class MockMessenger(MessengerAbstract):
         return ""
 
 
+class MockNodeRef(NodeRefAbstract):
+    def __init__(self):
+        self.registered_address = None
+
+    def register_address(self, actor_id: str, actor: ActorAbstract):
+        self.registered_address = (actor_id, actor)
+
+
 class MyActor(ActorAbstract):
     def receive(self, message: MessageAbstract, sender: ActorRefAbstract, me: ActorRefAbstract,
                 cluster: ClusterRefAbstract):
@@ -51,3 +61,14 @@ def test_should_send_spawn_message_to_cluster_manager():
     content = packet.content
     assert packet.receiver == Address("main", "cluster")
     assert isinstance(content, SpawnActorRequest) and content.actor is my_actor
+
+
+def test_should_send_register_actor_message_to_node_manager():
+    node = MockNodeRef()
+    my_actor = MyActor()
+    request = SpawnActorRequest(my_actor, "abc")
+    cluster = ClusterManager(..., "cluster", ..., node_refs={"node0": node})
+
+    cluster.receive(request, ..., ..., ...)
+
+    assert node.registered_address == ("abc", my_actor)

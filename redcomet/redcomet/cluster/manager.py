@@ -1,16 +1,18 @@
-from typing import List
+from typing import List, Dict
 
 from redcomet.base.actor.abstract import ActorAbstract, ActorRefAbstract
 from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
 from redcomet.base.node.abstract import NodeAbstract
+from redcomet.base.node.ref import NodeRefAbstract
 from redcomet.cluster.message.list_active_node.request import ListActiveNodeRequest
 from redcomet.cluster.message.spawn_actor.request import SpawnActorRequest
 from redcomet.discovery.actor import ActorDiscovery
 
 
 class ClusterManager(ActorAbstract):
-    def __init__(self, node: NodeAbstract, actor_id: str, discovery: ActorDiscovery):
+    def __init__(self, node: NodeAbstract, actor_id: str, discovery: ActorDiscovery,
+                 node_refs: Dict[str, NodeRefAbstract] = None):
         self._node = node
         self._actor_id = actor_id
         self._discovery = discovery
@@ -69,4 +71,4 @@ class ClusterManager(ActorAbstract):
         return node_id
 
     def _request_register_address(self, node_id: str, actor_id: str, actor: ActorAbstract):
-        self._node.issue_node_ref(self._actor_id, node_id).register_address(node_id, actor_id, actor)
+        self._node.issue_node_ref(self._actor_id, node_id).register_address(actor_id, actor)
