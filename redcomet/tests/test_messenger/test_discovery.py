@@ -108,3 +108,16 @@ def test_should_cache_queried_address():
     me.receive(DummyQueryAddressResponse(), ..., ..., ...)
 
     assert cache.get_address("yours") == Address("you", "yours")
+
+
+def test_should_cached_address_if_exists():
+    cache = AddressCache()
+    cache.update_cache(Address("you", "yours"))
+    your_handler = MockPacketHandler()
+    me = _create_messenger_with_node_id(..., "me", address_cache=cache)
+    you = _create_messenger_with_node_id(your_handler, "you")
+    me.make_connection_to(you)
+
+    me.receive(MessageForwardRequest(DummyMessage(123), "mine", "yours"), ..., ..., ...)
+
+    assert your_handler.received_packet.content.value == 123
