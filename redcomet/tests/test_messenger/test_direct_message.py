@@ -26,3 +26,8 @@ def test_should_put_message_with_ref_id_to_direct_message_box():
         messenger.receive(DummyMessage("Hello", ref_id=box.ref_id), ..., ..., ...)
         message: DummyMessage = box.get(timeout=0.1)
     assert message.value == "Hello"
+
+
+def test_should_ignore_message_when_ref_id_is_invalid():
+    messenger = create_messenger(...)
+    messenger.receive(DummyMessage("Hello", ref_id="abc"), ..., ..., ...)
