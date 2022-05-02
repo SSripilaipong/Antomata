@@ -1,4 +1,3 @@
-from contextlib import suppress
 from typing import Any
 
 from redcomet.base.actor.message import MessageAbstract
@@ -66,8 +65,7 @@ def test_should_send_list_active_node_message_cluster_manager():
     messenger = MockMessenger()
     cluster = ClusterRef(messenger, "me", "main", "cluster")
 
-    with suppress(TimeoutError):
-        cluster.get_active_nodes(timeout=0.001)
+    cluster.get_active_nodes(timeout=0.001)
 
     assert isinstance(messenger.sent_packet.content, ListActiveNodeRequest)
 
