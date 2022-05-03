@@ -13,3 +13,9 @@ class InboxAbstract(ABC):
     @abstractmethod
     def receive(self, packet: Packet):
         pass
+
+    def receive_loop(self):
+        pass
+
+    def stop_receive_loop(self):
+        pass
