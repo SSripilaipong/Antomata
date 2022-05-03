@@ -1,7 +1,7 @@
 from redcomet.base.messaging.handler import PacketHandlerAbstract
 from redcomet.messenger import Messenger
 from redcomet.messenger.address_cache import AddressCache
-from redcomet.messenger.inbox import Inbox
+from redcomet.messenger.inbox.synchronous import Inbox
 from redcomet.messenger.outbox import Outbox
 
 

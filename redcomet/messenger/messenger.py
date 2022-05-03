@@ -11,13 +11,13 @@ from redcomet.base.messenger.abstract import MessengerAbstract
 from redcomet.base.messenger.direct_message.ref import DirectMessageBoxRefAbstract
 from redcomet.messenger.address_cache import AddressCache
 from redcomet.messenger.direct_message.manager import DirectMessageManager
-from redcomet.messenger.inbox import Inbox
+from redcomet.messenger.inbox import InboxAbstract
 from redcomet.messenger.outbox import Outbox
 from redcomet.messenger.request import MessageForwardRequest
 
 
 class Messenger(ActorAbstract, MessengerAbstract):
-    def __init__(self, actor_id: str, inbox: Inbox, outbox: Outbox, address_cache: AddressCache = None,
+    def __init__(self, actor_id: str, inbox: InboxAbstract, outbox: Outbox, address_cache: AddressCache = None,
                  node_id: str = None, discovery: ActorDiscoveryRefAbstract = None):
         self._actor_id = actor_id
         self._inbox = inbox

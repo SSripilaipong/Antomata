@@ -10,7 +10,7 @@ from redcomet.cluster.ref import ClusterRef
 from redcomet.discovery.ref import ActorDiscoveryRef
 from redcomet.messaging.handler import PacketHandler
 from redcomet.messenger import Messenger
-from redcomet.messenger.inbox import Inbox
+from redcomet.messenger.inbox import InboxAbstract
 from redcomet.messenger.outbox import Outbox
 from redcomet.node.manager import NodeManager
 from redcomet.node.ref import NodeRef
@@ -26,7 +26,7 @@ class Node(NodeAbstract):
         self._manager = manager
 
     @classmethod
-    def create(cls, executor: ActorExecutor, inbox: Inbox, outbox: Outbox) -> 'Node':
+    def create(cls, executor: ActorExecutor, inbox: InboxAbstract, outbox: Outbox) -> 'Node':
         messenger = Messenger("messenger", inbox, outbox)
         node = cls(executor, messenger)
 
