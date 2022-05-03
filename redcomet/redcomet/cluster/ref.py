@@ -25,7 +25,7 @@ class ClusterRef(ClusterRefAbstract):
                         sender=Address.on_local(self._issuer_id),
                         receiver=self._address)
         self._messenger.send_packet(packet)
-        return ActorRef(self._messenger, self._issuer_id, ref_id)
+        return ActorRef(self._messenger, self._issuer_id, Address.anywhere(ref_id))
 
     def get_active_nodes(self, timeout: float) -> List[NodeRef]:
         with self._messenger.create_direct_message_box() as box:

@@ -53,8 +53,8 @@ class Node(NodeAbstract):
     def issue_cluster_ref(self, local_issuer_id: str) -> ClusterRefAbstract:
         return ClusterRef(self._messenger, local_issuer_id, "main", "cluster")
 
-    def issue_actor_ref(self, local_issuer_id: str, ref_id: str) -> ActorRefAbstract:
-        return ActorRef(self._messenger, local_issuer_id, ref_id)
+    def issue_actor_ref(self, local_issuer_id: str, address: Address) -> ActorRefAbstract:
+        return ActorRef(self._messenger, local_issuer_id, address)
 
     def issue_node_ref(self, local_issuer_id: str, node_id: str) -> NodeRef:
         return NodeRef(self._messenger, local_issuer_id, node_id)

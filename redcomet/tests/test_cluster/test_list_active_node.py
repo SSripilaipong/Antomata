@@ -74,7 +74,7 @@ class MockActorRef(ActorRefAbstract):
         pass
 
     @property
-    def ref_id(self) -> str:
+    def address(self) -> str:
         return ""
 
 

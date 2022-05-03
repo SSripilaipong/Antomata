@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 
 from redcomet.base.actor.message import MessageAbstract
+from redcomet.base.messaging.address import Address
 
 
 class ActorRefAbstract(ABC):
@@ -15,5 +16,5 @@ class ActorRefAbstract(ABC):
 
     @property
     @abstractmethod
-    def ref_id(self) -> str:
+    def address(self) -> Address:
         pass

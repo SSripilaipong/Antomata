@@ -15,7 +15,7 @@ class NodeAbstract(ABC):
         pass
 
     @abstractmethod
-    def issue_actor_ref(self, local_issuer_id: str, ref_id: str) -> ActorRefAbstract:
+    def issue_actor_ref(self, local_issuer_id: str, address: Address) -> ActorRefAbstract:
         pass
 
     @abstractmethod
