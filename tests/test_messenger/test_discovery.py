@@ -130,10 +130,11 @@ def test_should_use_cached_address_if_exists():
     cache = AddressCache()
     cache.update_cache(Address("you", "yours"))
     your_handler = MockPacketHandler()
-    me = _create_messenger_with_node_id(..., "me", address_cache=cache)
-    you = _create_messenger_with_node_id(your_handler, "you")
+    me = _create_messenger_with_node_id(..., "me", address_cache=cache, parallel=True)
+    you = _create_messenger_with_node_id(your_handler, "you", parallel=True)
     me.make_connection_to(you)
 
     me.receive(MessageForwardRequest(DummyMessage(123), "mine", "yours"), ..., ..., ...)
+    _start_parallel_inbox_process(you)
 
     assert your_handler.received_packet.content.value == 123
