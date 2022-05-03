@@ -5,8 +5,8 @@ from redcomet.node.manager import NodeManager
 from redcomet.node.synchronous import Node
 
 
-def create_node(executor: ActorExecutor) -> Node:
-
+def create_node() -> Node:
+    executor = ActorExecutor()
     messenger = create_messenger(PacketHandler(executor), actor_id="messenger")
     node = Node(executor, messenger)
     executor.set_node(node)
