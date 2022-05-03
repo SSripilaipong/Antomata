@@ -47,20 +47,24 @@ class MockActorDiscoveryRef(ActorDiscoveryRefAbstract):
         return False
 
 
-def _create_messenger_with_node_id(handler: PacketHandlerAbstract, node_id: str, address_cache: AddressCache = None):
-    messenger = create_messenger(handler, address_cache=address_cache, actor_id="messenger")
+def _create_messenger_with_node_id(handler: PacketHandlerAbstract, node_id: str, address_cache: AddressCache = None,
+                                   parallel: bool = False):
+    messenger = create_messenger(handler, address_cache=address_cache, actor_id="messenger", parallel=parallel)
     messenger.assign_node_id(node_id)
     return messenger
 
 
 def test_should_forward_message_to_be_process_later():
     handler = MockPacketHandler()
-    me = _create_messenger_with_node_id(handler, "me")
+    me = _create_messenger_with_node_id(handler, "me", parallel=True)
 
     me.send(DummyMessage(123), "mine", "yours")
+    me.stop_receive_loop()
 
+    me.start_receive_loop()
     content = handler.received_packet.content
     assert isinstance(content, MessageForwardRequest) and content.message.value == 123
+    me.close()
 
 
 def test_should_send_query_message_to_discovery_when_address_is_unknown():
