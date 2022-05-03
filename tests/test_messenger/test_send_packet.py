@@ -32,6 +32,7 @@ def test_should_send_packet():
     sender.make_connection_to(receiver)
 
     sender.send_packet(Packet(DummyPacketContent(), Address.on_local("me"), Address("receiver-node", "you")))
+    receiver.close()
 
 
 def test_should_receive_packet():
@@ -46,6 +47,7 @@ def test_should_receive_packet():
     receiver.start_receive_loop()  # process until stop message
     content: DummyPacketContent = receiver_handler.received_packet.content
     assert content.value == 123
+    receiver.close()
 
 
 def test_should_send_and_receive_packet_on_local_messenger():
@@ -58,3 +60,4 @@ def test_should_send_and_receive_packet_on_local_messenger():
     messenger.start_receive_loop()  # process until stop message
     content: DummyPacketContent = handler.received_packet.content
     assert content.value == 123
+    messenger.close()
