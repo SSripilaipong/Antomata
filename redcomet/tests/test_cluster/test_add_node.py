@@ -65,3 +65,12 @@ def test_should_connect_with_cluster_node():
     ClusterManager(cluster_node, ..., ...).add_node(node, "")
 
     assert cluster_node in node.connected_nodes and node in cluster_node.connected_nodes
+
+
+def test_should_connect_with_other_nodes():
+    node, node0, node1 = MockNode(), MockNode(), MockNode()
+
+    ClusterManager(MockNode(), ..., ..., nodes=[node0, node1]).add_node(node, "")
+
+    assert node0 in node.connected_nodes and node in node0.connected_nodes
+    assert node1 in node.connected_nodes and node in node1.connected_nodes

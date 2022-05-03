@@ -14,7 +14,7 @@ from redcomet.discovery.actor import ActorDiscovery
 
 class ClusterManager(ActorAbstract):
     def __init__(self, node: NodeAbstract, actor_id: str, discovery: Address,
-                 node_refs: Dict[str, NodeRefAbstract] = None):
+                 node_refs: Dict[str, NodeRefAbstract] = None, nodes=None):
         self._node = node
         self._actor_id = actor_id
         self._discovery = discovery
