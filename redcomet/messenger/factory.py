@@ -6,5 +6,10 @@ from redcomet.messenger.outbox import Outbox
 
 
 def create_messenger(handler: PacketHandlerAbstract, address_cache: AddressCache = None, *,
-                     actor_id: str = "messenger") -> Messenger:
-    return Messenger(actor_id, Inbox(handler), Outbox(), address_cache=address_cache)
+                     actor_id: str = "messenger", parallel: bool = False) -> Messenger:
+    if not parallel:
+        inbox = Inbox(handler)
+    else:
+        raise NotImplementedError()
+
+    return Messenger(actor_id, inbox, Outbox(), address_cache=address_cache)
