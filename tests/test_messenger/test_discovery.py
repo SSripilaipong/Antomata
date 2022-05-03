@@ -77,14 +77,17 @@ def test_should_send_query_message_to_discovery_when_address_is_unknown():
 
 def test_should_forward_message_to_queried_address():
     your_handler = MockPacketHandler()
-    me = _create_messenger_with_node_id(..., "me")
-    you = _create_messenger_with_node_id(your_handler, "you")
+    me = _create_messenger_with_node_id(..., "me", parallel=True)
+    you = _create_messenger_with_node_id(your_handler, "you", parallel=True)
     me.make_connection_to(you)
     me.bind_discovery(MockActorDiscoveryRef(query_response_params=("yours", Address("you", "yours"))))
 
     me.receive(MessageForwardRequest(DummyMessage(123), "mine", "yours"), ..., ..., ...)
     me.receive(DummyQueryAddressResponse(), ..., ..., ...)
 
+    you.stop_receive_loop()
+    you.start_receive_loop()
+    you.close()
     assert your_handler.received_packet.content.value == 123
 
 
