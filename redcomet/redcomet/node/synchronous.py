@@ -59,10 +59,6 @@ class Node(NodeAbstract):
     def issue_node_ref(self, local_issuer_id: str, node_id: str) -> NodeRef:
         return NodeRef(self._messenger, local_issuer_id, node_id)
 
-    def make_connection_with(self, node: NodeAbstract):
-        self.make_connection_to(node)
-        node.make_connection_to(self)
-
     def make_connection_to(self, node: NodeAbstract):
         self._messenger.make_connection_to(node.messenger)
 

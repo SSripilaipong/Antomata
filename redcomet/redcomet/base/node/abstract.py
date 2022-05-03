@@ -44,9 +44,9 @@ class NodeAbstract(ABC):
     def messenger(self) -> MessengerAbstract:
         pass
 
-    @abstractmethod
     def make_connection_with(self, node: 'NodeAbstract'):
-        pass
+        self.make_connection_to(node)
+        node.make_connection_to(self)
 
     @abstractmethod
     def make_connection_to(self, node: 'NodeAbstract'):

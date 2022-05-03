@@ -12,6 +12,7 @@ class MockNode(NodeAbstract):
     def __init__(self):
         self.assigned_node_id = None
         self.bound_discovery_address = None
+        self.connected_nodes = []
 
     def bind_discovery(self, address: Address):
         self.bound_discovery_address = address
@@ -39,11 +40,8 @@ class MockNode(NodeAbstract):
     def messenger(self) -> MessengerAbstract:
         return ...
 
-    def make_connection_with(self, node: 'NodeAbstract'):
-        pass
-
     def make_connection_to(self, node: 'NodeAbstract'):
-        pass
+        self.connected_nodes.append(node)
 
 
 def test_should_assign_node_id():
@@ -57,4 +55,13 @@ def test_should_bind_node_to_discovery_address():
     node = MockNode()
     cluster = ClusterManager(MockNode(), "cluster", Address("my", "discovery"))
     cluster.add_node(node, "")
-    node.bound_discovery_address = Address("my", "discovery")
+    assert node.bound_discovery_address == Address("my", "discovery")
+
+
+def test_should_connect_with_cluster_node():
+    cluster_node = MockNode()
+    node = MockNode()
+
+    ClusterManager(cluster_node, ..., ...).add_node(node, "")
+
+    assert cluster_node in node.connected_nodes and node in cluster_node.connected_nodes
