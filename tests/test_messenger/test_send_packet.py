@@ -50,8 +50,11 @@ def test_should_receive_packet():
 
 def test_should_send_and_receive_packet_on_local_messenger():
     handler = MockPacketHandler()
-    messenger = _create_messenger_with_node_id(handler, "node")
+    messenger = _create_messenger_with_node_id(handler, "node", parallel=True)
 
     messenger.send_packet(Packet(DummyPacketContent(123), Address.on_local("me"), Address.on_local("me-again")))
+    messenger.stop_receive_loop()  # just send stop message
+
+    messenger.start_receive_loop()  # process until stop message
     content: DummyPacketContent = handler.received_packet.content
     assert content.value == 123
