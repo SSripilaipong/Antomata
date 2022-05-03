@@ -36,11 +36,14 @@ def test_should_send_packet():
 
 def test_should_receive_packet():
     receiver_handler = MockPacketHandler()
-    sender = _create_messenger_with_node_id(MockPacketHandler(), "sender-node")
-    receiver = _create_messenger_with_node_id(receiver_handler, "receiver-node")
+    sender = _create_messenger_with_node_id(MockPacketHandler(), "sender-node", parallel=True)
+    receiver = _create_messenger_with_node_id(receiver_handler, "receiver-node", parallel=True)
     sender.make_connection_to(receiver)
 
     sender.send_packet(Packet(DummyPacketContent(123), Address.on_local("me"), Address("receiver-node", "you")))
+    receiver.stop()  # send stop message
+
+    receiver.start_receive_loop()
     content: DummyPacketContent = receiver_handler.received_packet.content
     assert content.value == 123
 

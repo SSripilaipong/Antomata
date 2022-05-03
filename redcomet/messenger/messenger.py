@@ -105,3 +105,9 @@ class Messenger(ActorAbstract, MessengerAbstract):
         if box is None:
             return
         box.put(message)
+
+    def start_receive_loop(self):
+        pass
+
+    def stop(self):
+        pass
