@@ -45,16 +45,20 @@ class ClusterManager(ActorAbstract):
             raise NotImplementedError()
 
         node.assign_node_id(node_id)
+        self._make_node_connection(node)
+        self._save_node_ref(node_id)
+
+    def _save_node_ref(self, node_id):
+        ref = self._node.issue_node_ref(self._actor_id, node_id)
+        self._node_refs[node_id] = ref
+        self._node_ref_list.append(ref)
+
+    def _make_node_connection(self, node: NodeAbstract):
         node.bind_discovery(self._discovery)
         node.make_connection_with(self._node)
         for existing_node in self._nodes:
             existing_node.make_connection_with(node)
-
         self._nodes.append(node)
-
-        ref = self._node.issue_node_ref(self._actor_id, node_id)
-        self._node_refs[node_id] = ref
-        self._node_ref_list.append(ref)
 
     def receive(self, message: MessageAbstract, sender: ActorRefAbstract, me: ActorRefAbstract,
                 cluster: ClusterRefAbstract):
