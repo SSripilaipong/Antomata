@@ -98,14 +98,16 @@ def test_should_forward_message_to_queried_address():
 def test_should_not_forward_message_when_queried_address_is_empty():
     your_handler = MockPacketHandler()
     my_handler = MockPacketHandler()
-    me = _create_messenger_with_node_id(my_handler, "me")
-    you = _create_messenger_with_node_id(your_handler, "you")
+    me = _create_messenger_with_node_id(my_handler, "me", parallel=True)
+    you = _create_messenger_with_node_id(your_handler, "you", parallel=True)
     me.make_connection_to(you)
     me.bind_discovery(MockActorDiscoveryRef(query_response_params=("yours", None)))
 
     me.receive(MessageForwardRequest(DummyMessage(123), "mine", "yours"), ..., ..., ...)
     me.receive(DummyQueryAddressResponse(), ..., ..., ...)
 
+    _start_parallel_inbox_process(me)
+    _start_parallel_inbox_process(you)
     assert your_handler.received_packet is None
     assert my_handler.received_packet is None
 
