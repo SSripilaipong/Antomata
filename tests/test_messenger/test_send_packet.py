@@ -41,9 +41,9 @@ def test_should_receive_packet():
     sender.make_connection_to(receiver)
 
     sender.send_packet(Packet(DummyPacketContent(123), Address.on_local("me"), Address("receiver-node", "you")))
-    receiver.stop()  # send stop message
+    receiver.stop_receive_loop()  # just send stop message
 
-    receiver.start_receive_loop()
+    receiver.start_receive_loop()  # process until stop message
     content: DummyPacketContent = receiver_handler.received_packet.content
     assert content.value == 123
 

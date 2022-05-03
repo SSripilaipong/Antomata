@@ -107,7 +107,10 @@ class Messenger(ActorAbstract, MessengerAbstract):
         box.put(message)
 
     def start_receive_loop(self):
-        pass
+        self._inbox.receive_loop()
 
-    def stop(self):
-        pass
+    def stop_receive_loop(self):
+        self._inbox.stop_receive_loop()
+
+    def close(self):
+        self._inbox.close()

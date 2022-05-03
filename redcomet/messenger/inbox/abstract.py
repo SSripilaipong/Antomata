@@ -19,3 +19,6 @@ class InboxAbstract(ABC):
 
     def stop_receive_loop(self):
         pass
+
+    def close(self):
+        pass

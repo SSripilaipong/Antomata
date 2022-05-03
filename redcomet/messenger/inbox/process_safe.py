@@ -26,3 +26,7 @@ class ProcessSafeInbox(InboxAbstract):
 
     def stop_receive_loop(self):
         self._queue.put(Packet(StopReceiveLoop(), sender=..., receiver=...))
+
+    def close(self):
+        self._queue.close()
+        self._queue.join_thread()
