@@ -20,15 +20,15 @@ class MockPacketHandler(PacketHandlerAbstract):
         self.received_packet = packet
 
 
-def _create_messenger_with_node_id(handler: PacketHandlerAbstract, node_id: str):
-    messenger = create_messenger(handler)
+def _create_messenger_with_node_id(handler: PacketHandlerAbstract, node_id: str, parallel: bool = False):
+    messenger = create_messenger(handler, parallel=parallel)
     messenger.assign_node_id(node_id)
     return messenger
 
 
 def test_should_send_packet():
-    sender = _create_messenger_with_node_id(MockPacketHandler(), "sender-node")
-    receiver = _create_messenger_with_node_id(MockPacketHandler(), "receiver-node")
+    sender = _create_messenger_with_node_id(MockPacketHandler(), "sender-node", parallel=True)
+    receiver = _create_messenger_with_node_id(MockPacketHandler(), "receiver-node", parallel=True)
     sender.make_connection_to(receiver)
 
     sender.send_packet(Packet(DummyPacketContent(), Address.on_local("me"), Address("receiver-node", "you")))
