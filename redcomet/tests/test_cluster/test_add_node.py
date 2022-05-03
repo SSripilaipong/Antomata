@@ -11,9 +11,10 @@ from redcomet.node.ref import NodeRef
 class MockNode(NodeAbstract):
     def __init__(self):
         self.assigned_node_id = None
+        self.bound_discovery_address = None
 
     def bind_discovery(self, address: Address):
-        pass
+        self.bound_discovery_address = address
 
     def issue_actor_ref(self, local_issuer_id: str, ref_id: str) -> ActorRefAbstract:
         pass
@@ -50,3 +51,10 @@ def test_should_assign_node_id():
     cluster = ClusterManager(MockNode(), "cluster", ...)
     cluster.add_node(node, "abc")
     assert node.assigned_node_id == "abc"
+
+
+def test_should_bind_node_to_discovery_address():
+    node = MockNode()
+    cluster = ClusterManager(MockNode(), "cluster", Address("my", "discovery"))
+    cluster.add_node(node, "")
+    node.bound_discovery_address = Address("my", "discovery")
