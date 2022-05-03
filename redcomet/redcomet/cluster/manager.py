@@ -3,6 +3,7 @@ from typing import List, Dict
 from redcomet.base.actor.abstract import ActorAbstract, ActorRefAbstract
 from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
+from redcomet.base.messaging.address import Address
 from redcomet.base.node.abstract import NodeAbstract
 from redcomet.base.node.ref import NodeRefAbstract
 from redcomet.cluster.message.list_active_node.request import ListActiveNodeRequest
@@ -12,7 +13,7 @@ from redcomet.discovery.actor import ActorDiscovery
 
 
 class ClusterManager(ActorAbstract):
-    def __init__(self, node: NodeAbstract, actor_id: str, discovery: ActorDiscovery,
+    def __init__(self, node: NodeAbstract, actor_id: str, discovery: Address,
                  node_refs: Dict[str, NodeRefAbstract] = None):
         self._node = node
         self._actor_id = actor_id
@@ -27,7 +28,7 @@ class ClusterManager(ActorAbstract):
     @classmethod
     def create(cls, node: NodeAbstract, node_id: str, actor_id: str) -> 'ClusterManager':
         discovery = ActorDiscovery.create("discovery", node_id)
-        cluster = cls(node, actor_id, discovery)
+        cluster = cls(node, actor_id, discovery.address)
         discovery.register_address(actor_id, node_id)
 
         node.assign_node_id(node_id)
@@ -44,7 +45,7 @@ class ClusterManager(ActorAbstract):
             raise NotImplementedError()
 
         node.assign_node_id(node_id)
-        node.bind_discovery(self._discovery.address)
+        node.bind_discovery(self._discovery)
         node.make_connection_with(self._node)
         for existing_node in self._nodes:
             existing_node.make_connection_with(node)

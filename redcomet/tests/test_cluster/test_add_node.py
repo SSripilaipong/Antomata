@@ -47,6 +47,6 @@ class MockNode(NodeAbstract):
 
 def test_should_assign_node_id():
     node = MockNode()
-    cluster = ClusterManager(node, "cluster", ...)
-    cluster.add_node(MockNode(), "abc")
+    cluster = ClusterManager(MockNode(), "cluster", ...)
+    cluster.add_node(node, "abc")
     assert node.assigned_node_id == "abc"
