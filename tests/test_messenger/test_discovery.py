@@ -5,6 +5,7 @@ from redcomet.base.discovery.ref import ActorDiscoveryRefAbstract
 from redcomet.base.messaging.address import Address
 from redcomet.base.messaging.handler import PacketHandlerAbstract
 from redcomet.base.messaging.packet import Packet
+from redcomet.messenger import Messenger
 from redcomet.messenger.address_cache import AddressCache
 from redcomet.messenger.factory import create_messenger
 from redcomet.messenger.request import MessageForwardRequest
@@ -54,17 +55,22 @@ def _create_messenger_with_node_id(handler: PacketHandlerAbstract, node_id: str,
     return messenger
 
 
+def _start_parallel_inbox_process(messenger: Messenger):
+    messenger.stop_receive_loop()
+    messenger.start_receive_loop()
+    messenger.close()
+
+
 def test_should_forward_message_to_be_process_later():
     handler = MockPacketHandler()
     me = _create_messenger_with_node_id(handler, "me", parallel=True)
 
     me.send(DummyMessage(123), "mine", "yours")
-    me.stop_receive_loop()
 
-    me.start_receive_loop()
+    _start_parallel_inbox_process(me)
+
     content = handler.received_packet.content
     assert isinstance(content, MessageForwardRequest) and content.message.value == 123
-    me.close()
 
 
 def test_should_send_query_message_to_discovery_when_address_is_unknown():
@@ -85,9 +91,7 @@ def test_should_forward_message_to_queried_address():
     me.receive(MessageForwardRequest(DummyMessage(123), "mine", "yours"), ..., ..., ...)
     me.receive(DummyQueryAddressResponse(), ..., ..., ...)
 
-    you.stop_receive_loop()
-    you.start_receive_loop()
-    you.close()
+    _start_parallel_inbox_process(you)
     assert your_handler.received_packet.content.value == 123
 
 
