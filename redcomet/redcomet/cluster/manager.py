@@ -14,12 +14,12 @@ from redcomet.discovery.actor import ActorDiscovery
 
 class ClusterManager(ActorAbstract):
     def __init__(self, node: NodeAbstract, actor_id: str, discovery: Address,
-                 node_refs: Dict[str, NodeRefAbstract] = None, nodes=None):
+                 node_refs: Dict[str, NodeRefAbstract] = None, nodes: List[NodeAbstract] = None):
         self._node = node
         self._actor_id = actor_id
         self._discovery = discovery
 
-        self._nodes: List[NodeAbstract] = []
+        self._nodes: List[NodeAbstract] = nodes or []
 
         self._node_refs = node_refs or {}
         self._node_ref_list: List[NodeRefAbstract] = [ref for ref in self._node_refs.values()]
