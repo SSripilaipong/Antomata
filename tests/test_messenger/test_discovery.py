@@ -114,14 +114,15 @@ def test_should_not_forward_message_when_queried_address_is_empty():
 
 def test_should_cache_queried_address():
     cache = AddressCache()
-    me = _create_messenger_with_node_id(..., "me", address_cache=cache)
-    you = _create_messenger_with_node_id(MockPacketHandler(), "you")
+    me = _create_messenger_with_node_id(..., "me", address_cache=cache, parallel=True)
+    you = _create_messenger_with_node_id(MockPacketHandler(), "you", parallel=True)
     me.make_connection_to(you)
     me.bind_discovery(MockActorDiscoveryRef(query_response_params=("yours", Address("you", "yours"))))
 
     me.receive(MessageForwardRequest(DummyMessage(123), "mine", "yours"), ..., ..., ...)
     me.receive(DummyQueryAddressResponse(), ..., ..., ...)
 
+    _start_parallel_inbox_process(you)
     assert cache.get_address("yours") == Address("you", "yours")
 
 
