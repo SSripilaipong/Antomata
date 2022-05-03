@@ -30,7 +30,7 @@ class ClusterRef(ClusterRefAbstract):
     def get_active_nodes(self, timeout: float) -> List[NodeRef]:
         with self._messenger.create_direct_message_box() as box:
             packet = Packet(ListActiveNodeRequest(box.ref_id),
-                            sender=Address.on_local(self._issuer_id),
+                            sender=Address.on_local("messenger"),
                             receiver=self._address)
             self._messenger.send_packet(packet)
             response: ListActiveNodeResponse = box.get(timeout=timeout)

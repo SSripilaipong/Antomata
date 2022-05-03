@@ -18,3 +18,7 @@ class QueryAddressRequest(MessageAbstract):
     @property
     def requester_target(self) -> str:
         return self._requester_target
+
+    def __repr__(self) -> str:
+        return f"QueryAddressRequest({self._target!r}, requester_node_id={self._requester_node_id!r}, " \
+               f"requester_target={self._requester_target!r})"

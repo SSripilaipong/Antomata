@@ -24,7 +24,7 @@ class ActorDiscoveryRef(ActorDiscoveryRefAbstract):
 
     def query_address(self, target: str, requester_node_id: str, requester_target: str):
         packet = Packet(QueryAddressRequest(target, requester_node_id, requester_target),
-                        sender=Address.on_local(""),
+                        sender=Address.on_local(requester_target),
                         receiver=self._address)
         self._messenger.send_packet(packet)
 

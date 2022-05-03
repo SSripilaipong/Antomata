@@ -31,3 +31,6 @@ class Packet:
 
     def is_local_receiver(self) -> bool:
         return self._receiver.is_local()
+
+    def is_local_sender(self) -> bool:
+        return self._sender.is_local()

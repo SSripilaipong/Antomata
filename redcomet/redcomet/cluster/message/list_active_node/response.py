@@ -15,3 +15,6 @@ class ListActiveNodeResponse(MessageAbstract):
     @property
     def ref_id(self) -> str:
         return self._ref_id
+
+    def __repr__(self) -> str:
+        return f"ListActiveNodeResponse(node_ids={self._node_ids!r}, ref_id={self._ref_id!r})"

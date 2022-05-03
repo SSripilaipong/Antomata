@@ -12,7 +12,6 @@ class PacketHandler(PacketHandlerAbstract):
         content = packet.content
         if isinstance(content, MessageAbstract):
             local_receiver_id = packet.receiver.target
-            sender_id = packet.sender.target
-            self._actor_executor.execute(content, sender_id, local_receiver_id)
+            self._actor_executor.execute(content, packet.sender, local_receiver_id)
         else:
             raise NotImplementedError()

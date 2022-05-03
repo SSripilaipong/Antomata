@@ -8,3 +8,6 @@ class ListActiveNodeRequest(MessageAbstract):
     @property
     def reply_ref_id(self) -> str:
         return self._reply_ref_id
+
+    def __repr__(self) -> str:
+        return f"ListActiveNodeRequest(reply_ref_id={self._reply_ref_id!r})"
