@@ -3,7 +3,7 @@ from redcomet.base.messaging.packet import Packet
 from redcomet.messenger.inbox import InboxAbstract
 
 
-class Inbox(InboxAbstract):
+class SynchronousInbox(InboxAbstract):
     def __init__(self, handler: PacketHandlerAbstract = None):
         self._handler = handler
 
