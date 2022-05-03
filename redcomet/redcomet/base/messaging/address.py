@@ -10,6 +10,10 @@ class Address:
     def on_local(cls, target: str) -> 'Address':
         return cls("__LOCAL", target)
 
+    @classmethod
+    def anywhere(cls, target: str) -> 'Address':
+        return cls("__ANYWHERE", target)
+
     @property
     def node_id(self) -> str:
         return self._node_id
@@ -23,6 +27,9 @@ class Address:
 
     def is_local(self) -> bool:
         return self._node_id == "__LOCAL"
+
+    def is_global(self) -> bool:
+        return self._node_id == "__ANYWHERE"
 
     def __repr__(self):
         return f"Address({self._node_id!r}, {self.target!r})"
