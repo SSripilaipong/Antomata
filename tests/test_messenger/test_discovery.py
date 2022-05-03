@@ -69,7 +69,7 @@ def test_should_forward_message_to_be_process_later():
 
 def test_should_send_query_message_to_discovery_when_address_is_unknown():
     discovery = MockActorDiscoveryRef()
-    me = _create_messenger_with_node_id(..., "me")
+    me = _create_messenger_with_node_id(..., "me", parallel=True)
     me.bind_discovery(discovery)
     me.receive(MessageForwardRequest(DummyMessage(123), "mine", "yours"), ..., ..., ...)
     assert discovery.queried_address == ("yours", "me", "messenger")
