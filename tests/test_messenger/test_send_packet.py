@@ -20,15 +20,15 @@ class MockPacketHandler(PacketHandlerAbstract):
         self.received_packet = packet
 
 
-def _create_messenger_with_node_id(handler: PacketHandlerAbstract, node_id: str, parallel: bool = False):
-    messenger = create_messenger(handler, parallel=parallel)
+def _create_messenger_with_node_id(handler: PacketHandlerAbstract, node_id: str):
+    messenger = create_messenger(handler)
     messenger.assign_node_id(node_id)
     return messenger
 
 
 def test_should_send_packet():
-    sender = _create_messenger_with_node_id(MockPacketHandler(), "sender-node", parallel=True)
-    receiver = _create_messenger_with_node_id(MockPacketHandler(), "receiver-node", parallel=True)
+    sender = _create_messenger_with_node_id(MockPacketHandler(), "sender-node")
+    receiver = _create_messenger_with_node_id(MockPacketHandler(), "receiver-node")
     sender.make_connection_to(receiver)
 
     sender.send_packet(Packet(DummyPacketContent(), Address.on_local("me"), Address("receiver-node", "you")))
@@ -37,8 +37,8 @@ def test_should_send_packet():
 
 def test_should_receive_packet():
     receiver_handler = MockPacketHandler()
-    sender = _create_messenger_with_node_id(MockPacketHandler(), "sender-node", parallel=True)
-    receiver = _create_messenger_with_node_id(receiver_handler, "receiver-node", parallel=True)
+    sender = _create_messenger_with_node_id(MockPacketHandler(), "sender-node")
+    receiver = _create_messenger_with_node_id(receiver_handler, "receiver-node")
     sender.make_connection_to(receiver)
 
     sender.send_packet(Packet(DummyPacketContent(123), Address.on_local("me"), Address("receiver-node", "you")))
@@ -52,7 +52,7 @@ def test_should_receive_packet():
 
 def test_should_send_and_receive_packet_on_local_messenger():
     handler = MockPacketHandler()
-    messenger = _create_messenger_with_node_id(handler, "node", parallel=True)
+    messenger = _create_messenger_with_node_id(handler, "node")
 
     messenger.send_packet(Packet(DummyPacketContent(123), Address.on_local("me"), Address.on_local("me-again")))
     messenger.stop_receive_loop()  # just send stop message
