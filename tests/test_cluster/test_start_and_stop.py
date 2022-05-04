@@ -12,9 +12,13 @@ from redcomet.node.ref import NodeRef
 class MockNode(NodeAbstract):
     def __init__(self):
         self.is_started = False
+        self.is_stopped = False
 
     def start(self):
         self.is_started = True
+
+    def stop(self):
+        self.is_stopped = True
 
     def bind_discovery(self, address: Address):
         pass
@@ -56,3 +60,13 @@ def test_should_start_worker_nodes():
     manager.add_node(node1, "node1")
     manager.start()
     assert node0.is_started and node1.is_started
+
+
+def test_should_stop_worker_nodes():
+    manager = ClusterManager(MockNode(), "cluster", Address("my", "discovery"))
+    node0, node1 = MockNode(), MockNode()
+    manager.add_node(node0, "node0")
+    manager.add_node(node1, "node1")
+    manager.start()
+    manager.stop()
+    assert node0.is_stopped and node1.is_stopped

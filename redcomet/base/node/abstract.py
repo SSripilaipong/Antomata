@@ -14,6 +14,9 @@ class NodeAbstract(ABC):
     def start(self):
         pass
 
+    def stop(self):
+        pass
+
     @abstractmethod
     def bind_discovery(self, address: Address):
         pass
