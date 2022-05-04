@@ -1,7 +1,7 @@
 from multiprocessing import Manager, Queue
 from typing import Any
 
-from redcomet.queue.abstract import QueueManagerAbstract, QueueAbstract
+from redcomet.messenger.inbox.queue import QueueManagerAbstract, QueueAbstract
 
 
 class ProcessSafeQueueManager(QueueManagerAbstract):

@@ -4,7 +4,7 @@ from redcomet.base.messaging.handler import PacketHandlerAbstract
 from redcomet.base.messaging.packet import Packet
 from redcomet.messenger.inbox import InboxAbstract
 from redcomet.messenger.inbox.message import StopReceiveLoop
-from redcomet.queue.abstract import QueueAbstract, QueueManagerAbstract
+from redcomet.messenger.inbox.queue import QueueAbstract, QueueManagerAbstract
 
 
 class ProcessSafeInbox(InboxAbstract):

@@ -1,7 +1,7 @@
 from multiprocessing import Queue
 from typing import Any
 
-from redcomet.queue.abstract import QueueAbstract
+from redcomet.messenger.inbox.queue import QueueAbstract
 
 
 class DefaultQueue(QueueAbstract):

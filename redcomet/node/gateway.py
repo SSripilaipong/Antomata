@@ -2,7 +2,7 @@ from redcomet.base.actor import ActorRefAbstract
 from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
-from redcomet.queue.abstract import QueueAbstract
+from redcomet.messenger.inbox.queue import QueueAbstract
 
 
 class GatewayActor(ActorAbstract):
