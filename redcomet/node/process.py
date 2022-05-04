@@ -39,6 +39,7 @@ class ProcessNode(NodeAbstract):
     def assign_node_id(self, node_id: str):
         self._node_id = node_id
         self._actor_id = node_id
+        self._messenger.assign_node_id(node_id)
 
     @property
     def node_id(self) -> str:
