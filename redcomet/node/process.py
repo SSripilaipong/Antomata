@@ -46,7 +46,7 @@ class ProcessNode(NodeAbstract):
 
     @property
     def messenger(self) -> MessengerAbstract:
-        pass
+        return self._messenger
 
     def make_connection_to(self, node: 'NodeAbstract'):
         pass
