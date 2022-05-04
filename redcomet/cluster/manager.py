@@ -97,3 +97,5 @@ class ClusterManager(ActorAbstract):
     def stop(self):
         for node in self._nodes:
             node.stop()
+        for node in self._nodes:
+            node.close()
