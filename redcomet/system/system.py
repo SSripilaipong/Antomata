@@ -8,13 +8,13 @@ from redcomet.cluster.manager import ClusterManager
 from redcomet.node.ref import NodeRef
 from redcomet.queue.abstract import QueueAbstract
 from redcomet.queue.default import DefaultQueue
-from redcomet.queue.manager import ProcessSafeQueue
+from redcomet.queue.process_safe import ProcessSafeQueueManager
 from redcomet.system.node_factory import create_gateway_node, create_worker_node
 
 
 class ActorSystem:
     def __init__(self, cluster: ClusterManager, cluster_ref: ClusterRefAbstract, incoming_messages: QueueAbstract,
-                 manager: ProcessSafeQueue):
+                 manager: ProcessSafeQueueManager):
         self._cluster = cluster
         self._cluster_ref = cluster_ref
         self._incoming_messages = incoming_messages
@@ -22,7 +22,7 @@ class ActorSystem:
 
     @classmethod
     def create(cls, n_worker_nodes: int = 1, node_id_prefix: str = "node", parallel: bool = False) -> 'ActorSystem':
-        incoming_messages_manager = ProcessSafeQueue()
+        incoming_messages_manager = ProcessSafeQueueManager()
         incoming_messages = incoming_messages_manager.__enter__()
 
         gateway = create_gateway_node(incoming_messages, parallel=parallel)

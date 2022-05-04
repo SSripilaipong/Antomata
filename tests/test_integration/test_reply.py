@@ -7,7 +7,7 @@ from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
 from redcomet.base.messaging.address import Address
 from redcomet.queue.abstract import QueueAbstract
-from redcomet.queue.manager import ProcessSafeQueue
+from redcomet.queue.process_safe import ProcessSafeQueueManager
 from redcomet.system import ActorSystem
 
 
@@ -56,7 +56,7 @@ class Provider(ActorAbstract):
 
 @pytest.mark.integration
 def test_should_response_back_to_sender():
-    with ProcessSafeQueue() as response_queue:
+    with ProcessSafeQueueManager() as response_queue:
         with ActorSystem.create(parallel=True) as system:
             provider = system.spawn(Provider("Paste"))
             caller = system.spawn(Caller("Copy", provider.address, response_queue))

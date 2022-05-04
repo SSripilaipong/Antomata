@@ -7,7 +7,7 @@ from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
 from redcomet.queue.abstract import QueueAbstract
-from redcomet.queue.manager import ProcessSafeQueue
+from redcomet.queue.process_safe import ProcessSafeQueueManager
 from redcomet.system import ActorSystem
 
 
@@ -51,7 +51,7 @@ class AnotherActor(ActorAbstract):
 
 @pytest.mark.integration
 def test_should_tell_message_to_another_actor():
-    with ProcessSafeQueue() as queue:
+    with ProcessSafeQueueManager() as queue:
         with ActorSystem.create(parallel=True) as system:
             my_actor = system.spawn(MyActor(queue))
             time.sleep(0.01)

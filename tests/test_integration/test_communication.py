@@ -9,7 +9,7 @@ from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
 from redcomet.base.messaging.address import Address
 from redcomet.queue.abstract import QueueAbstract
-from redcomet.queue.manager import ProcessSafeQueue
+from redcomet.queue.process_safe import ProcessSafeQueueManager
 from redcomet.system import ActorSystem
 
 
@@ -72,7 +72,7 @@ class Second(ActorAbstract):
 
 @pytest.mark.integration
 def test_should_communicate_between_actors():
-    with ProcessSafeQueue() as first_queue, ProcessSafeQueue() as second_queue:
+    with ProcessSafeQueueManager() as first_queue, ProcessSafeQueueManager() as second_queue:
         with ActorSystem.create(parallel=True) as system:
             first = system.spawn(First(first_queue))
             second = system.spawn(Second(first.address, second_queue))
