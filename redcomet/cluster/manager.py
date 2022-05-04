@@ -41,7 +41,8 @@ class ClusterManager(ActorAbstract):
         return cluster
 
     def start(self):
-        pass
+        for node in self._nodes:
+            node.start()
 
     def add_node(self, node: NodeAbstract, node_id: str):
         if node in self._nodes or node is self._node:
