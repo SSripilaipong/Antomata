@@ -5,8 +5,8 @@ from redcomet.node.synchronous import SynchronousNode
 from redcomet.queue.default import DefaultQueue
 
 
-def create_gateway_node(incoming_messages: DefaultQueue) -> SynchronousNode:
-    node = create_node()
+def create_gateway_node(incoming_messages: DefaultQueue, parallel: bool = False) -> SynchronousNode:
+    node = create_node(parallel=parallel)
     node.register_executable_actor(GatewayActor(incoming_messages), actor_id="main")
     return node
 

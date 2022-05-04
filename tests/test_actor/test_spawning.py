@@ -1,15 +1,20 @@
+import time
+
 from redcomet.base.actor import ActorRefAbstract
 from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
 from redcomet.queue.abstract import QueueAbstract
-from redcomet.queue.default import DefaultQueue
+from redcomet.queue.manager import ProcessSafeQueue
 from redcomet.system import ActorSystem
 
 
 class MyStringMessage(MessageAbstract):
     def __init__(self, value: str):
         self.value = value
+
+    def __repr__(self) -> str:
+        return f"MyStringMessage({self.value!r})"
 
 
 class MyActor(ActorAbstract):
@@ -26,6 +31,9 @@ class MyActor(ActorAbstract):
         else:
             raise NotImplementedError()
 
+    def __repr__(self) -> str:
+        return "<MyActor>"
+
 
 class AnotherActor(ActorAbstract):
     def __init__(self, recv_queue: QueueAbstract):
@@ -35,14 +43,18 @@ class AnotherActor(ActorAbstract):
                 cluster: ClusterRefAbstract):
         self._recv_queue.put(message)
 
+    def __repr__(self) -> str:
+        return "<AnotherActor>"
+
 
 def test_should_tell_message_to_another_actor():
-    queue = DefaultQueue()
-    with ActorSystem.create() as system:
-        my_actor = system.spawn(MyActor(queue))
-
-        my_actor.tell(MyStringMessage("start"))
-        my_actor.tell(MyStringMessage("hi to another"))
-        recv_message = queue.get(timeout=2)
+    with ProcessSafeQueue() as queue:
+        with ActorSystem.create(parallel=True) as system:
+            my_actor = system.spawn(MyActor(queue))
+            time.sleep(0.01)
+            my_actor.tell(MyStringMessage("start"))
+            time.sleep(0.01)
+            my_actor.tell(MyStringMessage("hi to another"))
+            recv_message = queue.get(timeout=0.01)
 
     assert recv_message.value == "HI"

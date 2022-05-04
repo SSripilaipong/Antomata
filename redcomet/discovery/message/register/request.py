@@ -13,3 +13,6 @@ class RegisterAddressRequest(MessageAbstract):
     @property
     def node_id(self) -> str:
         return self._node_id
+
+    def __repr__(self) -> str:
+        return f"RegisterAddressRequest({self._target!r}, {self._node_id!r})"

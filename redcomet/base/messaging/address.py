@@ -32,6 +32,10 @@ class Address:
         return self._node_id == "__ANYWHERE"
 
     def __repr__(self):
+        if self.is_local():
+            return f"Address.on_local({self.target!r})"
+        if self.is_global():
+            return f"Address.anywhere({self.target!r})"
         return f"Address({self._node_id!r}, {self.target!r})"
 
     def __eq__(self, other):

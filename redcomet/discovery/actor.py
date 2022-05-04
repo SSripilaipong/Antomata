@@ -56,6 +56,7 @@ class ActorDiscovery(ActorAbstract):
         self._mapper[target] = node_id
 
     def _query_node_id(self, target: str) -> str:
+        print("discovery on", self._address, self._mapper)
         node_id = self._mapper.get(target)
         if node_id is None:
             raise NotImplementedError()

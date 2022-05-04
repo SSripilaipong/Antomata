@@ -1,3 +1,4 @@
+import multiprocessing
 from typing import Dict, Optional
 
 from redcomet.base.messaging.packet import Packet
@@ -16,6 +17,7 @@ class Outbox:
         self._node_id = node_id
 
     def send(self, packet: Packet):
+        print(multiprocessing.current_process().name, "SEND", packet)
         packet.set_sender_node_id(self._node_id)
         if packet.is_local_receiver():
             packet.set_receiver_node_id(self._node_id)

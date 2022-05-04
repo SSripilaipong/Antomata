@@ -14,3 +14,6 @@ class RegisterActorRequest(MessageAbstract):
     @property
     def actor(self) -> ActorAbstract:
         return self._actor
+
+    def __repr__(self) -> str:
+        return f"RegisterActorRequest({self._actor_id!r}, {self._actor!r})"

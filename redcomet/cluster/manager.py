@@ -41,6 +41,7 @@ class ClusterManager(ActorAbstract):
         return cluster
 
     def start(self):
+        self._node.start()
         for node in self._nodes:
             node.start()
 
@@ -97,5 +98,7 @@ class ClusterManager(ActorAbstract):
     def stop(self):
         for node in self._nodes:
             node.stop()
+        self._node.stop()
         for node in self._nodes:
             node.close()
+        self._node.close()

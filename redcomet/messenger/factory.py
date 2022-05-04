@@ -1,4 +1,4 @@
-from multiprocessing import Queue
+from multiprocessing import Manager
 
 from redcomet.base.messaging.handler import PacketHandlerAbstract
 from redcomet.messenger import Messenger
@@ -13,6 +13,7 @@ def create_messenger(handler: PacketHandlerAbstract, address_cache: AddressCache
     if not parallel:
         inbox = SynchronousInbox(handler)
     else:
-        inbox = ProcessSafeInbox(Queue(), handler)
+        manager = Manager()
+        inbox = ProcessSafeInbox(manager, manager.Queue(), handler)
 
     return Messenger(actor_id, inbox, Outbox(), address_cache=address_cache)

@@ -14,3 +14,6 @@ class QueryAddressResponse(MessageAbstract):
     @property
     def address(self) -> Address:
         return self._address
+
+    def __repr__(self) -> str:
+        return f"QueryAddressResponse({self._target!r}, {self._address!r})"

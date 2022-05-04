@@ -7,13 +7,12 @@ from redcomet.node.process import ProcessNode
 from redcomet.node.synchronous import SynchronousNode
 
 
-def create_node(parallel=False) -> NodeAbstract:
+def create_node(parallel: bool = False) -> NodeAbstract:
     executor = ActorExecutor()
+    messenger = create_messenger(PacketHandler(executor), actor_id="messenger", parallel=parallel)
     if not parallel:
-        messenger = create_messenger(PacketHandler(executor), actor_id="messenger")
         node = SynchronousNode(executor, messenger)
     else:
-        messenger = create_messenger(PacketHandler(executor), actor_id="messenger", parallel=True)
         node = ProcessNode(messenger, executor)
     executor.set_node(node)
 
