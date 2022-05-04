@@ -7,7 +7,7 @@ from redcomet.base.cluster.ref import ClusterRefAbstract
 from redcomet.cluster.manager import ClusterManager
 from redcomet.node.ref import NodeRef
 from redcomet.messenger.inbox.queue import QueueAbstract
-from redcomet.queue.process_safe import ProcessSafeQueueManager
+from redcomet.implementation.messenger.inbox.queue.process_safe import ProcessSafeQueueManager
 from redcomet.system.node_factory import create_gateway_node, create_worker_node
 
 

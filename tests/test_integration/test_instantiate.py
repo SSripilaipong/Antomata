@@ -5,7 +5,7 @@ from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
 from redcomet.messenger.inbox.queue import QueueAbstract
-from redcomet.queue.default import DefaultQueue
+from redcomet.implementation.messenger.inbox.queue.default import DefaultQueue
 from redcomet.system import ActorSystem
 
 

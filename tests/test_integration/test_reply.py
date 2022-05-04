@@ -7,7 +7,7 @@ from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
 from redcomet.base.messaging.address import Address
 from redcomet.messenger.inbox.queue import QueueAbstract
-from redcomet.queue.process_safe import ProcessSafeQueueManager
+from redcomet.implementation.messenger.inbox.queue.process_safe import ProcessSafeQueueManager
 from redcomet.system import ActorSystem
 
 

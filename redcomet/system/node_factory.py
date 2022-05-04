@@ -2,7 +2,7 @@ from redcomet.base.node.abstract import NodeAbstract
 from redcomet.node.factory import create_node
 from redcomet.node.gateway import GatewayActor
 from redcomet.node.synchronous import SynchronousNode
-from redcomet.queue.default import DefaultQueue
+from redcomet.implementation.messenger.inbox.queue.default import DefaultQueue
 
 
 def create_gateway_node(incoming_messages: DefaultQueue, parallel: bool = False) -> SynchronousNode:

@@ -4,7 +4,7 @@ from redcomet.messenger.address_cache import AddressCache
 from redcomet.messenger.inbox.process_safe import ProcessSafeInbox
 from redcomet.messenger.inbox.synchronous import SynchronousInbox
 from redcomet.messenger.outbox import Outbox
-from redcomet.queue.process_safe import ProcessSafeQueueManager
+from redcomet.implementation.messenger.inbox.queue.process_safe import ProcessSafeQueueManager
 
 
 def create_messenger(handler: PacketHandlerAbstract, address_cache: AddressCache = None, *,
