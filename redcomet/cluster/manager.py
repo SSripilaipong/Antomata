@@ -95,4 +95,5 @@ class ClusterManager(ActorAbstract):
         ref.register_address(actor_id, actor)
 
     def stop(self):
-        pass
+        for node in self._nodes:
+            node.stop()
