@@ -13,6 +13,7 @@ from redcomet.node.process import ProcessNode
 class MockMessenger(MessengerAbstract):
     def __init__(self):
         self.bound_discovery = None
+        self.assigned_node_id = None
 
     def bind_discovery(self, ref: ActorDiscoveryRefAbstract):
         self.bound_discovery = ref
@@ -24,7 +25,7 @@ class MockMessenger(MessengerAbstract):
         pass
 
     def assign_node_id(self, node_id: str):
-        pass
+        self.assigned_node_id = node_id
 
     def make_connection_to(self, other: 'MessengerAbstract'):
         pass
@@ -66,6 +67,13 @@ def test_should_bind_manager_to_discovery_ref():
     node.assign_manager(manager)
     node.bind_discovery(Address("my", "discovery"))
     assert manager.bound_discovery == ActorDiscoveryRef(messenger, Address("my", "discovery"), "node")
+
+
+def test_should_assign_node_id_to_messenger():
+    messenger = MockMessenger()
+    node = _create_node(messenger)
+    node.assign_node_id("node")
+    assert messenger.assigned_node_id == "node"
 
 
 def test_should_provide_node_id():
