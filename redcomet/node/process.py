@@ -50,7 +50,7 @@ class ProcessNode(NodeAbstract):
         return self._messenger
 
     def make_connection_to(self, node: 'NodeAbstract'):
-        pass
+        self._messenger.make_connection_to(node.messenger)
 
     def assign_manager(self, manager: NodeManagerAbstract):
         self._manager = manager
