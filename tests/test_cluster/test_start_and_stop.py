@@ -13,12 +13,16 @@ class MockNode(NodeAbstract):
     def __init__(self):
         self.is_started = False
         self.is_stopped = False
+        self.is_closed = False
 
     def start(self):
         self.is_started = True
 
     def stop(self):
         self.is_stopped = True
+
+    def close(self):
+        self.is_closed = True
 
     def bind_discovery(self, address: Address):
         pass
@@ -70,3 +74,13 @@ def test_should_stop_worker_nodes():
     manager.start()
     manager.stop()
     assert node0.is_stopped and node1.is_stopped
+
+
+def test_should_close_worker_nodes():
+    manager = ClusterManager(MockNode(), "cluster", Address("my", "discovery"))
+    node0, node1 = MockNode(), MockNode()
+    manager.add_node(node0, "node0")
+    manager.add_node(node1, "node1")
+    manager.start()
+    manager.stop()
+    assert node0.is_closed and node1.is_closed
