@@ -3,8 +3,9 @@ from redcomet.base.actor import ActorRefAbstract
 from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
+from redcomet.base.messaging.address import Address
 from redcomet.queue.abstract import QueueAbstract
-from redcomet.queue.default import DefaultQueue
+from redcomet.queue.manager import ProcessSafeQueue
 from redcomet.system import ActorSystem
 
 
@@ -23,9 +24,9 @@ class StartCommand(MessageAbstract):
 
 
 class Caller(ActorAbstract):
-    def __init__(self, data: str, provider: ActorRef, recv_queue: QueueAbstract):
+    def __init__(self, data: str, provider: Address, recv_queue: QueueAbstract):
         self._data = data
-        self._provider = provider
+        self._provider = ActorRef(..., ..., provider)
         self._recv_queue = recv_queue
 
     def receive(self, message: MessageAbstract, sender: ActorRefAbstract, me: ActorRef,
@@ -52,10 +53,10 @@ class Provider(ActorAbstract):
 
 
 def test_should_response_back_to_sender():
-    response_queue = DefaultQueue()
-    with ActorSystem.create() as system:
-        provider = system.spawn(Provider("Paste"))
-        caller = system.spawn(Caller("Copy", provider, response_queue))
-        caller.tell(StartCommand())
+    with ProcessSafeQueue() as response_queue:
+        with ActorSystem.create(parallel=True) as system:
+            provider = system.spawn(Provider("Paste"))
+            caller = system.spawn(Caller("Copy", provider.address, response_queue))
+            caller.tell(StartCommand())
 
-        assert response_queue.get(timeout=1) == "CopyPaste"
+            assert response_queue.get(timeout=0.1) == "CopyPaste"
