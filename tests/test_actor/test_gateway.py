@@ -1,3 +1,5 @@
+import time
+
 from redcomet.base.actor import ActorRefAbstract
 from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.base.actor.message import MessageAbstract
@@ -23,8 +25,9 @@ class MyActor(ActorAbstract):
 
 
 def test_should_reply_to_gateway():
-    with ActorSystem.create() as system:
+    with ActorSystem.create(parallel=True) as system:
         actor = system.spawn(MyActor())
+        time.sleep(0.01)
         actor.tell(Ping())
         reply = system.fetch_message(timeout=1)
         assert isinstance(reply, Pong)

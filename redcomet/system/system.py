@@ -8,18 +8,22 @@ from redcomet.cluster.manager import ClusterManager
 from redcomet.node.ref import NodeRef
 from redcomet.queue.abstract import QueueAbstract
 from redcomet.queue.default import DefaultQueue
+from redcomet.queue.manager import ProcessSafeQueue
 from redcomet.system.node_factory import create_gateway_node, create_worker_node
 
 
 class ActorSystem:
-    def __init__(self, cluster: ClusterManager, cluster_ref: ClusterRefAbstract, incoming_messages: QueueAbstract):
+    def __init__(self, cluster: ClusterManager, cluster_ref: ClusterRefAbstract, incoming_messages: QueueAbstract,
+                 manager: ProcessSafeQueue):
         self._cluster = cluster
         self._cluster_ref = cluster_ref
         self._incoming_messages = incoming_messages
+        self._manager = manager
 
     @classmethod
     def create(cls, n_worker_nodes: int = 1, node_id_prefix: str = "node", parallel: bool = False) -> 'ActorSystem':
-        incoming_messages = DefaultQueue()
+        incoming_messages_manager = ProcessSafeQueue()
+        incoming_messages = incoming_messages_manager.__enter__()
 
         gateway = create_gateway_node(incoming_messages, parallel=parallel)
 
@@ -27,7 +31,7 @@ class ActorSystem:
         for i in range(n_worker_nodes):
             cluster.add_node(create_worker_node(parallel=parallel), f"{node_id_prefix}{i}")
 
-        return cls(cluster, gateway.issue_cluster_ref("main"), incoming_messages)
+        return cls(cluster, gateway.issue_cluster_ref("main"), incoming_messages, incoming_messages_manager)
 
     def spawn(self, actor: ActorAbstract) -> ActorRefAbstract:
         return self._cluster_ref.spawn(actor)
@@ -38,6 +42,7 @@ class ActorSystem:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.stop()
+        self._manager.__exit__(exc_type, exc_val, exc_tb)
 
     def fetch_message(self, timeout: float = None) -> MessageAbstract:
         return self._incoming_messages.get(timeout=timeout)
