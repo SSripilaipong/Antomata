@@ -40,6 +40,9 @@ class ClusterManager(ActorAbstract):
 
         return cluster
 
+    def start(self):
+        pass
+
     def add_node(self, node: NodeAbstract, node_id: str):
         if node in self._nodes or node is self._node:
             raise NotImplementedError()
@@ -89,3 +92,6 @@ class ClusterManager(ActorAbstract):
         if ref is None:
             raise NotImplementedError()
         ref.register_address(actor_id, actor)
+
+    def stop(self):
+        pass

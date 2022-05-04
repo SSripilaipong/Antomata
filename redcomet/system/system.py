@@ -12,8 +12,9 @@ from redcomet.system.node_factory import create_gateway_node, create_worker_node
 
 
 class ActorSystem:
-    def __init__(self, cluster: ClusterRefAbstract, incoming_messages: QueueAbstract):
+    def __init__(self, cluster: ClusterManager, cluster_ref: ClusterRefAbstract, incoming_messages: QueueAbstract):
         self._cluster = cluster
+        self._cluster_ref = cluster_ref
         self._incoming_messages = incoming_messages
 
     @classmethod
@@ -26,10 +27,10 @@ class ActorSystem:
         for i in range(n_worker_nodes):
             cluster.add_node(create_worker_node(parallel=parallel), f"{node_id_prefix}{i}")
 
-        return cls(gateway.issue_cluster_ref("main"), incoming_messages)
+        return cls(cluster, gateway.issue_cluster_ref("main"), incoming_messages)
 
     def spawn(self, actor: ActorAbstract) -> ActorRefAbstract:
-        return self._cluster.spawn(actor)
+        return self._cluster_ref.spawn(actor)
 
     def __enter__(self) -> 'ActorSystem':
         self.start()
@@ -42,10 +43,10 @@ class ActorSystem:
         return self._incoming_messages.get(timeout=timeout)
 
     def start(self):
-        pass
+        self._cluster.start()
 
     def stop(self):
-        pass
+        self._cluster.stop()
 
     def get_active_nodes(self, timeout: float) -> List[NodeRef]:
-        return self._cluster.get_active_nodes(timeout=timeout)
+        return self._cluster_ref.get_active_nodes(timeout=timeout)
