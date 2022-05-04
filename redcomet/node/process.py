@@ -1,3 +1,5 @@
+from typing import Optional
+
 from redcomet.base.actor import ActorRefAbstract
 from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
@@ -13,11 +15,13 @@ class ProcessNode(NodeAbstract):
     def __init__(self, messenger: MessengerAbstract):
         self._messenger = messenger
 
-        self._actor_id = None
+        self._manager: Optional[NodeManagerAbstract] = None
+        self._actor_id: Optional[str] = None
 
     def bind_discovery(self, address: Address):
         ref = ActorDiscoveryRef(self._messenger, address, self._actor_id)
         self._messenger.bind_discovery(ref)
+        self._manager.bind_discovery(ref)
 
     def issue_actor_ref(self, local_issuer_id: str, address: Address) -> ActorRefAbstract:
         pass
@@ -46,4 +50,4 @@ class ProcessNode(NodeAbstract):
         pass
 
     def assign_manager(self, manager: NodeManagerAbstract):
-        pass
+        self._manager = manager
