@@ -15,6 +15,7 @@ from redcomet.node.ref import NodeRef
 class ProcessNode(NodeAbstract):
     def __init__(self, messenger: MessengerAbstract, executor: ActorExecutorAbstract):
         self._messenger = messenger
+        self._executor = executor
 
         self._manager: Optional[NodeManagerAbstract] = None
         self._actor_id: Optional[str] = None
@@ -35,7 +36,7 @@ class ProcessNode(NodeAbstract):
         pass
 
     def register_executable_actor(self, actor: ActorAbstract, actor_id: str):
-        pass
+        self._executor.register(actor_id, actor)
 
     def assign_node_id(self, node_id: str):
         self._node_id = node_id
