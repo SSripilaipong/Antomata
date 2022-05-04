@@ -1,3 +1,4 @@
+from multiprocessing import Process
 from typing import Optional
 
 from redcomet.actor.ref import ActorRef
@@ -58,3 +59,12 @@ class ProcessNode(NodeAbstract):
 
     def assign_manager(self, manager: NodeManagerAbstract):
         self._manager = manager
+
+    def start(self):
+        Process(target=self._messenger.start_receive_loop).start()
+
+    def stop(self):
+        self._messenger.stop_receive_loop()
+
+    def close(self):
+        self._messenger.close()

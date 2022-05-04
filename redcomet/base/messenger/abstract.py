@@ -36,3 +36,12 @@ class MessengerAbstract(ABC):
     @abstractmethod
     def node_id(self) -> str:
         pass
+
+    def start_receive_loop(self):
+        pass
+
+    def stop_receive_loop(self):
+        pass
+
+    def close(self):
+        pass
