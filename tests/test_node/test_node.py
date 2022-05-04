@@ -1,4 +1,9 @@
+from typing import Optional
+
+from redcomet.base.actor import ActorRefAbstract
+from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.base.actor.message import MessageAbstract
+from redcomet.base.cluster.ref import ClusterRefAbstract
 from redcomet.base.discovery.ref import ActorDiscoveryRefAbstract
 from redcomet.base.messaging.address import Address
 from redcomet.base.messaging.packet import Packet
@@ -6,6 +11,7 @@ from redcomet.base.messenger.abstract import MessengerAbstract
 from redcomet.base.messenger.direct_message.ref import DirectMessageBoxRefAbstract
 from redcomet.base.node.abstract import NodeAbstract
 from redcomet.discovery.ref import ActorDiscoveryRef
+from redcomet.node.executor import ActorExecutorAbstract
 from redcomet.node.manager.abstract import NodeManagerAbstract
 from redcomet.node.process import ProcessNode
 
@@ -47,13 +53,29 @@ class MockManager(NodeManagerAbstract):
         self.bound_discovery = discovery
 
 
-def _create_node(messenger: MessengerAbstract) -> NodeAbstract:
-    return ProcessNode(messenger)
+class MockExecutor(ActorExecutorAbstract):
+    def __init__(self):
+        self.registered_actor_id = None
+        self.registered_actor = None
+
+    def register(self, local_id: str, actor: ActorAbstract):
+        self.registered_actor_id = local_id
+        self.registered_actor = actor
+
+
+class MockActor(ActorAbstract):
+    def receive(self, message: MessageAbstract, sender: ActorRefAbstract, me: ActorRefAbstract,
+                cluster: ClusterRefAbstract):
+        pass
+
+
+def _create_node(messenger: MessengerAbstract, executor: Optional[ActorExecutorAbstract]) -> NodeAbstract:
+    return ProcessNode(messenger, executor)
 
 
 def test_should_bind_messenger_to_discovery_ref():
     messenger = MockMessenger()
-    node = _create_node(messenger)
+    node = _create_node(messenger, None)
     node.assign_node_id("node")
     node.assign_manager(MockManager())
     node.bind_discovery(Address("my", "discovery"))
@@ -63,7 +85,7 @@ def test_should_bind_messenger_to_discovery_ref():
 def test_should_bind_manager_to_discovery_ref():
     manager = MockManager()
     messenger = MockMessenger()
-    node = _create_node(messenger)
+    node = _create_node(messenger, None)
     node.assign_node_id("node")
     node.assign_manager(manager)
     node.bind_discovery(Address("my", "discovery"))
@@ -72,29 +94,37 @@ def test_should_bind_manager_to_discovery_ref():
 
 def test_should_assign_node_id_to_messenger():
     messenger = MockMessenger()
-    node = _create_node(messenger)
+    node = _create_node(messenger, None)
     node.assign_node_id("node")
     assert messenger.assigned_node_id == "node"
 
 
 def test_should_provide_node_id():
-    node = _create_node(MockMessenger())
+    node = _create_node(MockMessenger(), None)
     node.assign_node_id("node")
     assert node.node_id == "node"
 
 
 def test_should_provide_messenger():
     messenger = MockMessenger()
-    node = _create_node(messenger)
+    node = _create_node(messenger, None)
     assert node.messenger is messenger
 
 
 def test_should_make_connection_to_another_messenger():
     my_messenger = MockMessenger()
-    me = _create_node(my_messenger)
+    me = _create_node(my_messenger, None)
     your_messenger = MockMessenger()
-    you = _create_node(your_messenger)
+    you = _create_node(your_messenger, None)
 
     me.make_connection_with(you)
 
     assert your_messenger.made_connection is my_messenger and my_messenger.made_connection is your_messenger
+
+
+def test_should_register_actor_to_executor():
+    executor = MockExecutor()
+    actor = MockActor()
+    node = _create_node(MockMessenger(), executor)
+    node.register_executable_actor(actor, "my_actor")
+    assert executor.registered_actor is actor and executor.registered_actor_id == "my_actor"

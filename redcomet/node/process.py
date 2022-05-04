@@ -7,12 +7,13 @@ from redcomet.base.messaging.address import Address
 from redcomet.base.messenger.abstract import MessengerAbstract
 from redcomet.base.node.abstract import NodeAbstract
 from redcomet.discovery.ref import ActorDiscoveryRef
+from redcomet.node.executor import ActorExecutorAbstract
 from redcomet.node.manager.abstract import NodeManagerAbstract
 from redcomet.node.ref import NodeRef
 
 
 class ProcessNode(NodeAbstract):
-    def __init__(self, messenger: MessengerAbstract):
+    def __init__(self, messenger: MessengerAbstract, executor: ActorExecutorAbstract):
         self._messenger = messenger
 
         self._manager: Optional[NodeManagerAbstract] = None
