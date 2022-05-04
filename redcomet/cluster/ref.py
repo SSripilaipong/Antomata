@@ -1,3 +1,5 @@
+import os
+import uuid
 from typing import List
 
 from redcomet.actor.ref import ActorRef
@@ -20,7 +22,7 @@ class ClusterRef(ClusterRefAbstract):
         self._address = Address(ref_node_id, ref_id)
 
     def spawn(self, actor: ActorAbstract) -> ActorRefAbstract:
-        ref_id = _generate_actor_id(actor)
+        ref_id = _generate_actor_id()
         packet = Packet(SpawnActorRequest(actor, ref_id),
                         sender=Address.on_local(self._issuer_id),
                         receiver=self._address)
@@ -37,5 +39,5 @@ class ClusterRef(ClusterRefAbstract):
         return [NodeRef(self._messenger, self._issuer_id, node_id) for node_id in response.node_ids]
 
 
-def _generate_actor_id(actor: ActorAbstract) -> str:
-    return str(id(actor))
+def _generate_actor_id() -> str:
+    return uuid.UUID(bytes=os.urandom(16), version=4).hex

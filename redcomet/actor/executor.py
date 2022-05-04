@@ -1,3 +1,4 @@
+import multiprocessing
 from typing import Dict
 
 from redcomet.base.actor.abstract import ActorAbstract
@@ -20,6 +21,7 @@ class ActorExecutor(ActorExecutorAbstract):
             raise NotImplementedError()
 
         self._actor_map[local_id] = actor
+        print(multiprocessing.current_process().name, "REAC", self._actor_map)
 
     def execute(self, message: MessageAbstract, sender: Address, local_actor_id: str):
         sender = self._node.issue_actor_ref(local_actor_id, sender)
