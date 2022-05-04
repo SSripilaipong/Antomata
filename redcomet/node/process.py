@@ -8,6 +8,9 @@ from redcomet.node.ref import NodeRef
 
 
 class ProcessNode(NodeAbstract):
+    def __init__(self, messenger: MessengerAbstract):
+        pass
+
     def bind_discovery(self, address: Address):
         pass
 

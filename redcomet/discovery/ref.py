@@ -33,3 +33,11 @@ class ActorDiscoveryRef(ActorDiscoveryRefAbstract):
             func(message.target, message.address)
             return True
         return False
+
+    def __eq__(self, other) -> bool:
+        if other.__class__ != self.__class__:
+            return False
+        assert isinstance(other, ActorDiscoveryRef)
+        return (self._messenger is other._messenger
+                and self._address == other._address
+                and self._issuer_id == other._issuer_id)
