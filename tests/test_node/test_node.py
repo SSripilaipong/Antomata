@@ -72,3 +72,9 @@ def test_should_provide_node_id():
     node = _create_node(MockMessenger())
     node.assign_node_id("node")
     assert node.node_id == "node"
+
+
+def test_should_provide_messenger():
+    messenger = MockMessenger()
+    node = _create_node(messenger)
+    assert node.messenger is messenger
