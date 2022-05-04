@@ -17,14 +17,14 @@ class ActorSystem:
         self._incoming_messages = incoming_messages
 
     @classmethod
-    def create(cls, n_worker_nodes: int = 1, node_id_prefix: str = "node") -> 'ActorSystem':
+    def create(cls, n_worker_nodes: int = 1, node_id_prefix: str = "node", parallel: bool = False) -> 'ActorSystem':
         incoming_messages = DefaultQueue()
 
         gateway = create_gateway_node(incoming_messages)
 
         cluster = ClusterManager.create(gateway, "main", "cluster")
         for i in range(n_worker_nodes):
-            cluster.add_node(create_worker_node(), f"{node_id_prefix}{i}")
+            cluster.add_node(create_worker_node(parallel=parallel), f"{node_id_prefix}{i}")
 
         return cls(gateway.issue_cluster_ref("main"), incoming_messages)
 

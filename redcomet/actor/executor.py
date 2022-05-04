@@ -4,9 +4,10 @@ from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.messaging.address import Address
 from redcomet.base.node.abstract import NodeAbstract
+from redcomet.node.executor import ActorExecutorAbstract
 
 
-class ActorExecutor:
+class ActorExecutor(ActorExecutorAbstract):
     def __init__(self, node: NodeAbstract = None):
         self._node = node
         self._actor_map: Dict[str, ActorAbstract] = {}

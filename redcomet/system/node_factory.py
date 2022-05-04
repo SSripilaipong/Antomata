@@ -1,3 +1,4 @@
+from redcomet.base.node.abstract import NodeAbstract
 from redcomet.node.factory import create_node
 from redcomet.node.gateway import GatewayActor
 from redcomet.node.synchronous import SynchronousNode
@@ -10,5 +11,5 @@ def create_gateway_node(incoming_messages: DefaultQueue) -> SynchronousNode:
     return node
 
 
-def create_worker_node() -> SynchronousNode:
-    return create_node()
+def create_worker_node(parallel: bool = False) -> NodeAbstract:
+    return create_node(parallel=parallel)

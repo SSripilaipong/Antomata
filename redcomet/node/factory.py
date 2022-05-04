@@ -14,7 +14,7 @@ def create_node(parallel=False) -> NodeAbstract:
         node = SynchronousNode(executor, messenger)
     else:
         messenger = create_messenger(PacketHandler(executor), actor_id="messenger", parallel=True)
-        node = ProcessNode()
+        node = ProcessNode(messenger, executor)
     executor.set_node(node)
 
     manager = NodeManager("manager", node)
