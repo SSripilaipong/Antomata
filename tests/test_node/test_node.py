@@ -66,3 +66,9 @@ def test_should_bind_manager_to_discovery_ref():
     node.assign_manager(manager)
     node.bind_discovery(Address("my", "discovery"))
     assert manager.bound_discovery == ActorDiscoveryRef(messenger, Address("my", "discovery"), "node")
+
+
+def test_should_provide_node_id():
+    node = _create_node(MockMessenger())
+    node.assign_node_id("node")
+    assert node.node_id == "node"
