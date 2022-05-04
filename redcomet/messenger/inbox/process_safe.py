@@ -1,15 +1,14 @@
 import multiprocessing
-from multiprocessing import Manager
 
 from redcomet.base.messaging.handler import PacketHandlerAbstract
 from redcomet.base.messaging.packet import Packet
 from redcomet.messenger.inbox import InboxAbstract
 from redcomet.messenger.inbox.message import StopReceiveLoop
-from redcomet.queue.abstract import QueueAbstract
+from redcomet.queue.abstract import QueueAbstract, QueueManagerAbstract
 
 
 class ProcessSafeInbox(InboxAbstract):
-    def __init__(self, manager: Manager, queue: QueueAbstract, handler: PacketHandlerAbstract = None):
+    def __init__(self, manager: QueueManagerAbstract, queue: QueueAbstract, handler: PacketHandlerAbstract = None):
         self._manager = manager
         self._queue = queue
         self._handler = handler
