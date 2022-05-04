@@ -16,7 +16,7 @@ from redcomet.node.manager import NodeManager
 from redcomet.node.ref import NodeRef
 
 
-class Node(NodeAbstract):
+class SynchronousNode(NodeAbstract):
     def __init__(self, executor: ActorExecutor, messenger: Messenger, node_id: str = None, manager: NodeManager = None):
         self._node_id = node_id
         self._actor_id = node_id
@@ -26,7 +26,7 @@ class Node(NodeAbstract):
         self._manager = manager
 
     @classmethod
-    def create(cls, executor: ActorExecutor, inbox: InboxAbstract, outbox: Outbox) -> 'Node':
+    def create(cls, executor: ActorExecutor, inbox: InboxAbstract, outbox: Outbox) -> 'SynchronousNode':
         messenger = Messenger("messenger", inbox, outbox)
         node = cls(executor, messenger)
 
