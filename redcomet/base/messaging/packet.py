@@ -26,6 +26,12 @@ class Packet:
     def __repr__(self):
         return f"Packet({self._content!r}, sender={self._sender!r}, receiver={self._receiver!r})"
 
+    def __eq__(self, other) -> bool:
+        if other.__class__ is not self.__class__:
+            return False
+        assert isinstance(other, Packet)
+        return other.content == self.content and other.receiver == self.receiver and other.sender == self.sender
+
     def set_receiver_node_id(self, node_id: str):
         self.receiver.set_node_id(node_id)
 
