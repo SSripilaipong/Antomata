@@ -4,15 +4,19 @@ from redcomet.base.cluster.ref import ClusterRefAbstract
 from redcomet.base.messaging.address import Address
 from redcomet.base.messenger.abstract import MessengerAbstract
 from redcomet.base.node.abstract import NodeAbstract
+from redcomet.discovery.ref import ActorDiscoveryRef
 from redcomet.node.ref import NodeRef
 
 
 class ProcessNode(NodeAbstract):
     def __init__(self, messenger: MessengerAbstract):
-        pass
+        self._messenger = messenger
+
+        self._actor_id = None
 
     def bind_discovery(self, address: Address):
-        pass
+        ref = ActorDiscoveryRef(self._messenger, address, self._actor_id)
+        self._messenger.bind_discovery(ref)
 
     def issue_actor_ref(self, local_issuer_id: str, address: Address) -> ActorRefAbstract:
         pass
@@ -27,7 +31,7 @@ class ProcessNode(NodeAbstract):
         pass
 
     def assign_node_id(self, node_id: str):
-        pass
+        self._actor_id = node_id
 
     @property
     def node_id(self) -> str:
