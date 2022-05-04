@@ -1,3 +1,5 @@
+import pytest
+
 from redcomet.actor.ref import ActorRef
 from redcomet.base.actor import ActorRefAbstract
 from redcomet.base.actor.abstract import ActorAbstract
@@ -52,6 +54,7 @@ class Provider(ActorAbstract):
             raise NotImplementedError()
 
 
+@pytest.mark.integration
 def test_should_response_back_to_sender():
     with ProcessSafeQueue() as response_queue:
         with ActorSystem.create(parallel=True) as system:

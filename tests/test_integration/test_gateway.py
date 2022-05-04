@@ -1,5 +1,7 @@
 import time
 
+import pytest
+
 from redcomet.base.actor import ActorRefAbstract
 from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.base.actor.message import MessageAbstract
@@ -24,6 +26,7 @@ class MyActor(ActorAbstract):
             raise NotImplementedError()
 
 
+@pytest.mark.integration
 def test_should_reply_to_gateway():
     with ActorSystem.create(parallel=True) as system:
         actor = system.spawn(MyActor())

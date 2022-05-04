@@ -1,5 +1,7 @@
 import time
 
+import pytest
+
 from redcomet.base.actor import ActorRefAbstract
 from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.base.actor.message import MessageAbstract
@@ -47,6 +49,7 @@ class AnotherActor(ActorAbstract):
         return "<AnotherActor>"
 
 
+@pytest.mark.integration
 def test_should_tell_message_to_another_actor():
     with ProcessSafeQueue() as queue:
         with ActorSystem.create(parallel=True) as system:

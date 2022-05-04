@@ -1,3 +1,5 @@
+import pytest
+
 from redcomet.base.actor import ActorRefAbstract
 from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.base.actor.message import MessageAbstract
@@ -21,6 +23,7 @@ class MyActor(ActorAbstract):
         self._recv_queue.put(message)
 
 
+@pytest.mark.integration
 def test_should_tell_message():
     queue = DefaultQueue()
     with ActorSystem.create() as system:

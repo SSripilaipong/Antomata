@@ -1,5 +1,7 @@
 import time
 
+import pytest
+
 from redcomet.actor.ref import ActorRef
 from redcomet.base.actor import ActorRefAbstract
 from redcomet.base.actor.abstract import ActorAbstract
@@ -68,6 +70,7 @@ class Second(ActorAbstract):
         return "<Second>"
 
 
+@pytest.mark.integration
 def test_should_communicate_between_actors():
     with ProcessSafeQueue() as first_queue, ProcessSafeQueue() as second_queue:
         with ActorSystem.create(parallel=True) as system:
