@@ -5,6 +5,7 @@ from redcomet.base.messaging.address import Address
 from redcomet.base.messenger.abstract import MessengerAbstract
 from redcomet.base.node.abstract import NodeAbstract
 from redcomet.cluster.manager import ClusterManager
+from redcomet.node.manager.abstract import NodeManagerAbstract
 from redcomet.node.ref import NodeRef
 
 
@@ -31,6 +32,9 @@ class MockNode(NodeAbstract):
 
     def assign_node_id(self, node_id: str):
         self.assigned_node_id = node_id
+
+    def assign_manager(self, manager: NodeManagerAbstract):
+        pass
 
     @property
     def node_id(self) -> str:

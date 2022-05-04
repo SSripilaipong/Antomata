@@ -5,6 +5,7 @@ from redcomet.base.messaging.address import Address
 from redcomet.base.messenger.abstract import MessengerAbstract
 from redcomet.base.node.abstract import NodeAbstract
 from redcomet.discovery.ref import ActorDiscoveryRef
+from redcomet.node.manager.abstract import NodeManagerAbstract
 from redcomet.node.ref import NodeRef
 
 
@@ -42,4 +43,7 @@ class ProcessNode(NodeAbstract):
         pass
 
     def make_connection_to(self, node: 'NodeAbstract'):
+        pass
+
+    def assign_manager(self, manager: NodeManagerAbstract):
         pass

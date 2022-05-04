@@ -12,7 +12,8 @@ from redcomet.messaging.handler import PacketHandler
 from redcomet.messenger import Messenger
 from redcomet.messenger.inbox import InboxAbstract
 from redcomet.messenger.outbox import Outbox
-from redcomet.node.manager import NodeManager
+from redcomet.node.manager.abstract import NodeManagerAbstract
+from redcomet.node.manager.actor import NodeManager
 from redcomet.node.ref import NodeRef
 
 
@@ -69,6 +70,9 @@ class SynchronousNode(NodeAbstract):
         self._node_id = node_id
         self._actor_id = node_id
         self._messenger.assign_node_id(node_id)
+
+    def assign_manager(self, manager: NodeManagerAbstract):
+        self._manager = manager
 
     @property
     def node_id(self) -> str:

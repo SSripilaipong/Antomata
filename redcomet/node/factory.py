@@ -2,7 +2,7 @@ from redcomet.actor.executor import ActorExecutor
 from redcomet.base.node.abstract import NodeAbstract
 from redcomet.messaging.handler import PacketHandler
 from redcomet.messenger.factory import create_messenger
-from redcomet.node.manager import NodeManager
+from redcomet.node.manager.actor import NodeManager
 from redcomet.node.process import ProcessNode
 from redcomet.node.synchronous import SynchronousNode
 
@@ -18,7 +18,7 @@ def create_node(parallel=False) -> NodeAbstract:
     executor.set_node(node)
 
     manager = NodeManager("manager", node)
-    node._manager = manager
+    node.assign_manager(manager)
 
     executor.register("messenger", messenger)
     executor.register("manager", manager)

@@ -5,6 +5,7 @@ from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
 from redcomet.base.messaging.address import Address
 from redcomet.base.messenger.abstract import MessengerAbstract
+from redcomet.node.manager.abstract import NodeManagerAbstract
 from redcomet.node.ref import NodeRef
 
 
@@ -53,4 +54,8 @@ class NodeAbstract(ABC):
 
     @abstractmethod
     def make_connection_to(self, node: 'NodeAbstract'):
+        pass
+
+    @abstractmethod
+    def assign_manager(self, manager: NodeManagerAbstract):
         pass

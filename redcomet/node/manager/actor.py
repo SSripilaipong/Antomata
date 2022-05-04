@@ -4,10 +4,11 @@ from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.cluster.ref import ClusterRefAbstract
 from redcomet.base.discovery.ref import ActorDiscoveryRefAbstract
 from redcomet.base.node.abstract import NodeAbstract
+from redcomet.node.manager.abstract import NodeManagerAbstract
 from redcomet.node.register import RegisterActorRequest
 
 
-class NodeManager(ActorAbstract):
+class NodeManager(ActorAbstract, NodeManagerAbstract):
     def __init__(self, actor_id: str, node: NodeAbstract, discovery: ActorDiscoveryRefAbstract = None):
         self._actor_id = actor_id
         self._node = node
