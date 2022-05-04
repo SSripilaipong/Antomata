@@ -10,6 +10,9 @@ from redcomet.node.ref import NodeRef
 
 class NodeAbstract(ABC):
 
+    def start(self):
+        pass
+
     @abstractmethod
     def bind_discovery(self, address: Address):
         pass
