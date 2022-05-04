@@ -14,6 +14,7 @@ class MockMessenger(MessengerAbstract):
     def __init__(self):
         self.bound_discovery = None
         self.assigned_node_id = None
+        self.made_connection = None
 
     def bind_discovery(self, ref: ActorDiscoveryRefAbstract):
         self.bound_discovery = ref
@@ -28,7 +29,7 @@ class MockMessenger(MessengerAbstract):
         self.assigned_node_id = node_id
 
     def make_connection_to(self, other: 'MessengerAbstract'):
-        pass
+        self.made_connection = other
 
     def create_direct_message_box(self) -> DirectMessageBoxRefAbstract:
         pass
@@ -86,3 +87,14 @@ def test_should_provide_messenger():
     messenger = MockMessenger()
     node = _create_node(messenger)
     assert node.messenger is messenger
+
+
+def test_should_make_connection_to_another_messenger():
+    my_messenger = MockMessenger()
+    me = _create_node(my_messenger)
+    your_messenger = MockMessenger()
+    you = _create_node(your_messenger)
+
+    me.make_connection_with(you)
+
+    assert your_messenger.made_connection is my_messenger and my_messenger.made_connection is your_messenger
