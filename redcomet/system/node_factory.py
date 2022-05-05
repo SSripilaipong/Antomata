@@ -1,11 +1,10 @@
 from redcomet.base.node.abstract import NodeAbstract
-from redcomet.implementation.messenger.inbox.queue.default import DefaultQueue
+from redcomet.messenger.inbox.queue import QueueAbstract
 from redcomet.node.factory import create_node
 from redcomet.node.gateway import GatewayActor
-from redcomet.node.synchronous import SynchronousNode
 
 
-def create_gateway_node(incoming_messages: DefaultQueue, parallel: bool = False) -> SynchronousNode:
+def create_gateway_node(incoming_messages: QueueAbstract, parallel: bool = False) -> NodeAbstract:
     node = create_node(parallel=parallel)
     node.register_executable_actor(GatewayActor(incoming_messages), actor_id="main")
     return node
