@@ -40,9 +40,7 @@ class Messenger(ActorAbstract, MessengerAbstract):
 
     def receive(self, message: MessageAbstract, sender: ActorRefAbstract, me: ActorRefAbstract,
                 cluster: ClusterRefAbstract):
-        if message.ref_id is not None:
-            self._put_to_direct_message_box(message)
-        elif isinstance(message, MessageForwardRequest):
+        if isinstance(message, MessageForwardRequest):
             self._forward_or_query_address(message)
         elif self._discovery.call_on_query_address_response(message, self._query_address_response):
             pass
@@ -100,12 +98,6 @@ class Messenger(ActorAbstract, MessengerAbstract):
 
     def create_direct_message_box(self) -> DirectMessageBoxRefAbstract:
         return self._direct_message_manager.create_message_box()
-
-    def _put_to_direct_message_box(self, message: MessageAbstract):
-        box = self._direct_message_manager.get_message_box(message.ref_id)
-        if box is None:
-            return
-        box.put(message)
 
     def start_receive_loop(self):
         self._inbox.receive_loop()
