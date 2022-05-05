@@ -1,51 +1,9 @@
-from typing import Callable, Any
-
-from redcomet.base.actor.message import MessageAbstract
-from redcomet.base.discovery.ref import ActorDiscoveryRefAbstract
 from redcomet.base.messaging.address import Address
-from redcomet.base.messaging.handler import PacketHandlerAbstract
-from redcomet.base.messaging.packet import Packet
 from redcomet.messenger import Messenger
 from redcomet.messenger.address_cache import AddressCache
 from redcomet.messenger.request import MessageForwardRequest
 from tests.test_messenger.factory import create_messenger_with_node_id
-
-
-class DummyMessage(MessageAbstract):
-    def __init__(self, value):
-        self.value = value
-
-
-class MockPacketHandler(PacketHandlerAbstract):
-    def __init__(self):
-        self.received_packet = None
-
-    def handle(self, packet: Packet):
-        self.received_packet = packet
-
-
-class DummyQueryAddressResponse(MessageAbstract):
-    pass
-
-
-class MockActorDiscoveryRef(ActorDiscoveryRefAbstract):
-    def __init__(self, query_response_params=None):
-        self._query_response_params = query_response_params
-        self.queried_address = None
-
-    def register_address(self, target: str, node_id: str):
-        pass
-
-    def query_address(self, target: str, requester_node_id: str, requester_target: str):
-        self.queried_address = target, requester_node_id, requester_target
-
-    def call_on_query_address_response(self, message: MessageAbstract, func: Callable[[str, Address], Any]) -> bool:
-        if not isinstance(message, DummyQueryAddressResponse):
-            return False
-        if self._query_response_params:
-            func(*self._query_response_params)
-            return True
-        return False
+from tests.test_messenger.mock import MockActorDiscoveryRef, DummyQueryAddressResponse, MockPacketHandler, DummyMessage
 
 
 def _start_parallel_inbox_process(messenger: Messenger):
