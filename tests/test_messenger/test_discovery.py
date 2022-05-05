@@ -1,17 +1,9 @@
 from redcomet.base.messaging.address import Address
 from redcomet.base.messaging.packet import Packet
-from redcomet.messenger import Messenger
 from redcomet.messenger.address_cache import AddressCache
 from redcomet.messenger.request import MessageForwardRequest
 from tests.test_messenger.factory import create_messenger_for_test
-from tests.test_messenger.mock import MockActorDiscoveryRef, DummyQueryAddressResponse, MockPacketHandler, DummyMessage, \
-    MockQueue
-
-
-def _start_parallel_inbox_process(messenger: Messenger):
-    messenger.stop_receive_loop()
-    messenger.start_receive_loop()
-    messenger.close()
+from tests.test_messenger.mock import MockActorDiscoveryRef, DummyQueryAddressResponse, DummyMessage, MockQueue
 
 
 def test_should_forward_message_to_be_processed_later():
@@ -75,12 +67,11 @@ def test_should_cache_queried_address():
 def test_should_use_cached_address_if_exists():
     cache = AddressCache()
     cache.update_cache(Address("you", "yours"))
-    your_handler = MockPacketHandler()
+    your_queue = MockQueue()
     me = create_messenger_for_test("me", address_cache=cache)
-    you = create_messenger_for_test("you", handler=your_handler)
+    you = create_messenger_for_test("you", inbox_queue=your_queue)
     me.make_connection_to(you)
 
     me.receive(MessageForwardRequest(DummyMessage(123), "mine", "yours"), ..., ..., ...)
-    _start_parallel_inbox_process(you)
 
-    assert your_handler.received_packet.content.value == 123
+    assert your_queue.get() == Packet(DummyMessage(123), sender=Address("me", "mine"), receiver=Address("you", "yours"))
