@@ -1,54 +1,10 @@
-from queue import Queue
-from typing import Optional, Any
-
 from redcomet.base.messaging.address import Address
-from redcomet.base.messaging.content import PacketContentAbstract
 from redcomet.base.messaging.handler import PacketHandlerAbstract
 from redcomet.base.messaging.packet import Packet
 from redcomet.messenger.factory import create_messenger
 from redcomet.messenger.inbox.message import StopReceiveLoop
 from redcomet.messenger.inbox.queue import QueueAbstract, QueueManagerAbstract
-
-
-class DummyPacketContent(PacketContentAbstract):
-    def __init__(self, value=None):
-        self.value = value
-
-    def __repr__(self) -> str:
-        return f"DummyPacketContent({self.value!r})"
-
-    def __eq__(self, other):
-        if self.__class__ != other.__class__:
-            return False
-        assert isinstance(other, DummyPacketContent)
-        return self.value == other.value
-
-
-class MockPacketHandler(PacketHandlerAbstract):
-    def __init__(self):
-        self.received_packet: Optional[Packet] = None
-
-    def handle(self, packet: Packet):
-        self.received_packet = packet
-
-
-class MockQueue(QueueAbstract):
-    def __init__(self):
-        self._queue = Queue()
-
-    def put(self, obj: Any, block: bool = True, timeout: float = None):
-        self._queue.put(obj)
-
-    def get(self, block: bool = True, timeout: float = None) -> Any:
-        return self._queue.get()
-
-
-class MockQueueManager(QueueManagerAbstract):
-    def start(self) -> QueueAbstract:
-        pass
-
-    def shutdown(self):
-        pass
+from tests.test_messenger.mock import MockQueue, MockQueueManager, MockPacketHandler, DummyPacketContent
 
 
 def _create_messenger_with_node_id(node_id: str, handler: PacketHandlerAbstract = None,
