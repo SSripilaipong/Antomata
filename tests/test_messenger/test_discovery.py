@@ -69,7 +69,6 @@ def test_should_cache_queried_address():
     me.receive(MessageForwardRequest(DummyMessage(123), "mine", "yours"), ..., ..., ...)
     me.receive(DummyQueryAddressResponse(), ..., ..., ...)
 
-    _start_parallel_inbox_process(you)
     assert cache.get_address("yours") == Address("you", "yours")
 
 
