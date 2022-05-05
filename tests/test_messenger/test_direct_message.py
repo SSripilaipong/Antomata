@@ -1,17 +1,7 @@
 from pytest import raises
 
-from redcomet.base.actor.message import MessageAbstract
 from redcomet.messenger.factory import create_messenger
-
-
-class DummyMessage(MessageAbstract):
-    def __init__(self, value, ref_id: str = None):
-        self.value = value
-        self._ref_id = ref_id
-
-    @property
-    def ref_id(self) -> str:
-        return self._ref_id
+from tests.test_messenger.mock import DummyMessage
 
 
 def _create_messenger():

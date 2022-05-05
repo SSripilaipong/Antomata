@@ -81,8 +81,13 @@ class DummyQueryAddressResponse(MessageAbstract):
 
 
 class DummyMessage(MessageAbstract):
-    def __init__(self, value):
+    def __init__(self, value, ref_id: str = None):
         self.value = value
+        self._ref_id = ref_id
+
+    @property
+    def ref_id(self) -> str:
+        return self._ref_id
 
     def __repr__(self):
         return f"DummyMessage({self.value})"
