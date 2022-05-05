@@ -47,20 +47,16 @@ def test_should_forward_message_to_queried_address_when_received_response():
 
 
 def test_should_not_forward_message_when_queried_address_is_empty():
-    your_handler = MockPacketHandler()
-    my_handler = MockPacketHandler()
-    me = create_messenger_for_test("me", handler=my_handler)
-    you = create_messenger_for_test("you", handler=your_handler)
+    my_inbox_queue, your_inbox_queue = MockQueue(), MockQueue()
+    me = create_messenger_for_test("me", inbox_queue=my_inbox_queue)
+    you = create_messenger_for_test("you", inbox_queue=your_inbox_queue)
     me.make_connection_to(you)
     me.bind_discovery(MockActorDiscoveryRef(query_response_params=("yours", None)))
 
     me.receive(MessageForwardRequest(DummyMessage(123), "mine", "yours"), ..., ..., ...)
     me.receive(DummyQueryAddressResponse(), ..., ..., ...)
 
-    _start_parallel_inbox_process(me)
-    _start_parallel_inbox_process(you)
-    assert your_handler.received_packet is None
-    assert my_handler.received_packet is None
+    assert your_inbox_queue.empty() and my_inbox_queue.empty()
 
 
 def test_should_cache_queried_address():

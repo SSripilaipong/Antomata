@@ -22,6 +22,9 @@ class MockQueue(QueueAbstract):
     def get(self, block: bool = True, timeout: float = None) -> Any:
         return self._queue.get()
 
+    def empty(self) -> bool:
+        return self._queue.empty()
+
 
 class MockQueueManager(QueueManagerAbstract):
     def start(self) -> QueueAbstract:
