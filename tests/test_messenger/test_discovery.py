@@ -40,10 +40,10 @@ def test_should_forward_message_to_queried_address_when_received_response():
 
 def test_should_not_forward_message_when_queried_address_is_empty():
     my_inbox_queue, your_inbox_queue = MockQueue(), MockQueue()
-    me = create_messenger_for_test("me", inbox_queue=my_inbox_queue)
+    discovery_mock = MockActorDiscoveryRef(query_response_params=("yours", None))
+    me = create_messenger_for_test("me", inbox_queue=my_inbox_queue, discovery_ref=discovery_mock)
     you = create_messenger_for_test("you", inbox_queue=your_inbox_queue)
     me.make_connection_to(you)
-    me.bind_discovery(MockActorDiscoveryRef(query_response_params=("yours", None)))
 
     me.receive(MessageForwardRequest(DummyMessage(123), "mine", "yours"), ..., ..., ...)
     me.receive(DummyQueryAddressResponse(), ..., ..., ...)
@@ -53,10 +53,10 @@ def test_should_not_forward_message_when_queried_address_is_empty():
 
 def test_should_cache_queried_address():
     cache = AddressCache()
-    me = create_messenger_for_test("me", address_cache=cache)
+    discovery_mock = MockActorDiscoveryRef(query_response_params=("yours", Address("you", "yours")))
+    me = create_messenger_for_test("me", address_cache=cache, discovery_ref=discovery_mock)
     you = create_messenger_for_test("you")
     me.make_connection_to(you)
-    me.bind_discovery(MockActorDiscoveryRef(query_response_params=("yours", Address("you", "yours"))))
 
     me.receive(MessageForwardRequest(DummyMessage(123), "mine", "yours"), ..., ..., ...)
     me.receive(DummyQueryAddressResponse(), ..., ..., ...)
