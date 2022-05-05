@@ -8,7 +8,7 @@ from redcomet.base.messenger.abstract import MessengerAbstract
 from redcomet.base.node.abstract import NodeAbstract
 from redcomet.cluster.ref import ClusterRef
 from redcomet.discovery.ref import ActorDiscoveryRef
-from redcomet.messaging.handler import PacketHandler
+from redcomet.messenger.handler import PacketHandler
 from redcomet.messenger import Messenger
 from redcomet.messenger.inbox import InboxAbstract
 from redcomet.messenger.outbox import Outbox
