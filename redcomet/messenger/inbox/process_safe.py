@@ -3,6 +3,7 @@ import multiprocessing
 from redcomet.base.messaging.handler import PacketHandlerAbstract
 from redcomet.base.messaging.packet import Packet
 from redcomet.messenger.inbox import InboxAbstract
+from redcomet.messenger.inbox.exception import StopReceiveLoopException
 from redcomet.messenger.inbox.message import StopReceiveLoop
 from redcomet.messenger.inbox.queue import QueueAbstract, QueueManagerAbstract
 
@@ -23,9 +24,10 @@ class ProcessSafeInbox(InboxAbstract):
         while True:
             packet = self._queue.get(block=True)
             print(multiprocessing.current_process().name, "RECV", packet)
-            if isinstance(packet.content, StopReceiveLoop):
+            try:
+                self._handler.handle(packet)
+            except StopReceiveLoopException:
                 break
-            self._handler.handle(packet)
 
     def stop_receive_loop(self):
         self._queue.put(Packet(StopReceiveLoop(), sender=..., receiver=...))

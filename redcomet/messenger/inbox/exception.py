@@ -1,0 +1,2 @@
+class StopReceiveLoopException(Exception):
+    pass
