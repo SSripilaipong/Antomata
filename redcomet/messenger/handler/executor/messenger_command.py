@@ -12,7 +12,9 @@ class MessengerCommandExecutor:
     def filter_packet(self, packet: Packet) -> bool:
         content = packet.content
         if isinstance(content, MessageAbstract) and content.ref_id is not None:
-            self._direct_message_manager.get_message_box(content.ref_id).put(content)
+            box = self._direct_message_manager.get_message_box(content.ref_id)
+            if box is not None:
+                box.put(content)
             return True
         elif isinstance(packet.content, StopReceiveLoop):
             raise StopReceiveLoopException()
