@@ -18,8 +18,12 @@ def test_should_put_message_to_direct_message_box():
 
 
 def test_should_ignore_message_when_ref_id_is_invalid():
-    messenger = create_messenger_for_test()
-    messenger.receive(DummyMessage("Hello", ref_id="abc"), ..., ..., ...)
+    inbox_queue = MockQueue()
+    messenger = create_messenger_for_test(inbox_queue=inbox_queue)
+
+    inbox_queue.put(Packet(DummyMessage("Hello", ref_id="abc"), sender=..., receiver=...))
+    inbox_queue.put(Packet(StopReceiveLoop(), sender=..., receiver=...))
+    messenger.start_receive_loop()
 
 
 def test_should_ignore_operations_after_box_is_closed():
