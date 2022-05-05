@@ -96,4 +96,4 @@ class DummyMessage(MessageAbstract):
         if self.__class__ != other.__class__:
             return False
         assert isinstance(other, DummyMessage)
-        return self.value == other.value
+        return self.value == other.value and self.ref_id == other.ref_id
