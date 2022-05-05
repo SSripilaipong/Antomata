@@ -90,7 +90,7 @@ class DummyMessage(MessageAbstract):
         return self._ref_id
 
     def __repr__(self):
-        return f"DummyMessage({self.value})"
+        return f"DummyMessage({self.value!r}, ref_id={self.ref_id!r})"
 
     def __eq__(self, other):
         if self.__class__ != other.__class__:
