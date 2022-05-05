@@ -27,8 +27,7 @@ def test_should_forward_message_to_be_processed_later():
 
 def test_should_send_query_message_to_discovery_when_address_is_unknown():
     discovery = MockActorDiscoveryRef()
-    me = create_messenger_for_test("me")
-    me.bind_discovery(discovery)
+    me = create_messenger_for_test("me", discovery_ref=discovery)
     me.receive(MessageForwardRequest(DummyMessage(123), "mine", "yours"), ..., ..., ...)
     assert discovery.queried_address == ("yours", "me", "messenger")
 
