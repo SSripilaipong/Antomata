@@ -27,10 +27,13 @@ def test_should_ignore_message_when_ref_id_is_invalid():
 
 
 def test_should_ignore_operations_after_box_is_closed():
-    messenger = create_messenger_for_test()
+    inbox_queue = MockQueue()
+    messenger = create_messenger_for_test(inbox_queue=inbox_queue)
     with messenger.create_direct_message_box() as box:
         pass
-    messenger.receive(DummyMessage("Hello", ref_id=box.ref_id), ..., ..., ...)
+    inbox_queue.put(Packet(DummyMessage("Hello", ref_id=box.ref_id), sender=..., receiver=...))
+    inbox_queue.put(Packet(StopReceiveLoop(), sender=..., receiver=...))
+    messenger.start_receive_loop()
     assert box.get(timeout=0.1) is None
 
 
