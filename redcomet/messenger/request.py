@@ -22,3 +22,6 @@ class MessageForwardRequest(MessageAbstract):
     def __repr__(self) -> str:
         return f"MessageForwardRequest({self._message!r}, sender_id={self._sender_id!r}, " \
                f"receiver_id={self.receiver_id!r})"
+
+    def __eq__(self, other):
+        return False

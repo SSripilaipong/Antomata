@@ -80,3 +80,12 @@ class DummyQueryAddressResponse(MessageAbstract):
 class DummyMessage(MessageAbstract):
     def __init__(self, value):
         self.value = value
+
+    def __repr__(self):
+        return f"DummyMessage({self.value})"
+
+    def __eq__(self, other):
+        if self.__class__ != other.__class__:
+            return False
+        assert isinstance(other, DummyMessage)
+        return self.value == other.value
