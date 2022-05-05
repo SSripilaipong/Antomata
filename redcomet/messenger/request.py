@@ -24,4 +24,9 @@ class MessageForwardRequest(MessageAbstract):
                f"receiver_id={self.receiver_id!r})"
 
     def __eq__(self, other):
-        return False
+        if self.__class__ != other.__class__:
+            return False
+        assert isinstance(other, MessageForwardRequest)
+        return (self._message == other._message
+                and self._sender_id == other._sender_id
+                and self._receiver_id == other._receiver_id)
