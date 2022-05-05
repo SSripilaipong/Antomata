@@ -32,18 +32,18 @@ def test_should_send_query_message_to_discovery_when_address_is_unknown():
     assert discovery.queried_address == ("yours", "me", "messenger")
 
 
-def test_should_forward_message_to_queried_address():
-    your_handler = MockPacketHandler()
+def test_should_forward_message_to_queried_address_when_received_response():
+    your_inbox_queue = MockQueue()
     me = create_messenger_for_test("me")
-    you = create_messenger_for_test("you", handler=your_handler)
+    you = create_messenger_for_test("you", inbox_queue=your_inbox_queue)
     me.make_connection_to(you)
     me.bind_discovery(MockActorDiscoveryRef(query_response_params=("yours", Address("you", "yours"))))
 
     me.receive(MessageForwardRequest(DummyMessage(123), "mine", "yours"), ..., ..., ...)
     me.receive(DummyQueryAddressResponse(), ..., ..., ...)
 
-    _start_parallel_inbox_process(you)
-    assert your_handler.received_packet.content.value == 123
+    expected = Packet(DummyMessage(123), sender=Address("me", "mine"), receiver=Address("you", "yours"))
+    assert your_inbox_queue.get() == expected
 
 
 def test_should_not_forward_message_when_queried_address_is_empty():
