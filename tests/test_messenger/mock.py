@@ -11,7 +11,7 @@ from redcomet.base.messaging.handler import PacketHandlerAbstract
 from redcomet.base.messaging.packet import Packet
 
 from redcomet.messenger.inbox.queue import QueueAbstract, QueueManagerAbstract
-from redcomet.node.executor import ActorExecutorAbstract
+from redcomet.messenger.handler.executor.actor import ActorExecutorAbstract
 
 
 class MockQueue(QueueAbstract):

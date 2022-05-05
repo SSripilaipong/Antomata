@@ -2,7 +2,7 @@ from redcomet.base.discovery.ref import ActorDiscoveryRefAbstract
 from redcomet.messenger.address_cache import AddressCache
 from redcomet.messenger.factory import create_messenger
 from redcomet.messenger.inbox.queue import QueueManagerAbstract, QueueAbstract
-from redcomet.node.executor import ActorExecutorAbstract
+from redcomet.messenger.handler.executor.actor import ActorExecutorAbstract
 from tests.test_messenger.mock import MockActorExecutor, MockQueueManager, MockQueue
 
 

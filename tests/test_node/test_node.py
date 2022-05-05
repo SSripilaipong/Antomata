@@ -11,7 +11,7 @@ from redcomet.base.messenger.abstract import MessengerAbstract
 from redcomet.base.messenger.direct_message.ref import DirectMessageBoxRefAbstract
 from redcomet.base.node.abstract import NodeAbstract
 from redcomet.discovery.ref import ActorDiscoveryRef
-from redcomet.node.executor import ActorExecutorAbstract
+from redcomet.messenger.handler.executor.actor import ActorExecutorAbstract
 from redcomet.node.manager.abstract import NodeManagerAbstract
 from redcomet.node.process import ProcessNode
 

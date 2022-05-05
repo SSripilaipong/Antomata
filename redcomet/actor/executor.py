@@ -5,7 +5,7 @@ from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.messaging.address import Address
 from redcomet.base.node.abstract import NodeAbstract
-from redcomet.node.executor import ActorExecutorAbstract
+from redcomet.messenger.handler.executor.actor import ActorExecutorAbstract
 
 
 class ActorExecutor(ActorExecutorAbstract):
