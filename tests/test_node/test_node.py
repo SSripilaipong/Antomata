@@ -62,6 +62,9 @@ class MockExecutor(ActorExecutorAbstract):
         self.registered_actor_id = local_id
         self.registered_actor = actor
 
+    def execute(self, message: MessageAbstract, sender: Address, local_actor_id: str):
+        pass
+
 
 class MockActor(ActorAbstract):
     def receive(self, message: MessageAbstract, sender: ActorRefAbstract, me: ActorRefAbstract,

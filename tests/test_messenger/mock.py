@@ -1,6 +1,7 @@
 from queue import Queue
-from typing import Any, Optional, Callable
+from typing import Any, Optional, Callable, Tuple
 
+from redcomet.base.actor.abstract import ActorAbstract
 from redcomet.base.actor.message import MessageAbstract
 from redcomet.base.discovery.ref import ActorDiscoveryRefAbstract
 from redcomet.base.messaging.address import Address
@@ -10,6 +11,7 @@ from redcomet.base.messaging.handler import PacketHandlerAbstract
 from redcomet.base.messaging.packet import Packet
 
 from redcomet.messenger.inbox.queue import QueueAbstract, QueueManagerAbstract
+from redcomet.node.executor import ActorExecutorAbstract
 
 
 class MockQueue(QueueAbstract):
@@ -34,12 +36,15 @@ class MockQueueManager(QueueManagerAbstract):
         pass
 
 
-class MockPacketHandler(PacketHandlerAbstract):
+class MockActorExecutor(ActorExecutorAbstract):
     def __init__(self):
-        self.received_packet: Optional[Packet] = None
+        self.received_message: Optional[Tuple[PacketContentAbstract, Address, str]] = None
 
-    def handle(self, packet: Packet):
-        self.received_packet = packet
+    def register(self, local_id: str, actor: ActorAbstract):
+        pass
+
+    def execute(self, message: PacketContentAbstract, sender: Address, local_actor_id: str):
+        self.received_message = (message, sender, local_actor_id)
 
 
 class DummyPacketContent(PacketContentAbstract):

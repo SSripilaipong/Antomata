@@ -2,7 +2,7 @@ from redcomet.base.messaging.address import Address
 from redcomet.base.messaging.packet import Packet
 from redcomet.messenger.inbox.message import StopReceiveLoop
 from tests.test_messenger.factory import create_messenger_for_test
-from tests.test_messenger.mock import MockQueue, MockPacketHandler, DummyPacketContent
+from tests.test_messenger.mock import MockQueue, MockActorExecutor, DummyPacketContent
 
 
 def test_should_send_packet_to_receiver_inbox_queue():
@@ -17,18 +17,17 @@ def test_should_send_packet_to_receiver_inbox_queue():
 
 
 def test_should_receive_packet_until_StopReceiveLoop():
-    receiver_handler = MockPacketHandler()
+    receiver_handler = MockActorExecutor()
     receiver_inbox_queue = MockQueue()
 
     receiver_inbox_queue.put(Packet(DummyPacketContent(123), Address("sender", "me"), Address("receiver", "you")))
     receiver_inbox_queue.put(Packet(StopReceiveLoop(), ..., ...))
 
-    receiver = create_messenger_for_test("receiver", inbox_queue=receiver_inbox_queue, handler=receiver_handler)
+    receiver = create_messenger_for_test("receiver", inbox_queue=receiver_inbox_queue, executor=receiver_handler)
 
     receiver.start_receive_loop()
 
-    assert receiver_handler.received_packet == \
-           Packet(DummyPacketContent(123), Address("sender", "me"), Address("receiver", "you"))
+    assert receiver_handler.received_message == (DummyPacketContent(123), Address("sender", "me"), "you")
 
 
 def test_should_stop_receive_loop_by_sending_StopReceiveLoop():
