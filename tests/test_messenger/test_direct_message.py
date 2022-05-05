@@ -17,22 +17,6 @@ def test_should_put_message_to_direct_message_box():
         assert box.get(timeout=0.1) == DummyMessage("Hello", box.ref_id)
 
 
-def test_should_get_value_from_direct_message_box():
-    messenger = create_messenger_for_test()
-    with messenger.create_direct_message_box() as box:
-        box.put(DummyMessage("Hello"))
-        message: DummyMessage = box.get(timeout=0.1)
-    assert message.value == "Hello"
-
-
-def test_should_put_message_with_ref_id_to_direct_message_box():
-    messenger = create_messenger_for_test()
-    with messenger.create_direct_message_box() as box:
-        messenger.receive(DummyMessage("Hello", ref_id=box.ref_id), ..., ..., ...)
-        message: DummyMessage = box.get(timeout=0.1)
-    assert message.value == "Hello"
-
-
 def test_should_ignore_message_when_ref_id_is_invalid():
     messenger = create_messenger_for_test()
     messenger.receive(DummyMessage("Hello", ref_id="abc"), ..., ..., ...)
